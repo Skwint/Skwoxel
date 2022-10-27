@@ -55,8 +55,9 @@ namespace skwoxel
 
 		real_t sample(const Vector3& pos) const;
 		void collect_children();
-		void allocate_fields();
-		void delete_fields();
+		void clear_voxels();
+		void allocate_voxels();
+		void delete_voxels();
 		inline int size_x() { return upper_bounds.x + 1 - lower_bounds.x; }
 		inline int size_y() { return upper_bounds.y + 1 - lower_bounds.y; }
 		inline int size_z() { return upper_bounds.z + 1 - lower_bounds.z; }
@@ -80,7 +81,6 @@ namespace skwoxel
 		~Skwoxel();
 
 		void generate();
-		void clear_fields();
 		void generate_fields();
 		void generate_mesh();
 
@@ -89,13 +89,15 @@ namespace skwoxel
 		Vector3i get_lower_bounds() const;
 		void set_upper_bounds(const Vector3i& bounds);
 		Vector3i get_upper_bounds() const;
+
+		// Ungodly editor hack
 		void set_generate(bool val) { generate(); }
 		bool get_generate() const { return false; }
 	};
 
 	inline Skwoxel::Voxel& Skwoxel::voxel_at_local_unsafe(int x, int y, int z)
 	{
-		return *(voxels + (z * size_y() + y) * size_x() + x);
+		return *(voxels + (z * data_size_y() + y) * data_size_x() + x);
 	}
 
 	inline Skwoxel::Voxel& Skwoxel::voxel_at_global_unsafe(int x, int y, int z)

@@ -65,7 +65,6 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, upper_bounds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
-		ClassDB::bind_method(D_METHOD("clear_fields"), &Skwoxel::clear_fields);
 		ClassDB::bind_method(D_METHOD("generate_fields"), &Skwoxel::generate_fields);
 		ClassDB::bind_method(D_METHOD("generate_mesh"), &Skwoxel::generate_mesh);
 	}
@@ -78,7 +77,7 @@ namespace skwoxel
 
 	Skwoxel::~Skwoxel()
 	{
-		delete_fields();
+		delete_voxels();
 	}
 
 	void Skwoxel::generate()
@@ -87,22 +86,21 @@ namespace skwoxel
 		generate_mesh();
 	}
 
-	void Skwoxel::allocate_fields()
+	void Skwoxel::allocate_voxels()
 	{
 		if (!voxels)
 		{
-			// Allocate an extra voxel in each direction which is used as a buffer zone
-			voxels = new Voxel[data_size_x() * data_size_y() * data_size_x()];
+			voxels = new Voxel[data_size_x() * data_size_y() * data_size_z()];
 		}
 	}
 
-	void Skwoxel::delete_fields()
+	void Skwoxel::delete_voxels()
 	{
 		delete[] voxels;
 		voxels = 0;
 	}
 
-	void Skwoxel::clear_fields()
+	void Skwoxel::clear_voxels()
 	{
 		Voxel * voxel = voxels;
 		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
@@ -172,14 +170,14 @@ namespace skwoxel
 	void Skwoxel::generate_fields()
 	{
 		UtilityFunctions::print(__FUNCTION__);
-		allocate_fields();
+		allocate_voxels();
 		collect_children();
 
-		Voxel * voxel = voxels;
 		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
 		{
 			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
 			{
+				Voxel* voxel = &voxel_at_global_unsafe(lower_bounds.x, y, z);
 				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
 				{
 					voxel->strength = sample(Vector3(x, y, z));
@@ -195,13 +193,13 @@ namespace skwoxel
 		// These are the index steps corresponding to each of the 7 edges
 		const Vector3i steps[] =
 		{
-			Vector3i(1, 0, 0),
-			Vector3i(0, 1, 0),
-			Vector3i(0, 0, 1),
-			Vector3i(1, 1, 0),
-			Vector3i(1, 0, 1),
-			Vector3i(0, 1, 1),
-			Vector3i(1, 1, 1),
+			Vector3(1.0, 0.0, 0.0),
+			Vector3(0.0, 1.0, 0.0),
+			Vector3(0.0, 0.0, 1.0),
+			Vector3(1.0, 1.0, 0.0),
+			Vector3(1.0, 0.0, 1.0),
+			Vector3(0.0, 1.0, 1.0),
+			Vector3(1.0, 1.0, 1.0),
 		};
 		// These are the index offsets for the voxels on the corners of a cube
 		const int32_t cube_idx[] =
@@ -262,7 +260,7 @@ namespace skwoxel
 			{ {0, 5, 1, 7},    {4, 0, 6, 17,  8, 12} }
 		};
 	
-		// First, set up the indices.
+		// First, count the vertices and link the edges
 		int32_t numVertices = 0;
 		for (int32_t z = 0; z < size_z(); ++z)
 		{
@@ -460,7 +458,7 @@ namespace skwoxel
 	// Properties.
 	void Skwoxel::set_lower_bounds(const Vector3i& bounds) {
 		lower_bounds = bounds;
-		delete_fields();
+		delete_voxels();
 	}
 
 	Vector3i Skwoxel::get_lower_bounds() const {
@@ -469,7 +467,7 @@ namespace skwoxel
 
 	void Skwoxel::set_upper_bounds(const Vector3i& bounds) {
 		upper_bounds = bounds;
-		delete_fields();
+		delete_voxels();
 	}
 
 	Vector3i Skwoxel::get_upper_bounds() const {

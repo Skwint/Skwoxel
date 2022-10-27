@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+*.exp
+
+
+# Godot stuff
+.godot
+test/bin/*
+
+.sconsign.dblite

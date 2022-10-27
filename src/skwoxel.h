@@ -9,8 +9,11 @@
 #include <godot_cpp/classes/Node3d.hpp>
 #include <godot_cpp/classes/global_constants.hpp>
 #include <godot_cpp/classes/viewport.hpp>
+#include <godot_cpp/variant/typed_array.hpp>
 
 #include <godot_cpp/core/binder_common.hpp>
+
+#include "skwoxel_field.h"
 
 using namespace godot;
 
@@ -19,6 +22,25 @@ namespace skwoxel
 	class Skwoxel : public Node3D {
 		GDCLASS(Skwoxel, Node3D);
 
+	public:
+		struct Voxel
+		{
+		public:
+			enum EdgeNum
+			{
+				EEN_X,
+				EEN_Y,
+				EEN_Z,
+				EEN_XY,
+				EEN_XZ,
+				EEN_YZ,
+				EEN_XYZ,
+				EEN_COUNT
+			};
+		public:
+			real_t strength;
+			int32_t edges[EEN_COUNT];
+		};
 	protected:
 		static void _bind_methods();
 
@@ -31,27 +53,36 @@ namespace skwoxel
 
 		String _to_string() const;
 
+		real_t sample(const Vector3& pos) const;
+		void collect_children();
 		void allocate_fields();
 		void delete_fields();
 		inline int size_x() { return upper_bounds.x + 1 - lower_bounds.x; }
 		inline int size_y() { return upper_bounds.y + 1 - lower_bounds.y; }
 		inline int size_z() { return upper_bounds.z + 1 - lower_bounds.z; }
-		inline float& field_at_local_unsafe(int x, int y, int z);
-		inline float& field_at_global_unsafe(int x, int y, int z);
-		inline float& field_at_local(int x, int y, int z);
-		inline float& field_at_global(int x, int y, int z);
+		inline int data_size_x() { return size_x() + 1; }
+		inline int data_size_y() { return size_y() + 1; }
+		inline int data_size_z() { return size_z() + 1; }
+		inline Voxel& voxel_at_local_unsafe(int x, int y, int z);
+		inline Voxel& voxel_at_global_unsafe(int x, int y, int z);
+		inline Voxel& voxel_at_local(int x, int y, int z);
+		inline Voxel& voxel_at_global(int x, int y, int z);
 
 	private:
 		Vector3i lower_bounds;
 		Vector3i upper_bounds;
-		float* field_strengths;
+		Voxel* voxels;
+		SkwoxelField** fields;
+		int num_fields;
 
 	public:
 		Skwoxel();
 		~Skwoxel();
 
+		void generate();
 		void clear_fields();
 		void generate_fields();
+		void generate_mesh();
 
 		// Property.
 		void set_lower_bounds(const Vector3i& bounds);
@@ -60,27 +91,27 @@ namespace skwoxel
 		Vector3i get_upper_bounds() const;
 	};
 
-	inline float& Skwoxel::field_at_local_unsafe(int x, int y, int z)
+	inline Skwoxel::Voxel& Skwoxel::voxel_at_local_unsafe(int x, int y, int z)
 	{
-		return *(field_strengths + (z * size_y() + y) * size_x() + x);
+		return *(voxels + (z * size_y() + y) * size_x() + x);
 	}
 
-	inline float& Skwoxel::field_at_global_unsafe(int x, int y, int z)
+	inline Skwoxel::Voxel& Skwoxel::voxel_at_global_unsafe(int x, int y, int z)
 	{
-		return field_at_local_unsafe(x - lower_bounds.x, y - lower_bounds.y, z - lower_bounds.z);
+		return voxel_at_local_unsafe(x - lower_bounds.x, y - lower_bounds.y, z - lower_bounds.z);
 	}
 
-	inline float& Skwoxel::field_at_local(int x, int y, int z)
+	inline Skwoxel::Voxel& Skwoxel::voxel_at_local(int x, int y, int z)
 	{
 		x = godot::Math::clamp(x, 0, size_x() - 1);
 		y = godot::Math::clamp(y, 0, size_y() - 1);
 		z = godot::Math::clamp(z, 0, size_z() - 1);
-		return field_at_local_unsafe(x, y, z);
+		return voxel_at_local_unsafe(x, y, z);
 	}
 
-	inline float& Skwoxel::field_at_global(int x, int y, int z)
+	inline Skwoxel::Voxel& Skwoxel::voxel_at_global(int x, int y, int z)
 	{
-		return field_at_local(x - lower_bounds.x, y - lower_bounds.y, z - lower_bounds.z);
+		return voxel_at_local(x - lower_bounds.x, y - lower_bounds.y, z - lower_bounds.z);
 	}
 
 }

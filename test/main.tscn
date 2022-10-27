@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dmx2xuigcpvt4"]
 
-[node name="Skwoxel" type="Skwoxel"]
+[node name="StaticBody3D" type="StaticBody3D"]
+
+[node name="Skwoxel" type="Skwoxel" parent="."]
 lower_bounds = Vector3i(-10, -10, -10)
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="Skwoxel"]

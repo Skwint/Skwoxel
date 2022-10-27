@@ -191,7 +191,7 @@ namespace skwoxel
 	{
 		UtilityFunctions::print(__FUNCTION__);
 		// These are the index steps corresponding to each of the 7 edges
-		const Vector3i steps[] =
+		const Vector3 steps[] =
 		{
 			Vector3(1.0, 0.0, 0.0),
 			Vector3(0.0, 1.0, 0.0),

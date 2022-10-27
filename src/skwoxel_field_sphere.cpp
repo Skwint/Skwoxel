@@ -78,11 +78,18 @@ namespace skwoxel
 	{
 		real_t rad = pos.length();
 		if (rad < inner_radius)
+		{
 			return inner_strength;
+		}
 		else if (rad > outer_radius)
+		{
 			return outer_strength;
+		}
 		else
-			return inner_strength + (outer_strength - inner_strength) * (rad - inner_radius) / (outer_radius - inner_radius);
+		{
+			real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
+			return (1.0 - r) * inner_strength + r * outer_strength;
+		}
 	}
 
 }

@@ -89,6 +89,8 @@ namespace skwoxel
 		Vector3i get_lower_bounds() const;
 		void set_upper_bounds(const Vector3i& bounds);
 		Vector3i get_upper_bounds() const;
+		void set_generate(bool val) { generate(); }
+		bool get_generate() const { return false; }
 	};
 
 	inline Skwoxel::Voxel& Skwoxel::voxel_at_local_unsafe(int x, int y, int z)

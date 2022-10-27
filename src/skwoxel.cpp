@@ -22,12 +22,14 @@ using namespace godot;
 namespace skwoxel
 {
 	void Skwoxel::_notification(int p_what) {
+		UtilityFunctions::print("Skwoxel note: ", String::num(p_what));
 	}
 
 	bool Skwoxel::_set(const StringName& p_name, const Variant& p_value) {
 		String name = p_name;
 		SKWOXEL_SET_METHOD(lower_bounds);
 		SKWOXEL_SET_METHOD(upper_bounds);
+		SKWOXEL_SET_METHOD(generate);
 		return false;
 	}
 
@@ -35,6 +37,7 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_GET_METHOD(lower_bounds);
 		SKWOXEL_GET_METHOD(upper_bounds);
+		SKWOXEL_GET_METHOD(generate);
 		return false;
 	}
 
@@ -45,6 +48,7 @@ namespace skwoxel
 	void Skwoxel::_get_property_list(List<PropertyInfo>* list) const {
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "lower_bounds"));
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "upper_bounds"));
+		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
 	}
 
 	bool Skwoxel::_property_can_revert(const StringName& p_name) const {
@@ -59,6 +63,7 @@ namespace skwoxel
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, lower_bounds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, upper_bounds);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
 		ClassDB::bind_method(D_METHOD("clear_fields"), &Skwoxel::clear_fields);
 		ClassDB::bind_method(D_METHOD("generate_fields"), &Skwoxel::generate_fields);
@@ -125,6 +130,7 @@ namespace skwoxel
 
 	void Skwoxel::collect_children()
 	{
+		UtilityFunctions::print(__FUNCTION__);
 		if (fields)
 		{
 			delete[] fields;
@@ -165,6 +171,7 @@ namespace skwoxel
 
 	void Skwoxel::generate_fields()
 	{
+		UtilityFunctions::print(__FUNCTION__);
 		allocate_fields();
 		collect_children();
 
@@ -184,6 +191,7 @@ namespace skwoxel
 
 	void Skwoxel::generate_mesh()
 	{
+		UtilityFunctions::print(__FUNCTION__);
 		// These are the index steps corresponding to each of the 7 edges
 		const Vector3i steps[] =
 		{
@@ -287,15 +295,12 @@ namespace skwoxel
 		// Create the array of arrays we need
 		Array arrays;
 		arrays.resize(Mesh::ARRAY_MAX);
-		auto * vertices = new PackedVector3Array();
-		auto * normals = new PackedVector3Array();
-		auto * indices = new PackedInt32Array();
-		arrays[Mesh::ARRAY_VERTEX] = vertices;
-		arrays[Mesh::ARRAY_NORMAL] = normals;
-		arrays[Mesh::ARRAY_INDEX] = indices;
+		PackedVector3Array vertices;
+		PackedVector3Array normals;
+		PackedInt32Array indices;
 
 		// Now that we know how many vertices there will be we can allocate a buffer for them
-		vertices->resize(numVertices);
+		vertices.resize(numVertices);
 
 		Vector3 start;
 		start.z = lower_bounds.z;
@@ -313,7 +318,7 @@ namespace skwoxel
 					{
 						if (vox->edges[e] != -1)
 						{
-							(*vertices)[vox->edges[e]] = start + steps[e] * ((0.0f - vox->strength) / ((vox + edge->idx[1])->strength - vox->strength));
+							vertices[vox->edges[e]] = start + steps[e] * ((0.0f - vox->strength) / ((vox + edge->idx[1])->strength - vox->strength));
 						}
 						++edge;
 					}
@@ -352,7 +357,7 @@ namespace skwoxel
 #						define MT_INDEX(ee) \
 						{ \
 							TetraEdge * tedge = &tetraEdges[tet->edgeIdx[ee]]; \
-							indices->push_back((vox + tedge->idx[0])->edges[tedge->edge]); \
+							indices.push_back((vox + tedge->idx[0])->edges[tedge->edge]); \
 						}
 #						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e1); MT_INDEX(e2); MT_INDEX(e3); }
 						switch (mask)
@@ -420,12 +425,13 @@ namespace skwoxel
 
 		// Generate normals:
 		real_t off = 0.2;
+		normals.resize(numVertices);
 		Vector3 neighbour;
 		Vector3 pos;
 		for (int idx = 0; idx < numVertices; ++idx)
 		{
 			Vector3 gradient;
-			pos = (*vertices)[idx];
+			pos = vertices[idx];
 			real_t localStrength = sample(pos);
 			neighbour = pos;
 			neighbour.x += off;
@@ -437,9 +443,12 @@ namespace skwoxel
 			neighbour.z += off;
 			gradient.z = sample(neighbour) - localStrength;
 			gradient.normalize();
-			(* normals)[idx] = -gradient;
+			normals[idx] = -gradient;
 		}
 
+		arrays[Mesh::ARRAY_VERTEX] = vertices;
+		arrays[Mesh::ARRAY_NORMAL] = normals;
+		arrays[Mesh::ARRAY_INDEX] = indices;
 		Ref<ArrayMesh> mesh;
 		mesh.instantiate();
 		mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);

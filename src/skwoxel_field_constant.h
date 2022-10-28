@@ -1,19 +1,20 @@
-#ifndef SKWOXEL_FIELD_H
-#define SKWOXEL_FIELD_H
+#ifndef SKWOXEL_FIELD_CONSTANT_H
+#define SKWOXEL_FIELD_CONSTANT_H
+
+#include "skwoxel_field.h"
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
-#include <godot_cpp/classes/node3d.hpp>
 
 namespace skwoxel
 {
-	class SkwoxelField : public godot::Node
+	class SkwoxelFieldConstant : public SkwoxelField
 	{
-		GDCLASS(SkwoxelField, godot::Node);
+		GDCLASS(SkwoxelFieldConstant, SkwoxelField);
 	public:
-		SkwoxelField();
-		virtual ~SkwoxelField();
+		SkwoxelFieldConstant();
+		virtual ~SkwoxelFieldConstant();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -24,7 +25,12 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		virtual real_t strength(const godot::Vector3 & pos);
+		real_t strength(const godot::Vector3 & pos) override;
+		real_t get_constant() const { return constant; };
+		void set_constant(real_t val) { constant = val; }
+
+	private:
+		real_t constant;
 	};
 }
 

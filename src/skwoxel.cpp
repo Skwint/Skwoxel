@@ -162,10 +162,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -188,10 +191,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -220,10 +226,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -246,10 +255,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -278,10 +290,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -304,10 +319,13 @@ namespace skwoxel
 					{
 						if (is_air)
 						{
-							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							if (voxel->strength <= 0.0)
 							{
-								voxel->flags |= Voxel::AIR;
-								changed = true;
+								if (!(voxel->flags & Voxel::AIR))
+								{
+									changed = true;
+									voxel->flags |= Voxel::AIR;
+								}
 							}
 							else
 							{
@@ -346,10 +364,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -372,10 +393,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -404,10 +428,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -430,10 +457,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -462,10 +492,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -488,10 +521,13 @@ namespace skwoxel
 					{
 						if (is_ground)
 						{
-							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							if (voxel->strength > 0.0)
 							{
-								voxel->flags |= Voxel::GROUND;
-								changed = true;
+								if (!(voxel->flags & Voxel::GROUND))
+								{
+									voxel->flags |= Voxel::GROUND;
+									changed = true;
+								}
 							}
 							else
 							{
@@ -534,9 +570,9 @@ namespace skwoxel
 				Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
 				for (int x = 0; x < size_x(); ++x)
 				{
-					if (voxel->strength < 0.0 && !(voxel->flags & Voxel::AIR))
+					if (voxel->strength <= 0.0 && !(voxel->flags & Voxel::AIR))
 					{
-						voxel->strength = 0.001;
+						voxel->strength = 1.0;
 					}
 					++voxel;
 				}
@@ -554,7 +590,7 @@ namespace skwoxel
 				Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
 				for (int x = 0; x < size_x(); ++x)
 				{
-					if (voxel->strength >= 0.0 && !(voxel->flags & Voxel::GROUND))
+					if (voxel->strength > 0.0 && !(voxel->flags & Voxel::GROUND))
 					{
 						voxel->strength = -0.001;
 					}

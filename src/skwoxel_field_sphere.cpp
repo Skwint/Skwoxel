@@ -11,6 +11,7 @@ namespace skwoxel
 
 	bool SkwoxelFieldSphere::_set(const StringName& p_name, const Variant& p_value) {
 		String name = p_name;
+		SKWOXEL_SET_METHOD(centre);
 		SKWOXEL_SET_METHOD(inner_radius);
 		SKWOXEL_SET_METHOD(outer_radius);
 		SKWOXEL_SET_METHOD(inner_strength);
@@ -21,6 +22,7 @@ namespace skwoxel
 
 	bool SkwoxelFieldSphere::_get(const StringName& p_name, Variant& r_ret) const {
 		String name = p_name;
+		SKWOXEL_GET_METHOD(centre);
 		SKWOXEL_GET_METHOD(inner_radius);
 		SKWOXEL_GET_METHOD(outer_radius);
 		SKWOXEL_GET_METHOD(inner_strength);
@@ -34,6 +36,7 @@ namespace skwoxel
 	}
 
 	void SkwoxelFieldSphere::_get_property_list(List<PropertyInfo>* list) const {
+		list->push_back(PropertyInfo(Variant::VECTOR3, "centre"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_radius"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "outer_radius"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
@@ -50,13 +53,11 @@ namespace skwoxel
 
 	void SkwoxelFieldSphere::_bind_methods() {
 		// Methods.
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, centre);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, inner_radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, outer_radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, inner_strength);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, outer_strength);
-
-		//ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "inner_radius", PROPERTY_HINT_RESOURCE_TYPE, VoxelStream::get_class_static()),
-		//	"set_stream", "get_stream");
 	}
 
 	SkwoxelFieldSphere::SkwoxelFieldSphere() :
@@ -76,7 +77,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldSphere::strength(const Vector3& pos)
 	{
-		real_t rad = pos.length();
+		real_t rad = (pos - centre).length();
 		if (rad < inner_radius)
 		{
 			return inner_strength;

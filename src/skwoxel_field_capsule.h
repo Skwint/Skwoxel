@@ -1,5 +1,5 @@
-#ifndef SKWOXEL_FIELD_SPHERE_H
-#define SKWOXEL_FIELD_SPHERE_H
+#ifndef SKWOXEL_FIELD_CAPSULE_H
+#define SKWOXEL_FIELD_CAPSULE_H
 
 #include "skwoxel_field.h"
 
@@ -9,12 +9,12 @@
 
 namespace skwoxel
 {
-	class SkwoxelFieldSphere : public SkwoxelField
+	class SkwoxelFieldCapsule : public SkwoxelField
 	{
-		GDCLASS(SkwoxelFieldSphere, SkwoxelField);
+		GDCLASS(SkwoxelFieldCapsule, SkwoxelField);
 	public:
-		SkwoxelFieldSphere();
-		virtual ~SkwoxelFieldSphere();
+		SkwoxelFieldCapsule();
+		virtual ~SkwoxelFieldCapsule();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -26,8 +26,11 @@ namespace skwoxel
 		static void _bind_methods();
 
 		real_t strength(const godot::Vector3 & pos) override;
-		godot::Vector3 get_centre() const { return centre; };
-		void set_centre(godot::Vector3 pos) { centre = pos; }
+
+		godot::Vector3 get_point1() const { return point1; }
+		void set_point1(const godot::Vector3& point) { point1 = point; }
+		godot::Vector3 get_point2() const { return point2; }
+		void set_point2(const godot::Vector3& point) { point2 = point; }
 		real_t get_inner_radius() const { return inner_radius; };
 		void set_inner_radius(real_t radius) { inner_radius = radius; }
 		real_t get_outer_radius() const { return outer_radius; };
@@ -38,7 +41,8 @@ namespace skwoxel
 		void set_outer_strength(real_t strength) { outer_strength = strength; }
 
 	private:
-		godot::Vector3 centre;
+		godot::Vector3 point1;
+		godot::Vector3 point2;
 		real_t inner_radius;
 		real_t outer_radius;
 		real_t inner_strength;

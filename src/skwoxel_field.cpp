@@ -5,7 +5,7 @@ using namespace godot;
 namespace skwoxel
 {
 
-	SkwoxelField::SkwoxelField() : Node3D()
+	SkwoxelField::SkwoxelField() : Node()
 	{
 
 	}

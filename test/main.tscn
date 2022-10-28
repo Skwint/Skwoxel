@@ -9,7 +9,6 @@ lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)
 ground = Vector3i(0, 0, 0)
-remove_floaters = false
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
 centre = Vector3(-10, 0, 0)
@@ -24,3 +23,9 @@ point2 = Vector3(-40, 10, 0)
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
 constant = -1.0
+
+[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="."]
+normal = Vector3(0, 1, 0)
+inner_distance = -20.0
+outer_distance = -10.0
+inner_strength = 2.0

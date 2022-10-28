@@ -24,7 +24,13 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		virtual real_t strength(const godot::Vector3 & pos);
+		virtual real_t strength(const godot::Vector3 & pos) const;
+		void collect_children();
+		void collect_children_of(const godot::Node* parent);
+
+	private:
+		int num_child_fields;
+		SkwoxelField** child_fields;
 	};
 }
 

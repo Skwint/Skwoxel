@@ -88,9 +88,8 @@ namespace skwoxel
 		Vector3i air;
 		bool remove_bubbles;
 		bool remove_floaters;
+		SkwoxelField root;
 		Voxel* voxels;
-		SkwoxelField** fields;
-		int num_fields;
 
 	public:
 		Skwoxel();

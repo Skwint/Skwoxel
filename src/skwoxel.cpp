@@ -88,8 +88,7 @@ namespace skwoxel
 		air(0.0, 1.0, 0.0),
 		remove_bubbles(true),
 		remove_floaters(true),
-		voxels(0),
-		fields(0)
+		voxels(0)
 	{
 	}
 
@@ -602,53 +601,13 @@ namespace skwoxel
 
 	real_t Skwoxel::sample(const Vector3& pos) const
 	{
-		real_t strength = 0.0;
-		for (int idx = 0; idx < num_fields; ++idx)
-		{
-			strength += ((SkwoxelField *)(fields[idx]))->strength(pos);
-		}
-		return strength;
+		return root.strength(pos);
 	}
 
 	void Skwoxel::collect_children()
 	{
 		UtilityFunctions::print(__FUNCTION__);
-		if (fields)
-		{
-			delete[] fields;
-			fields = 0;
-		}
-		int count = get_child_count();
-		int field_count = 0;
-		for (int i = 0; i < count; i++)
-		{
-			Node* node = get_child(i);
-			SkwoxelField* child = dynamic_cast<SkwoxelField*>(node);
-			if (child)
-			{
-				++field_count;
-			}
-		}
-
-		// Why am I using my own array instead of a TypedArray?
-		// Because TypedArray is really annoying! Yay!
-		// Is this safe? NO! The children might cease to exist
-		// and we will still have pointers to them.
-		// This is very very internal. Do not expose to scripts.
-		num_fields = field_count;
-		fields = new SkwoxelField * [field_count];
-
-		field_count = 0;
-		for (int i = 0; i < count; i++)
-		{
-			Node* node = get_child(i);
-			SkwoxelField* child = dynamic_cast<SkwoxelField*>(node);
-			if (child)
-			{
-				fields[field_count] = child;
-				++field_count;
-			}
-		}
+		root.collect_children_of(this);
 	}
 
 	void Skwoxel::generate_voxels()

@@ -25,7 +25,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) override;
+		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Vector3 get_centre() const { return centre; };
 		void set_centre(godot::Vector3 pos) { centre = pos; }
 		real_t get_inner_radius() const { return inner_radius; };

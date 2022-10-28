@@ -83,22 +83,23 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldCapsule::strength(const Vector3& pos)
+	real_t SkwoxelFieldCapsule::strength(const Vector3& pos) const
 	{
+		real_t sum = SkwoxelField::strength(pos);
 		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
 		real_t rad = (pos - close).length();
 		if (rad < inner_radius)
 		{
-			return inner_strength;
+			return sum + inner_strength;
 		}
 		else if (rad > outer_radius)
 		{
-			return outer_strength;
+			return sum + outer_strength;
 		}
 		else
 		{
 			real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
-			return (1.0 - r) * inner_strength + r * outer_strength;
+			return sum + (1.0 - r) * inner_strength + r * outer_strength;
 		}
 	}
 

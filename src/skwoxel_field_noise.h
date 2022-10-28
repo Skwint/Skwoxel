@@ -28,7 +28,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) override;
+		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Ref<godot::Noise> get_noise() const { return noise; };
 		void set_noise(godot::Ref<godot::Noise> val) { noise = val; }
 

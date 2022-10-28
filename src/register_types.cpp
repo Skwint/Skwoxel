@@ -14,6 +14,7 @@
 #include "skwoxel.h"
 #include "skwoxel_field.h"
 #include "skwoxel_field_sphere.h"
+#include "skwoxel_field_noise.h"
 
 using namespace godot;
 
@@ -22,6 +23,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::Skwoxel>();
 		ClassDB::register_class<skwoxel::SkwoxelField>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldSphere>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldNoise>();
 	}
 }
 

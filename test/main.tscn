@@ -1,12 +1,19 @@
-[gd_scene format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=2 format=3 uid="uid://dmx2xuigcpvt4"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
+frequency = 0.05
+fractal_octaves = 2
 
 [node name="StaticBody3D" type="StaticBody3D"]
 
 [node name="Skwoxel" type="Skwoxel" parent="."]
-lower_bounds = Vector3i(-10, -10, -10)
-upper_bounds = Vector3i(10, 10, 10)
+lower_bounds = Vector3i(-100, -20, -100)
+upper_bounds = Vector3i(100, 20, 100)
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="Skwoxel"]
-inner_radius = 4.0
-outer_radius = 6.0
-outer_strength = -1.0
+outer_radius = 20.0
+inner_strength = 0.2
+outer_strength = -0.2
+
+[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="Skwoxel"]
+noise = SubResource("FastNoiseLite_tm8ep")

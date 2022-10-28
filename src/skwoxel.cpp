@@ -357,7 +357,8 @@ namespace skwoxel
 							TetraEdge * tedge = &tetraEdges[tet->edgeIdx[ee]]; \
 							indices.push_back((vox + tedge->idx[0])->edges[tedge->edge]); \
 						}
-#						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e1); MT_INDEX(e2); MT_INDEX(e3); }
+//#						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e1); MT_INDEX(e2); MT_INDEX(e3); }
+#						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e3); MT_INDEX(e2); MT_INDEX(e1); }
 						switch (mask)
 						{
 						case 0:

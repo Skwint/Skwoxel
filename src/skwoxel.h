@@ -14,6 +14,7 @@
 #include <godot_cpp/core/binder_common.hpp>
 
 #include "skwoxel_field.h"
+#include "skwoxel_field_add.h"
 
 using namespace godot;
 
@@ -88,7 +89,7 @@ namespace skwoxel
 		Vector3i air;
 		bool remove_bubbles;
 		bool remove_floaters;
-		SkwoxelField root;
+		SkwoxelFieldAdd root;
 		Voxel* voxels;
 
 	public:

@@ -59,8 +59,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldNoise::strength(const Vector3& pos) const
 	{
-		real_t sum = SkwoxelField::strength(pos);
-		return sum + noise->get_noise_3dv(pos);
+		return noise->get_noise_3dv(pos);
 	}
 
 }

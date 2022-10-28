@@ -48,12 +48,7 @@ namespace skwoxel
 
 	real_t SkwoxelField::strength(const Vector3& pos) const
 	{
-		real_t sum = 0.0;
-		for (int ch = 0; ch < num_child_fields; ch++)
-		{
-			sum += child_fields[ch]->strength(pos);
-		}
-		return sum;
+		return 0.0;
 	}
 
 	void SkwoxelField::collect_children_of(const Node * parent)

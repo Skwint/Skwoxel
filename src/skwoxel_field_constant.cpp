@@ -58,8 +58,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldConstant::strength(const Vector3& pos) const
 	{
-		real_t sum = SkwoxelField::strength(pos);
-		return sum + constant;
+		return constant;
 	}
 
 }

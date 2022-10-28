@@ -1,19 +1,21 @@
-#ifndef SKWOXEL_FIELD_H
-#define SKWOXEL_FIELD_H
+#ifndef SKWOXEL_ADD_H
+#define SKWOXEL_ADD_H
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
+#include "skwoxel_field.h"
+
 namespace skwoxel
 {
-	class SkwoxelField : public godot::Node
+	class SkwoxelFieldAdd : public SkwoxelField
 	{
-		GDCLASS(SkwoxelField, godot::Node);
+		GDCLASS(SkwoxelFieldAdd, SkwoxelField);
 	public:
-		SkwoxelField();
-		virtual ~SkwoxelField();
+		SkwoxelFieldAdd();
+		virtual ~SkwoxelFieldAdd();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -25,12 +27,6 @@ namespace skwoxel
 		static void _bind_methods();
 
 		virtual real_t strength(const godot::Vector3 & pos) const;
-		void collect_children();
-		void collect_children_of(const godot::Node* parent);
-
-	protected:
-		int num_child_fields;
-		SkwoxelField** child_fields;
 	};
 }
 

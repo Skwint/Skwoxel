@@ -1,19 +1,20 @@
-#ifndef SKWOXEL_FIELD_H
-#define SKWOXEL_FIELD_H
+#ifndef SKWOXEL_FIELD_CUT_H
+#define SKWOXEL_FIELD_CUT_H
+
+#include "skwoxel_field_add.h"
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
-#include <godot_cpp/classes/node3d.hpp>
 
 namespace skwoxel
 {
-	class SkwoxelField : public godot::Node
+	class SkwoxelFieldCut : public SkwoxelFieldAdd
 	{
-		GDCLASS(SkwoxelField, godot::Node);
+		GDCLASS(SkwoxelFieldCut, SkwoxelField);
 	public:
-		SkwoxelField();
-		virtual ~SkwoxelField();
+		SkwoxelFieldCut();
+		virtual ~SkwoxelFieldCut();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -24,13 +25,15 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		virtual real_t strength(const godot::Vector3 & pos) const;
-		void collect_children();
-		void collect_children_of(const godot::Node* parent);
+		real_t strength(const godot::Vector3 & pos) const override;
+		godot::Vector3 get_normal() const { return normal; };
+		void set_normal(godot::Vector3 pos) { normal = pos; }
+		real_t get_distance() const { return distance; };
+		void set_distance(real_t dist) { distance = dist; }
 
-	protected:
-		int num_child_fields;
-		SkwoxelField** child_fields;
+	private:
+		godot::Vector3 normal;
+		real_t distance;
 	};
 }
 

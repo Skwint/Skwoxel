@@ -14,18 +14,38 @@ ground = Vector3i(0, 0, 0)
 centre = Vector3(-10, 0, 0)
 outer_radius = 20.0
 
-[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="."]
-noise = SubResource("FastNoiseLite_tm8ep")
-
 [node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
 point1 = Vector3(-40, -10, 0)
 point2 = Vector3(-40, 10, 0)
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
-constant = -1.0
+constant = -0.8
 
 [node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="."]
 normal = Vector3(0, 1, 0)
 inner_distance = -20.0
 outer_distance = -10.0
 inner_strength = 2.0
+
+[node name="SkwoxelFieldMultiply" type="SkwoxelFieldMultiply" parent="."]
+
+[node name="SkwoxelFieldCut" type="SkwoxelFieldCut" parent="SkwoxelFieldMultiply"]
+normal = Vector3(0, 0, 1)
+
+[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="SkwoxelFieldMultiply/SkwoxelFieldCut"]
+noise = SubResource("FastNoiseLite_tm8ep")
+
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMultiply"]
+centre = Vector3(0, -20, 50)
+inner_radius = 0.0
+outer_radius = 40.0
+inner_strength = 0.0
+outer_strength = 1.0
+
+[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="SkwoxelFieldMultiply"]
+point1 = Vector3(50, -30, 80)
+point2 = Vector3(50, -30, 20)
+inner_radius = 20.0
+outer_radius = 40.0
+inner_strength = 5.0
+outer_strength = 1.0

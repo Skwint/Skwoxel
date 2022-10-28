@@ -13,8 +13,11 @@
 
 #include "skwoxel.h"
 #include "skwoxel_field.h"
+#include "skwoxel_field_add.h"
 #include "skwoxel_field_capsule.h"
 #include "skwoxel_field_constant.h"
+#include "skwoxel_field_cut.h"
+#include "skwoxel_field_multiply.h"
 #include "skwoxel_field_noise.h"
 #include "skwoxel_field_plane.h"
 #include "skwoxel_field_sphere.h"
@@ -25,8 +28,11 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		ClassDB::register_class<skwoxel::Skwoxel>();
 		ClassDB::register_class<skwoxel::SkwoxelField>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldAdd>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCapsule>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldConstant>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldCut>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldMultiply>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldNoise>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldPlane>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldSphere>();

@@ -77,20 +77,19 @@ namespace skwoxel
 
 	real_t SkwoxelFieldPlane::strength(const Vector3& pos) const
 	{
-		real_t sum = SkwoxelField::strength(pos);
 		real_t rad = pos.dot(normal);
 		if (rad < inner_distance)
 		{
-			return sum + inner_strength;
+			return inner_strength;
 		}
 		else if (rad > outer_distance)
 		{
-			return sum + outer_strength;
+			return outer_strength;
 		}
 		else
 		{
 			real_t r = (rad - inner_distance) / (outer_distance - inner_distance);
-			return sum + (1.0 - r) * inner_strength + r * outer_strength;
+			return (1.0 - r) * inner_strength + r * outer_strength;
 		}
 	}
 

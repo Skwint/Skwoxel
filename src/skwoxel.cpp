@@ -29,6 +29,10 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_SET_METHOD(lower_bounds);
 		SKWOXEL_SET_METHOD(upper_bounds);
+		SKWOXEL_SET_METHOD(air);
+		SKWOXEL_SET_METHOD(ground);
+		SKWOXEL_SET_METHOD(remove_bubbles);
+		SKWOXEL_SET_METHOD(remove_floaters);
 		SKWOXEL_SET_METHOD(generate);
 		return false;
 	}
@@ -37,6 +41,10 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_GET_METHOD(lower_bounds);
 		SKWOXEL_GET_METHOD(upper_bounds);
+		SKWOXEL_GET_METHOD(air);
+		SKWOXEL_GET_METHOD(ground);
+		SKWOXEL_GET_METHOD(remove_bubbles);
+		SKWOXEL_GET_METHOD(remove_floaters);
 		SKWOXEL_GET_METHOD(generate);
 		return false;
 	}
@@ -48,6 +56,10 @@ namespace skwoxel
 	void Skwoxel::_get_property_list(List<PropertyInfo>* list) const {
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "lower_bounds"));
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "upper_bounds"));
+		list->push_back(PropertyInfo(Variant::VECTOR3I, "air"));
+		list->push_back(PropertyInfo(Variant::VECTOR3I, "ground"));
+		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
+		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
 		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
 	}
 
@@ -63,13 +75,19 @@ namespace skwoxel
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, lower_bounds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, upper_bounds);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, air);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, ground);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
-		ClassDB::bind_method(D_METHOD("generate_fields"), &Skwoxel::generate_fields);
-		ClassDB::bind_method(D_METHOD("generate_mesh"), &Skwoxel::generate_mesh);
 	}
 
 	Skwoxel::Skwoxel() :
+		ground(0.0, -1.0, 0.0),
+		air(0.0, 1.0, 0.0),
+		remove_bubbles(true),
+		remove_floaters(true),
 		voxels(0),
 		fields(0)
 	{
@@ -82,8 +100,18 @@ namespace skwoxel
 
 	void Skwoxel::generate()
 	{
-		generate_fields();
+		delete_mesh();
+		generate_voxels();
+		filter();
 		generate_mesh();
+		delete_voxels();
+	}
+
+	void Skwoxel::delete_mesh()
+	{
+		auto mesh = find_child("SkwoxelMesh", false, true);
+		if (mesh)
+			mesh->queue_free();
 	}
 
 	void Skwoxel::allocate_voxels()
@@ -110,6 +138,426 @@ namespace skwoxel
 				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
 				{
 					voxel->strength = 0.0;
+					++voxel;
+				}
+			}
+		}
+	}
+
+	void Skwoxel::generate_air_flags()
+	{
+		bool changed = true;
+		voxel_at_global(air.x, air.y, air.z).flags |= Voxel::AIR;
+		while (changed)
+		{
+			changed = false;
+			for (int z = 0; z < size_z(); ++z)
+			{
+				for (int y = 0; y < size_y(); ++y)
+				{
+					// Sweep right
+					bool is_air = false;
+					Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
+					for (int x = 0; x < size_x(); ++x)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						++voxel;
+					}
+					// Sweep left
+					is_air = false;
+					voxel = &voxel_at_local_unsafe(size_x() - 1, y, z);
+					for (int x = size_x(); x > 0; --x)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						--voxel;
+					}
+				}
+			}
+			for (int z = 0; z < size_z(); ++z)
+			{
+				for (int x = 0; x < size_x(); ++x)
+				{
+					// Sweep up
+					bool is_air = false;
+					Voxel* voxel = &voxel_at_local_unsafe(x, 0, z);
+					for (int y = 0; y < size_y(); ++y)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						voxel += data_size_x();
+					}
+					// Sweep down
+					is_air = false;
+					voxel = &voxel_at_local_unsafe(x, size_y() - 1, z);
+					for (int y = size_y(); y > 0; --y)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						voxel -= data_size_x();
+					}
+				}
+			}
+			for (int y = 0; y < size_y(); ++y)
+			{
+				for (int x = 0; x < size_x(); ++x)
+				{
+					// Sweep away
+					bool is_air = false;
+					Voxel* voxel = &voxel_at_local_unsafe(x, y, 0);
+					for (int z = 0; z < size_z(); ++z)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						voxel += data_size_x() * data_size_y();
+					}
+					// Sweep down
+					is_air = false;
+					voxel = &voxel_at_local_unsafe(x, y, size_z() - 1);
+					for (int z = size_z(); z > 0; --z)
+					{
+						if (is_air)
+						{
+							if (!(voxel->flags & Voxel::AIR) && voxel->strength < 0.0)
+							{
+								voxel->flags |= Voxel::AIR;
+								changed = true;
+							}
+							else
+							{
+								is_air = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::AIR)
+							{
+								is_air = true;
+							}
+						}
+						voxel -= data_size_x() * data_size_y();
+					}
+				}
+			}
+		}
+	}
+
+	void Skwoxel::generate_ground_flags()
+	{
+		bool changed = true;
+		voxel_at_global(ground.x, ground.y, ground.z).flags |= Voxel::GROUND;
+		while (changed)
+		{
+			changed = false;
+			for (int z = 0; z < size_z(); ++z)
+			{
+				for (int y = 0; y < size_y(); ++y)
+				{
+					// Sweep right
+					bool is_ground = false;
+					Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
+					for (int x = 0; x < size_x(); ++x)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						++voxel;
+					}
+					// Sweep left
+					is_ground = false;
+					voxel = &voxel_at_local_unsafe(size_x() - 1, y, z);
+					for (int x = size_x(); x > 0; --x)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						--voxel;
+					}
+				}
+			}
+			for (int z = 0; z < size_z(); ++z)
+			{
+				for (int x = 0; x < size_x(); ++x)
+				{
+					// Sweep up
+					bool is_ground = false;
+					Voxel* voxel = &voxel_at_local_unsafe(x, 0, z);
+					for (int y = 0; y < size_y(); ++y)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						voxel += data_size_x();
+					}
+					// Sweep down
+					is_ground = false;
+					voxel = &voxel_at_local_unsafe(x, size_y() - 1, z);
+					for (int y = size_y(); y > 0; --y)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						voxel -= data_size_x();
+					}
+				}
+			}
+			for (int y = 0; y < size_y(); ++y)
+			{
+				for (int x = 0; x < size_x(); ++x)
+				{
+					// Sweep away
+					bool is_ground = false;
+					Voxel* voxel = &voxel_at_local_unsafe(x, y, 0);
+					for (int z = 0; z < size_z(); ++z)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						voxel += data_size_x() * data_size_y();
+					}
+					// Sweep towards
+					is_ground = false;
+					voxel = &voxel_at_local_unsafe(x, y, size_z() - 1);
+					for (int z = size_z(); z > 0; --z)
+					{
+						if (is_ground)
+						{
+							if (!(voxel->flags & Voxel::GROUND) && voxel->strength >= 0.0)
+							{
+								voxel->flags |= Voxel::GROUND;
+								changed = true;
+							}
+							else
+							{
+								is_ground = false;
+							}
+						}
+						else
+						{
+							if (voxel->flags & Voxel::GROUND)
+							{
+								is_ground = true;
+							}
+						}
+						voxel -= data_size_x() * data_size_y();
+					}
+				}
+			}
+		}
+	}
+	
+	void Skwoxel::filter()
+	{
+		if (remove_bubbles)
+		{
+			filter_bubbles();
+		}
+		if (remove_floaters)
+		{
+			filter_floaters();
+		}
+	}
+
+	void Skwoxel::filter_bubbles()
+	{
+		generate_air_flags();
+		for (int z = 0; z < size_z(); ++z)
+		{
+			for (int y = 0; y < size_y(); ++y)
+			{
+				Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
+				for (int x = 0; x < size_x(); ++x)
+				{
+					if (voxel->strength < 0.0 && !(voxel->flags & Voxel::AIR))
+					{
+						voxel->strength = 0.001;
+					}
+					++voxel;
+				}
+			}
+		}
+	}
+
+	void Skwoxel::filter_floaters()
+	{
+		generate_ground_flags();
+		for (int z = 0; z < size_z(); ++z)
+		{
+			for (int y = 0; y < size_y(); ++y)
+			{
+				Voxel* voxel = &voxel_at_local_unsafe(0, y, z);
+				for (int x = 0; x < size_x(); ++x)
+				{
+					if (voxel->strength >= 0.0 && !(voxel->flags & Voxel::GROUND))
+					{
+						voxel->strength = -0.001;
+					}
 					++voxel;
 				}
 			}
@@ -167,9 +615,10 @@ namespace skwoxel
 		}
 	}
 
-	void Skwoxel::generate_fields()
+	void Skwoxel::generate_voxels()
 	{
 		UtilityFunctions::print(__FUNCTION__);
+		delete_voxels();
 		allocate_voxels();
 		collect_children();
 
@@ -181,6 +630,7 @@ namespace skwoxel
 				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
 				{
 					voxel->strength = sample(Vector3(x, y, z));
+					voxel->flags = 0;
 					++voxel;
 				}
 			}
@@ -291,8 +741,6 @@ namespace skwoxel
 		}
 
 		// Create the array of arrays we need
-		Array arrays;
-		arrays.resize(Mesh::ARRAY_MAX);
 		PackedVector3Array vertices;
 		PackedVector3Array normals;
 		PackedInt32Array indices;
@@ -445,6 +893,9 @@ namespace skwoxel
 			normals[idx] = -gradient;
 		}
 
+		// Build arrays and mesh
+		Array arrays;
+		arrays.resize(Mesh::ARRAY_MAX);
 		arrays[Mesh::ARRAY_VERTEX] = vertices;
 		arrays[Mesh::ARRAY_NORMAL] = normals;
 		arrays[Mesh::ARRAY_INDEX] = indices;
@@ -453,13 +904,13 @@ namespace skwoxel
 		mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);
 		MeshInstance3D* mesh_instance = memnew(MeshInstance3D);
 		mesh_instance->set_mesh(mesh);
-		get_parent()->add_child(mesh_instance); // TODO - SAFETY CHECK and warnings
+		mesh_instance->set_name("SkwoxelMesh");
+		add_child(mesh_instance);
 	}
 
 	// Properties.
 	void Skwoxel::set_lower_bounds(const Vector3i& bounds) {
 		lower_bounds = bounds;
-		delete_voxels();
 	}
 
 	Vector3i Skwoxel::get_lower_bounds() const {
@@ -468,10 +919,41 @@ namespace skwoxel
 
 	void Skwoxel::set_upper_bounds(const Vector3i& bounds) {
 		upper_bounds = bounds;
-		delete_voxels();
 	}
 
 	Vector3i Skwoxel::get_upper_bounds() const {
 		return upper_bounds;
+	}
+
+	void Skwoxel::set_ground(const Vector3i& pos) {
+		ground = pos;
+	}
+
+	Vector3i Skwoxel::get_ground() const {
+		return ground;
+	}
+
+	void Skwoxel::set_air(const Vector3i& pos) {
+		air = pos;
+	}
+
+	Vector3i Skwoxel::get_air() const {
+		return air;
+	}
+
+	void Skwoxel::set_remove_bubbles(bool remove) {
+		remove_bubbles = remove;
+	}
+
+	bool Skwoxel::get_remove_bubbles() const {
+		return remove_bubbles;
+	}
+
+	void Skwoxel::set_remove_floaters(bool remove) {
+		remove_floaters = remove;
+	}
+
+	bool Skwoxel::get_remove_floaters() const {
+		return remove_floaters;
 	}
 }

@@ -6,7 +6,7 @@
 #ifndef SKWOXEL_SKWOXEL_H
 #define SKWOXEL_SKWOXEL_H
 
-#include <godot_cpp/classes/Node3d.hpp>
+#include <godot_cpp/classes/static_body3d.hpp>
 #include <godot_cpp/classes/global_constants.hpp>
 #include <godot_cpp/classes/viewport.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
@@ -19,13 +19,18 @@ using namespace godot;
 
 namespace skwoxel
 {
-	class Skwoxel : public Node3D {
-		GDCLASS(Skwoxel, Node3D);
+	class Skwoxel : public StaticBody3D {
+		GDCLASS(Skwoxel, StaticBody3D);
 
 	public:
 		struct Voxel
 		{
 		public:
+			enum Flag
+			{
+				GROUND = 1 << 0,
+				AIR    = 1 << 1
+			};
 			enum EdgeNum
 			{
 				EEN_X,
@@ -40,6 +45,7 @@ namespace skwoxel
 		public:
 			real_t strength;
 			int32_t edges[EEN_COUNT];
+			uint32_t flags;
 		};
 	protected:
 		static void _bind_methods();
@@ -58,6 +64,12 @@ namespace skwoxel
 		void clear_voxels();
 		void allocate_voxels();
 		void delete_voxels();
+		void generate_voxels();
+		void delete_mesh();
+		void generate_mesh();
+		void generate_air_flags();
+		void generate_ground_flags();
+		void filter();
 		inline int size_x() { return upper_bounds.x + 1 - lower_bounds.x; }
 		inline int size_y() { return upper_bounds.y + 1 - lower_bounds.y; }
 		inline int size_z() { return upper_bounds.z + 1 - lower_bounds.z; }
@@ -72,6 +84,10 @@ namespace skwoxel
 	private:
 		Vector3i lower_bounds;
 		Vector3i upper_bounds;
+		Vector3i ground;
+		Vector3i air;
+		bool remove_bubbles;
+		bool remove_floaters;
 		Voxel* voxels;
 		SkwoxelField** fields;
 		int num_fields;
@@ -81,14 +97,22 @@ namespace skwoxel
 		~Skwoxel();
 
 		void generate();
-		void generate_fields();
-		void generate_mesh();
+		void filter_bubbles();
+		void filter_floaters();
 
 		// Property.
 		void set_lower_bounds(const Vector3i& bounds);
 		Vector3i get_lower_bounds() const;
 		void set_upper_bounds(const Vector3i& bounds);
 		Vector3i get_upper_bounds() const;
+		void set_ground(const Vector3i& pos);
+		Vector3i get_ground() const;
+		void set_air(const Vector3i& pos);
+		Vector3i get_air() const;
+		void set_remove_bubbles(bool remove);
+		bool get_remove_bubbles() const;
+		void set_remove_floaters(bool remove);
+		bool get_remove_floaters() const;
 
 		// Ungodly editor hack
 		void set_generate(bool val) { generate(); }

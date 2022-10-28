@@ -4,16 +4,15 @@
 frequency = 0.05
 fractal_octaves = 2
 
-[node name="StaticBody3D" type="StaticBody3D"]
-
-[node name="Skwoxel" type="Skwoxel" parent="."]
+[node name="Skwoxel" type="Skwoxel"]
 lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
+air = Vector3i(-100, 20, -100)
+ground = Vector3i(0, 0, 0)
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="Skwoxel"]
-outer_radius = 20.0
-inner_strength = 0.2
-outer_strength = -0.2
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
+outer_radius = 40.0
+outer_strength = -1.0
 
-[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="Skwoxel"]
+[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="."]
 noise = SubResource("FastNoiseLite_tm8ep")

@@ -62,7 +62,6 @@ namespace skwoxel
 
 		real_t sample(const Vector3& pos) const;
 		void collect_children();
-		void clear_voxels();
 		void allocate_voxels();
 		void delete_voxels();
 		void generate_voxels();

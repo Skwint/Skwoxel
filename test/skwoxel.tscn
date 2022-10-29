@@ -8,7 +8,7 @@ fractal_octaves = 2
 lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)
-ground = Vector3i(0, 0, 0)
+ground = Vector3i(0, -20, 0)
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
 centre = Vector3(-10, 0, 0)

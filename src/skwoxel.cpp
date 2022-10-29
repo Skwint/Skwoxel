@@ -113,12 +113,21 @@ namespace skwoxel
 
 	void Skwoxel::delete_mesh()
 	{
-		auto mesh = find_child(SKWOXEL_MESH_NAME, false, true);
+		UtilityFunctions::print(__FUNCTION__);
+		auto mesh = find_child(SKWOXEL_MESH_NAME, false, false);
 		if (mesh)
+		{
+			UtilityFunctions::print(" found mesh");
+			remove_child(mesh);
 			mesh->queue_free();
-		auto coll = find_child(SKWOXEL_COLLISION_NAME, false, true);
+		}
+		auto coll = find_child(SKWOXEL_COLLISION_NAME, false, false);
 		if (coll)
+		{
+			UtilityFunctions::print(" found collisions");
+			remove_child(coll);
 			coll->queue_free();
+		}
 	}
 
 	void Skwoxel::allocate_voxels()
@@ -133,22 +142,6 @@ namespace skwoxel
 	{
 		delete[] voxels;
 		voxels = 0;
-	}
-
-	void Skwoxel::clear_voxels()
-	{
-		Voxel * voxel = voxels;
-		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
-		{
-			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
-			{
-				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
-				{
-					voxel->strength = 0.0;
-					++voxel;
-				}
-			}
-		}
 	}
 
 	void Skwoxel::generate_air_flags()
@@ -922,6 +915,7 @@ namespace skwoxel
 		shape->set_faces(physics);
 		CollisionShape3D* collision = memnew(CollisionShape3D);
 		collision->set_shape(shape);
+		collision->set_name(SKWOXEL_COLLISION_NAME);
 		add_child(collision);
 	}
 

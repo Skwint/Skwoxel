@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=3 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
 frequency = 0.05
 fractal_octaves = 2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
+seed = 2
+frequency = 0.05
+fractal_octaves = 1
 
 [node name="Skwoxel" type="Skwoxel"]
 lower_bounds = Vector3i(-100, -20, -100)
@@ -49,3 +54,12 @@ inner_radius = 20.0
 outer_radius = 40.0
 inner_strength = 5.0
 outer_strength = 1.0
+
+[node name="SkwoxelFieldTurbulence" type="SkwoxelFieldTurbulence" parent="."]
+noise = SubResource("FastNoiseLite_0uk55")
+direction = Vector3(8, 0, 0)
+
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldTurbulence"]
+centre = Vector3(0, 0, -40)
+inner_radius = 15.0
+outer_radius = 25.0

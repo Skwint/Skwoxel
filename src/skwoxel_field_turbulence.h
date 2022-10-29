@@ -1,20 +1,23 @@
-#ifndef SKWOXEL_FIELD_CUT_H
-#define SKWOXEL_FIELD_CUT_H
+#ifndef SKWOXEL_FIELD_TURBULENCE_H
+#define SKWOXEL_FIELD_TURBULENCE_H
 
 #include "skwoxel_field_add.h"
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
+#include <godot_cpp/classes/fast_noise_lite.hpp>
+#include <godot_cpp/classes/noise.hpp>
+#include <godot_cpp/classes/ref.hpp>
 
 namespace skwoxel
 {
-	class SkwoxelFieldCut : public SkwoxelFieldAdd
+	class SkwoxelFieldTurbulence : public SkwoxelFieldAdd
 	{
-		GDCLASS(SkwoxelFieldCut, SkwoxelFieldAdd);
+		GDCLASS(SkwoxelFieldTurbulence, SkwoxelFieldAdd);
 	public:
-		SkwoxelFieldCut();
-		virtual ~SkwoxelFieldCut();
+		SkwoxelFieldTurbulence();
+		virtual ~SkwoxelFieldTurbulence();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -26,14 +29,14 @@ namespace skwoxel
 		static void _bind_methods();
 
 		real_t strength(const godot::Vector3 & pos) const override;
-		godot::Vector3 get_normal() const { return normal; };
-		void set_normal(godot::Vector3 pos) { normal = pos; }
-		real_t get_distance() const { return distance; };
-		void set_distance(real_t dist) { distance = dist; }
+		godot::Vector3 get_direction() const { return direction; };
+		void set_direction(godot::Vector3 dir) { direction = dir; }
+		godot::Ref<godot::Noise> get_noise() const { return noise; };
+		void set_noise(godot::Ref<godot::Noise> val) { noise = val; }
 
 	private:
-		godot::Vector3 normal;
-		real_t distance;
+		godot::Ref<godot::Noise> noise;
+		godot::Vector3 direction;
 	};
 }
 

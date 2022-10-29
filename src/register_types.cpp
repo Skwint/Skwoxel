@@ -21,6 +21,7 @@
 #include "skwoxel_field_noise.h"
 #include "skwoxel_field_plane.h"
 #include "skwoxel_field_sphere.h"
+#include "skwoxel_field_turbulence.h"
 
 using namespace godot;
 
@@ -36,6 +37,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldNoise>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldPlane>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldSphere>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldTurbulence>();
 	}
 }
 

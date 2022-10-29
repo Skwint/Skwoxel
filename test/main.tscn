@@ -1,51 +1,61 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=7 format=3 uid="uid://fquntduuoap0"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-frequency = 0.05
-fractal_octaves = 2
+[ext_resource type="Script" path="res://main.gd" id="1_nxr2c"]
+[ext_resource type="PackedScene" uid="uid://dmx2xuigcpvt4" path="res://skwoxel.tscn" id="2_t1a35"]
 
-[node name="Skwoxel" type="Skwoxel"]
-lower_bounds = Vector3i(-100, -20, -100)
-upper_bounds = Vector3i(100, 20, 100)
-air = Vector3i(-100, 20, -100)
-ground = Vector3i(0, 0, 0)
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3j3hn"]
+bounce = 0.39
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
-centre = Vector3(-10, 0, 0)
-outer_radius = 20.0
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oli4w"]
+bounce = 0.5
 
-[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
-point1 = Vector3(-40, -10, 0)
-point2 = Vector3(-40, 10, 0)
+[sub_resource type="SphereShape3D" id="SphereShape3D_aip4a"]
+radius = 5.0
 
-[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
-constant = -0.8
+[sub_resource type="SphereMesh" id="SphereMesh_x70xd"]
+radius = 5.0
+height = 10.0
 
-[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="."]
-normal = Vector3(0, 1, 0)
-inner_distance = -20.0
-outer_distance = -10.0
-inner_strength = 2.0
+[node name="main" type="Node3D"]
+script = ExtResource("1_nxr2c")
 
-[node name="SkwoxelFieldMultiply" type="SkwoxelFieldMultiply" parent="."]
+[node name="Skwoxel" parent="." instance=ExtResource("2_t1a35")]
+physics_material_override = SubResource("PhysicsMaterial_3j3hn")
 
-[node name="SkwoxelFieldCut" type="SkwoxelFieldCut" parent="SkwoxelFieldMultiply"]
-normal = Vector3(0, 0, 1)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+sky_mode = 1
 
-[node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="SkwoxelFieldMultiply/SkwoxelFieldCut"]
-noise = SubResource("FastNoiseLite_tm8ep")
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -100, 20, 100)
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMultiply"]
-centre = Vector3(0, -20, 50)
-inner_radius = 0.0
-outer_radius = 40.0
-inner_strength = 0.0
-outer_strength = 1.0
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+physics_material_override = SubResource("PhysicsMaterial_oli4w")
 
-[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="SkwoxelFieldMultiply"]
-point1 = Vector3(50, -30, 80)
-point2 = Vector3(50, -30, 20)
-inner_radius = 20.0
-outer_radius = 40.0
-inner_strength = 5.0
-outer_strength = 1.0
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("SphereShape3D_aip4a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("SphereMesh_x70xd")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, 0)
+physics_material_override = SubResource("PhysicsMaterial_oli4w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("SphereShape3D_aip4a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2"]
+mesh = SubResource("SphereMesh_x70xd")
+
+[node name="RigidBody3D3" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 20, 0)
+physics_material_override = SubResource("PhysicsMaterial_oli4w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3"]
+shape = SubResource("SphereShape3D_aip4a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3"]
+mesh = SubResource("SphereMesh_x70xd")
+skeleton = NodePath("../../RigidBody3D3")

@@ -7,15 +7,20 @@
 
 #include <godot_cpp/core/class_db.hpp>
 
-#include <godot_cpp/classes/global_constants.hpp>
-#include <godot_cpp/classes/label.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/collision_shape3d.hpp>
+#include <godot_cpp/classes/concave_polygon_shape3d.hpp>
+#include <godot_cpp/classes/global_constants.hpp>
+#include <godot_cpp/classes/label.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 
 #include "skwoxel_helpers.h"
 #include "skwoxel_field.h"
+
+#define SKWOXEL_MESH_NAME "SkwoxelMesh"
+#define SKWOXEL_COLLISION_NAME "SkwoxelCollision"
 
 using namespace godot;
 
@@ -108,9 +113,12 @@ namespace skwoxel
 
 	void Skwoxel::delete_mesh()
 	{
-		auto mesh = find_child("SkwoxelMesh", false, true);
+		auto mesh = find_child(SKWOXEL_MESH_NAME, false, true);
 		if (mesh)
 			mesh->queue_free();
+		auto coll = find_child(SKWOXEL_COLLISION_NAME, false, true);
+		if (coll)
+			coll->queue_free();
 	}
 
 	void Skwoxel::allocate_voxels()
@@ -899,8 +907,22 @@ namespace skwoxel
 		mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);
 		MeshInstance3D* mesh_instance = memnew(MeshInstance3D);
 		mesh_instance->set_mesh(mesh);
-		mesh_instance->set_name("SkwoxelMesh");
+		mesh_instance->set_name(SKWOXEL_MESH_NAME);
 		add_child(mesh_instance);
+
+		// Generate a corresponding collision shape
+		Ref<ConcavePolygonShape3D> shape;
+		shape.instantiate();
+		PackedVector3Array physics;
+		physics.resize(indices.size());
+		for (int i = 0; i < indices.size(); ++i)
+		{
+			physics[i] = vertices[indices[i]];
+		}
+		shape->set_faces(physics);
+		CollisionShape3D* collision = memnew(CollisionShape3D);
+		collision->set_shape(shape);
+		add_child(collision);
 	}
 
 	// Properties.

@@ -55,11 +55,15 @@ outer_radius = 40.0
 inner_strength = 5.0
 outer_strength = 1.0
 
-[node name="SkwoxelFieldTurbulence" type="SkwoxelFieldTurbulence" parent="."]
+[node name="SkwoxelFieldMirror" type="SkwoxelFieldMirror" parent="."]
+normal = Vector3(1, 0, 0)
+distance = -20.0
+
+[node name="SkwoxelFieldTurbulence" type="SkwoxelFieldTurbulence" parent="SkwoxelFieldMirror"]
 noise = SubResource("FastNoiseLite_0uk55")
 direction = Vector3(8, 0, 0)
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldTurbulence"]
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMirror/SkwoxelFieldTurbulence"]
 centre = Vector3(0, 0, -40)
 inner_radius = 15.0
 outer_radius = 25.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=4 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
 frequency = 0.05
@@ -8,6 +8,15 @@ fractal_octaves = 2
 seed = 2
 frequency = 0.05
 fractal_octaves = 1
+
+[sub_resource type="Curve3D" id="Curve3D_brtmw"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, -50, -50, 30, 80, 0, -80, 50, 50, -20, 0, 0, 0, -80, -20, -80),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+up_vector_enabled = false
 
 [node name="Skwoxel" type="Skwoxel"]
 lower_bounds = Vector3i(-100, -20, -100)
@@ -67,3 +76,8 @@ direction = Vector3(8, 0, 0)
 centre = Vector3(0, 0, -40)
 inner_radius = 15.0
 outer_radius = 25.0
+
+[node name="SkwoxelFieldCurve" type="SkwoxelFieldCurve" parent="."]
+curve = SubResource("Curve3D_brtmw")
+inner_radius = 5.0
+outer_radius = 15.0

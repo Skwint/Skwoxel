@@ -28,21 +28,18 @@ namespace skwoxel
 		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Vector3 get_centre() const { return centre; };
 		void set_centre(godot::Vector3 pos) { centre = pos; }
-		real_t get_inner_radius() const { return inner_radius; };
-		void set_inner_radius(real_t radius) { inner_radius = radius; }
-		real_t get_outer_radius() const { return outer_radius; };
-		void set_outer_radius(real_t radius) { outer_radius = radius; }
+		real_t get_radius() const { return radius; };
+		void set_radius(real_t p_radius) { radius = p_radius; }
+		real_t get_blend() const { return blend; };
+		void set_blend(real_t p_blend) { blend = p_blend; }
 		real_t get_inner_strength() const { return inner_strength; };
-		void set_inner_strength(real_t strength) { inner_strength = strength; }
-		real_t get_outer_strength() const { return outer_strength; };
-		void set_outer_strength(real_t strength) { outer_strength = strength; }
+		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
 	private:
 		godot::Vector3 centre;
-		real_t inner_radius;
-		real_t outer_radius;
+		real_t radius;
+		real_t blend;
 		real_t inner_strength;
-		real_t outer_strength;
 	};
 }
 

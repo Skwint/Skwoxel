@@ -34,19 +34,19 @@ ground = Vector3i(0, -20, 0)
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
 centre = Vector3(-10, 0, 0)
-outer_radius = 20.0
+radius = 15.0
+blend = 3.0
 
 [node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
 point1 = Vector3(-40, -10, 0)
 point2 = Vector3(-40, 10, 0)
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
-constant = -0.8
+constant = -0.5
 
 [node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="."]
 normal = Vector3(0, 1, 0)
-inner_distance = -20.0
-outer_distance = -10.0
+distance = -10.0
 inner_strength = 2.0
 
 [node name="SkwoxelFieldMultiply" type="SkwoxelFieldMultiply" parent="."]
@@ -57,20 +57,23 @@ normal = Vector3(0, 0, 1)
 [node name="SkwoxelFieldNoise" type="SkwoxelFieldNoise" parent="SkwoxelFieldMultiply/SkwoxelFieldCut"]
 noise = SubResource("FastNoiseLite_tm8ep")
 
-[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMultiply"]
-centre = Vector3(0, -20, 50)
-inner_radius = 0.0
-outer_radius = 40.0
-inner_strength = 0.0
-outer_strength = 1.0
+[node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="SkwoxelFieldMultiply"]
 
-[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="SkwoxelFieldMultiply"]
+[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="SkwoxelFieldMultiply/SkwoxelFieldAdd"]
 point1 = Vector3(50, -30, 80)
 point2 = Vector3(50, -30, 20)
-inner_radius = 20.0
-outer_radius = 40.0
+radius = 10.0
+blend = 3.0
 inner_strength = 5.0
-outer_strength = 1.0
+
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMultiply/SkwoxelFieldAdd"]
+centre = Vector3(0, -20, 50)
+radius = 20.0
+blend = 4.0
+inner_strength = -1.0
+
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="SkwoxelFieldMultiply/SkwoxelFieldAdd"]
+constant = 1.0
 
 [node name="SkwoxelFieldMirror" type="SkwoxelFieldMirror" parent="."]
 normal = Vector3(1, 0, 0)
@@ -82,13 +85,10 @@ direction = Vector3(8, 0, 0)
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldMirror/SkwoxelFieldTurbulence"]
 centre = Vector3(0, 0, -40)
-inner_radius = 15.0
-outer_radius = 25.0
+radius = 15.0
 
 [node name="SkwoxelFieldCurve" type="SkwoxelFieldCurve" parent="."]
 curve = SubResource("Curve3D_brtmw")
-inner_radius = 5.0
-outer_radius = 15.0
 
 [node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="."]
 curve = SubResource("Curve3D_6n8g1")

@@ -12,10 +12,9 @@ namespace skwoxel
 	bool SkwoxelFieldSphere::_set(const StringName& p_name, const Variant& p_value) {
 		String name = p_name;
 		SKWOXEL_SET_METHOD(centre);
-		SKWOXEL_SET_METHOD(inner_radius);
-		SKWOXEL_SET_METHOD(outer_radius);
+		SKWOXEL_SET_METHOD(radius);
+		SKWOXEL_SET_METHOD(blend);
 		SKWOXEL_SET_METHOD(inner_strength);
-		SKWOXEL_SET_METHOD(outer_strength);
 
 		return false;
 	}
@@ -23,10 +22,9 @@ namespace skwoxel
 	bool SkwoxelFieldSphere::_get(const StringName& p_name, Variant& r_ret) const {
 		String name = p_name;
 		SKWOXEL_GET_METHOD(centre);
-		SKWOXEL_GET_METHOD(inner_radius);
-		SKWOXEL_GET_METHOD(outer_radius);
+		SKWOXEL_GET_METHOD(radius);
+		SKWOXEL_GET_METHOD(blend);
 		SKWOXEL_GET_METHOD(inner_strength);
-		SKWOXEL_GET_METHOD(outer_strength);
 
 		return false;
 	}
@@ -37,10 +35,9 @@ namespace skwoxel
 
 	void SkwoxelFieldSphere::_get_property_list(List<PropertyInfo>* list) const {
 		list->push_back(PropertyInfo(Variant::VECTOR3, "centre"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "outer_radius"));
+		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
+		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "outer_strength"));
 	}
 
 	bool SkwoxelFieldSphere::_property_can_revert(const StringName& p_name) const {
@@ -54,18 +51,16 @@ namespace skwoxel
 	void SkwoxelFieldSphere::_bind_methods() {
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, centre);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, inner_radius);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, outer_radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, inner_strength);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, outer_strength);
 	}
 
 	SkwoxelFieldSphere::SkwoxelFieldSphere() :
 		SkwoxelField(),
-		inner_radius(10.0),
-		outer_radius(12.0),
-		inner_strength(1.0),
-		outer_strength(0.0)
+		radius(10.0),
+		blend(2.0),
+		inner_strength(1.0)
 	{
 
 	}
@@ -78,19 +73,8 @@ namespace skwoxel
 	real_t SkwoxelFieldSphere::strength(const Vector3& pos) const
 	{
 		real_t rad = (pos - centre).length();
-		if (rad < inner_radius)
-		{
-			return inner_strength;
-		}
-		else if (rad > outer_radius)
-		{
-			return outer_strength;
-		}
-		else
-		{
-			real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
-			return (1.0 - r) * inner_strength + r * outer_strength;
-		}
+		real_t radial_multiplier = Math::smoothstep(-blend, blend, rad - radius);
+		return Math::lerp(inner_strength, real_t(0.0), radial_multiplier);
 	}
 
 }

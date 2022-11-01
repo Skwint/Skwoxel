@@ -15,10 +15,9 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_SET_METHOD(point1);
 		SKWOXEL_SET_METHOD(point2);
-		SKWOXEL_SET_METHOD(inner_radius);
-		SKWOXEL_SET_METHOD(outer_radius);
+		SKWOXEL_SET_METHOD(radius);
+		SKWOXEL_SET_METHOD(blend);
 		SKWOXEL_SET_METHOD(inner_strength);
-		SKWOXEL_SET_METHOD(outer_strength);
 
 		return false;
 	}
@@ -27,10 +26,9 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_GET_METHOD(point1);
 		SKWOXEL_GET_METHOD(point2);
-		SKWOXEL_GET_METHOD(inner_radius);
-		SKWOXEL_GET_METHOD(outer_radius);
+		SKWOXEL_GET_METHOD(radius);
+		SKWOXEL_GET_METHOD(blend);
 		SKWOXEL_GET_METHOD(inner_strength);
-		SKWOXEL_GET_METHOD(outer_strength);
 
 		return false;
 	}
@@ -42,10 +40,9 @@ namespace skwoxel
 	void SkwoxelFieldCapsule::_get_property_list(List<PropertyInfo>* list) const {
 		list->push_back(PropertyInfo(Variant::VECTOR3, "point1"));
 		list->push_back(PropertyInfo(Variant::VECTOR3, "point2"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "outer_radius"));
+		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
+		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "outer_strength"));
 	}
 
 	bool SkwoxelFieldCapsule::_property_can_revert(const StringName& p_name) const {
@@ -60,21 +57,19 @@ namespace skwoxel
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, point1);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, point2);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, inner_radius);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, outer_radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, inner_strength);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, outer_strength);
 
-		//ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "inner_radius", PROPERTY_HINT_RESOURCE_TYPE, VoxelStream::get_class_static()),
+		//ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "radius", PROPERTY_HINT_RESOURCE_TYPE, VoxelStream::get_class_static()),
 		//	"set_stream", "get_stream");
 	}
 
 	SkwoxelFieldCapsule::SkwoxelFieldCapsule() :
 		SkwoxelField(),
-		inner_radius(5.0),
-		outer_radius(10.0),
-		inner_strength(1.0),
-		outer_strength(0.0)
+		radius(5.0),
+		blend(2.0),
+		inner_strength(1.0)
 	{
 	}
 
@@ -87,19 +82,8 @@ namespace skwoxel
 	{
 		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
 		real_t rad = (pos - close).length();
-		if (rad < inner_radius)
-		{
-			return inner_strength;
-		}
-		else if (rad > outer_radius)
-		{
-			return outer_strength;
-		}
-		else
-		{
-			real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
-			return (1.0 - r) * inner_strength + r * outer_strength;
-		}
+		real_t radial_multiplier = Math::smoothstep(-blend, blend, rad - radius);
+		return Math::lerp(inner_strength, real_t(0.0), radial_multiplier);
 	}
 
 }

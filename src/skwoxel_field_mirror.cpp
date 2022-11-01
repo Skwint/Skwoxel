@@ -55,7 +55,7 @@ namespace skwoxel
 	SkwoxelFieldMirror::SkwoxelFieldMirror() :
 		SkwoxelFieldAdd(),
 		distance(0.0),
-		blend(1.0)
+		blend(2.0)
 	{
 
 	}
@@ -80,8 +80,8 @@ namespace skwoxel
 		}
 		else
 		{
-			real_t r = (rad + blend) / (2.0 * blend);
-			return (1.0 - r) * SkwoxelFieldAdd::strength(reflected) + r * SkwoxelFieldAdd::strength(pos);
+			real_t multiplier = Math::smoothstep(-blend, blend, rad);
+			return Math::lerp(SkwoxelFieldAdd::strength(reflected), SkwoxelFieldAdd::strength(pos), multiplier);
 		}
 	}
 

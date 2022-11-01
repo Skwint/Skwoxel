@@ -18,12 +18,14 @@
 #include "skwoxel_field_constant.h"
 #include "skwoxel_field_curve.h"
 #include "skwoxel_field_cut.h"
+#include "skwoxel_field_image_curve.h"
 #include "skwoxel_field_mirror.h"
 #include "skwoxel_field_multiply.h"
 #include "skwoxel_field_noise.h"
 #include "skwoxel_field_plane.h"
 #include "skwoxel_field_sphere.h"
 #include "skwoxel_field_turbulence.h"
+#include "skwoxel_field_walkway.h"
 
 using namespace godot;
 
@@ -36,12 +38,14 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldConstant>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCurve>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCut>();
+		//ClassDB::register_class<skwoxel::SkwoxelFieldImageCurve>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldMirror>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldMultiply>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldNoise>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldPlane>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldSphere>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTurbulence>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldWalkway>();
 	}
 }
 

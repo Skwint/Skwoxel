@@ -46,9 +46,25 @@ namespace skwoxel
 	{
 	}
 
+	void SkwoxelField::pre_generate()
+	{
+		for (int ch = 0; ch < num_child_fields; ch++)
+		{
+			child_fields[ch]->pre_generate();
+		}
+	}
+
 	real_t SkwoxelField::strength(const Vector3& pos) const
 	{
 		return 0.0;
+	}
+
+	void SkwoxelField::post_generate()
+	{
+		for (int ch = 0; ch < num_child_fields; ch++)
+		{
+			child_fields[ch]->post_generate();
+		}
 	}
 
 	void SkwoxelField::collect_children_of(const Node * parent)

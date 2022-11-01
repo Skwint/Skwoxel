@@ -64,7 +64,9 @@ namespace skwoxel
 		void collect_children();
 		void allocate_voxels();
 		void delete_voxels();
+		void pre_generate();
 		void generate_voxels();
+		void post_generate();
 		void delete_mesh();
 		void generate_mesh();
 		void generate_air_flags();

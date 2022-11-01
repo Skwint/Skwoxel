@@ -36,7 +36,6 @@ namespace skwoxel
 	}
 
 	void SkwoxelFieldCurve::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::OBJECT, "curve"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_radius"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "outer_radius"));
 		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
@@ -58,6 +57,8 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, outer_radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, inner_strength);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, outer_strength);
+
+		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
 	}
 
 	SkwoxelFieldCurve::SkwoxelFieldCurve() :
@@ -77,21 +78,27 @@ namespace skwoxel
 
 	real_t SkwoxelFieldCurve::strength(const Vector3& pos) const
 	{
-		Vector3 touch = curve->get_closest_point(pos);
-		auto rad = (pos - touch).length();
-		if (rad < inner_radius)
+		if (curve.is_valid())
 		{
-			return inner_strength;
-		}
-		else if (rad > outer_radius)
-		{
-			return outer_strength;
+			Vector3 touch = curve->get_closest_point(pos);
+			auto rad = (pos - touch).length();
+			if (rad < inner_radius)
+			{
+				return inner_strength;
+			}
+			else if (rad > outer_radius)
+			{
+				return outer_strength;
+			}
+			else
+			{
+				real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
+				return (1.0 - r) * inner_strength + r * outer_strength;
+			}
 		}
 		else
 		{
-			real_t r = (rad - inner_radius) / (outer_radius - inner_radius);
-			return (1.0 - r) * inner_strength + r * outer_strength;
+			return 0.0;
 		}
 	}
-
 }

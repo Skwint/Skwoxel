@@ -618,6 +618,7 @@ namespace skwoxel
 		allocate_voxels();
 		collect_children();
 
+		root.pre_generate();
 		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
 		{
 			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
@@ -631,6 +632,7 @@ namespace skwoxel
 				}
 			}
 		}
+		root.post_generate();
 	}
 
 	void Skwoxel::generate_mesh()

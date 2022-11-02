@@ -27,7 +27,7 @@ using namespace godot;
 namespace skwoxel
 {
 	void Skwoxel::_notification(int p_what) {
-		UtilityFunctions::print("Skwoxel note: ", String::num(p_what));
+		// UtilityFunctions::print("Skwoxel note: ", String::num(p_what));
 	}
 
 	bool Skwoxel::_set(const StringName& p_name, const Variant& p_value) {
@@ -68,8 +68,6 @@ namespace skwoxel
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
 		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
-
-		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
 	}
 
 	bool Skwoxel::_property_can_revert(const StringName& p_name) const {
@@ -91,6 +89,8 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
+
+		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
 	}
 
 	Skwoxel::Skwoxel() :
@@ -118,18 +118,15 @@ namespace skwoxel
 
 	void Skwoxel::delete_mesh()
 	{
-		UtilityFunctions::print(__FUNCTION__);
 		auto mesh = find_child(SKWOXEL_MESH_NAME, false, false);
 		if (mesh)
 		{
-			UtilityFunctions::print(" found mesh");
 			remove_child(mesh);
 			mesh->queue_free();
 		}
 		auto coll = find_child(SKWOXEL_COLLISION_NAME, false, false);
 		if (coll)
 		{
-			UtilityFunctions::print(" found collisions");
 			remove_child(coll);
 			coll->queue_free();
 		}
@@ -612,13 +609,11 @@ namespace skwoxel
 
 	void Skwoxel::collect_children()
 	{
-		UtilityFunctions::print(__FUNCTION__);
 		root.collect_children_of(this);
 	}
 
 	void Skwoxel::generate_voxels()
 	{
-		UtilityFunctions::print(__FUNCTION__);
 		delete_voxels();
 		allocate_voxels();
 		collect_children();
@@ -642,7 +637,6 @@ namespace skwoxel
 
 	void Skwoxel::generate_mesh()
 	{
-		UtilityFunctions::print(__FUNCTION__);
 		// These are the index steps corresponding to each of the 7 edges
 		const Vector3 steps[] =
 		{
@@ -808,7 +802,6 @@ namespace skwoxel
 							TetraEdge * tedge = &tetraEdges[tet->edgeIdx[ee]]; \
 							indices.push_back((vox + tedge->idx[0])->edges[tedge->edge]); \
 						}
-//#						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e1); MT_INDEX(e2); MT_INDEX(e3); }
 #						define MT_TRIANGLE(e1, e2, e3) { MT_INDEX(e3); MT_INDEX(e2); MT_INDEX(e1); }
 						switch (mask)
 						{
@@ -913,6 +906,7 @@ namespace skwoxel
 			mesh_instance->set_surface_override_material(0, material);
 		}
 		add_child(mesh_instance);
+		UtilityFunctions::print("Mesh generated with ", String::num(indices.size() / 3), " triangles");
 
 		// Generate a corresponding collision shape
 		Ref<ConcavePolygonShape3D> shape;

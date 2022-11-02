@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsh1txfb1bbol"]
+
+[sub_resource type="Curve3D" id="Curve3D_4fehk"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 200, -100, 0, -100, 0, 0, -200, 0, 0, 0, 100, 0, 100),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_xwow7"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 200, 100, 0, -100, 0, 0, -200, 0, 0, 0, -100, 0, 100),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_47u76"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 200, 0, 0, -100, -40, -100, -200, 0, 0, 0, 0, 0, 100, -40, 100),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_mbxnk"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, -200, 0, 0, 100, -40, -100, 200, 0, 0, 0, 0, 0, -100, -40, 100),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="transforms" type="Skwoxel"]
+lower_bounds = Vector3i(-100, -100, -100)
+upper_bounds = Vector3i(100, 100, 100)
+air = Vector3i(0, 100, 0)
+ground = Vector3i(0, -100, 0)
+remove_bubbles = false
+remove_floaters = false
+
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
+constant = -0.5
+
+[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
+point1 = Vector3(0, 75, 0)
+point2 = Vector3(0, -75, 0)
+radius = 20.0
+
+[node name="SkwoxelFieldSelect" type="SkwoxelFieldSelect" parent="."]
+
+[node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
+curve = SubResource("Curve3D_4fehk")
+floor_strength = 2.0
+air_strength = -2.0
+
+[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
+curve = SubResource("Curve3D_xwow7")
+floor_strength = 2.0
+air_strength = -2.0
+
+[node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="."]
+
+[node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
+curve = SubResource("Curve3D_47u76")
+floor_strength = 2.0
+air_strength = -2.0
+
+[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
+curve = SubResource("Curve3D_mbxnk")
+floor_strength = 2.0
+air_strength = -2.0

@@ -8,6 +8,7 @@
 
 #include <godot_cpp/classes/static_body3d.hpp>
 #include <godot_cpp/classes/global_constants.hpp>
+#include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/viewport.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
 
@@ -90,6 +91,7 @@ namespace skwoxel
 		Vector3i air;
 		bool remove_bubbles;
 		bool remove_floaters;
+		Ref<Material> material;
 		SkwoxelFieldAdd root;
 		Voxel* voxels;
 
@@ -110,6 +112,8 @@ namespace skwoxel
 		Vector3i get_ground() const;
 		void set_air(const Vector3i& pos);
 		Vector3i get_air() const;
+		void set_material(godot::Ref<godot::Material> p_material) { material = p_material; }
+		godot::Ref<godot::Material> get_material() const { return material; }
 		void set_remove_bubbles(bool remove);
 		bool get_remove_bubbles() const;
 		void set_remove_floaters(bool remove);

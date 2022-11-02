@@ -27,6 +27,7 @@ _data = {
 point_count = 3
 
 [node name="Skwoxel" type="Skwoxel"]
+material = null
 lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)

@@ -39,6 +39,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(remove_bubbles);
 		SKWOXEL_SET_METHOD(remove_floaters);
 		SKWOXEL_SET_METHOD(generate);
+		SKWOXEL_SET_METHOD(material);
 		return false;
 	}
 
@@ -51,6 +52,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(remove_bubbles);
 		SKWOXEL_GET_METHOD(remove_floaters);
 		SKWOXEL_GET_METHOD(generate);
+		SKWOXEL_GET_METHOD(material);
 		return false;
 	}
 
@@ -66,6 +68,8 @@ namespace skwoxel
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
 		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
+
+		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
 	}
 
 	bool Skwoxel::_property_can_revert(const StringName& p_name) const {
@@ -85,6 +89,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
 	}
 
@@ -903,6 +908,10 @@ namespace skwoxel
 		MeshInstance3D* mesh_instance = memnew(MeshInstance3D);
 		mesh_instance->set_mesh(mesh);
 		mesh_instance->set_name(SKWOXEL_MESH_NAME);
+		if (material.is_valid())
+		{
+			mesh_instance->set_surface_override_material(0, material);
+		}
 		add_child(mesh_instance);
 
 		// Generate a corresponding collision shape

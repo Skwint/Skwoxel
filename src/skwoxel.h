@@ -14,6 +14,7 @@
 
 #include <godot_cpp/core/binder_common.hpp>
 
+#include "lotsa.h"
 #include "skwoxel_field.h"
 #include "skwoxel_field_add.h"
 
@@ -65,9 +66,7 @@ namespace skwoxel
 		void collect_children();
 		void allocate_voxels();
 		void delete_voxels();
-		void pre_generate();
 		void generate_voxels();
-		void post_generate();
 		void delete_mesh();
 		void generate_mesh();
 		void generate_air_flags();
@@ -94,7 +93,7 @@ namespace skwoxel
 		bool randomize_seeds;
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
-		Voxel* voxels;
+		lotsa<Voxel> voxels;
 
 	public:
 		Skwoxel();
@@ -129,7 +128,7 @@ namespace skwoxel
 
 	inline Skwoxel::Voxel& Skwoxel::voxel_at_local_unsafe(int x, int y, int z)
 	{
-		return *(voxels + (z * data_size_y() + y) * data_size_x() + x);
+		return voxels[(z* data_size_y() + y) * data_size_x() + x];
 	}
 
 	inline Skwoxel::Voxel& Skwoxel::voxel_at_global_unsafe(int x, int y, int z)

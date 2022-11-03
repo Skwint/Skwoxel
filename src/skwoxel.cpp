@@ -101,14 +101,12 @@ namespace skwoxel
 		ground(0.0, -1.0, 0.0),
 		air(0.0, 1.0, 0.0),
 		remove_bubbles(true),
-		remove_floaters(true),
-		voxels(0)
+		remove_floaters(true)
 	{
 	}
 
 	Skwoxel::~Skwoxel()
 	{
-		delete_voxels();
 	}
 
 	void Skwoxel::generate()
@@ -138,16 +136,12 @@ namespace skwoxel
 
 	void Skwoxel::allocate_voxels()
 	{
-		if (!voxels)
-		{
-			voxels = new Voxel[data_size_x() * data_size_y() * data_size_z()];
-		}
+		voxels.resize(data_size_x() * data_size_y() * data_size_z());
 	}
 
 	void Skwoxel::delete_voxels()
 	{
-		delete[] voxels;
-		voxels = 0;
+		voxels.clear();
 	}
 
 	void Skwoxel::generate_air_flags()

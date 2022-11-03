@@ -79,6 +79,8 @@ namespace skwoxel
 			return highest;
 		case LOWEST:
 			return lowest;
+		default:
+			return 0.0;
 		}
 	}
 

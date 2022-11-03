@@ -18,6 +18,7 @@
 
 #include "skwoxel_helpers.h"
 #include "skwoxel_field.h"
+#include "simplify.h"
 
 #define SKWOXEL_MESH_NAME "SkwoxelMesh"
 #define SKWOXEL_COLLISION_NAME "SkwoxelCollision"
@@ -38,6 +39,9 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(ground);
 		SKWOXEL_SET_METHOD(remove_bubbles);
 		SKWOXEL_SET_METHOD(remove_floaters);
+		SKWOXEL_SET_METHOD(simplify_mesh);
+		SKWOXEL_SET_METHOD(simplify_aggressiveness);
+		SKWOXEL_SET_METHOD(simplify_target_triangle_count);
 		SKWOXEL_SET_METHOD(randomize_seeds);
 		SKWOXEL_SET_METHOD(generate);
 		SKWOXEL_SET_METHOD(material);
@@ -52,6 +56,9 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(ground);
 		SKWOXEL_GET_METHOD(remove_bubbles);
 		SKWOXEL_GET_METHOD(remove_floaters);
+		SKWOXEL_GET_METHOD(simplify_mesh);
+		SKWOXEL_GET_METHOD(simplify_aggressiveness);
+		SKWOXEL_GET_METHOD(simplify_target_triangle_count);
 		SKWOXEL_GET_METHOD(randomize_seeds);
 		SKWOXEL_GET_METHOD(generate);
 		SKWOXEL_GET_METHOD(material);
@@ -69,6 +76,9 @@ namespace skwoxel
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "ground"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
+		list->push_back(PropertyInfo(Variant::BOOL, "simplify_mesh"));
+		list->push_back(PropertyInfo(Variant::FLOAT, "simplify_aggressiveness"));
+		list->push_back(PropertyInfo(Variant::INT, "simplify_target_triangle_count"));
 		list->push_back(PropertyInfo(Variant::BOOL, "randomize_seeds"));
 		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
 	}
@@ -89,6 +99,9 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, ground);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_mesh);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_aggressiveness);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_target_triangle_count);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, randomize_seeds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
@@ -101,7 +114,10 @@ namespace skwoxel
 		ground(0.0, -1.0, 0.0),
 		air(0.0, 1.0, 0.0),
 		remove_bubbles(true),
-		remove_floaters(true)
+		remove_floaters(true),
+		simplify_mesh(true),
+		simplify_aggressiveness(7),
+		simplify_target_triangle_count(100000)
 	{
 	}
 
@@ -735,12 +751,8 @@ namespace skwoxel
 			}
 		}
 
-		// Create the array of arrays we need
-		PackedVector3Array vertices;
-		PackedVector3Array normals;
-		PackedInt32Array indices;
-
 		// Now that we know how many vertices there will be we can allocate a buffer for them
+		lotsa<Vector3> vertices;
 		vertices.resize(numVertices);
 
 		Vector3 start;
@@ -772,6 +784,7 @@ namespace skwoxel
 		}
 
 		// Create all the triangles.
+		lotsa<int> indices;
 		for (int32_t z = 0; z < size_z() - 1; ++z)
 		{
 			for (int32_t y = 0; y < size_y() - 1; ++y)
@@ -864,8 +877,17 @@ namespace skwoxel
 			}
 		}
 
+		// Simplify:
+		if (simplify_mesh)
+		{
+			UtilityFunctions::print("Mesh pre-simplification with ", String::num(indices.size() / 3), " triangles");
+			Simplify simp;
+			simp.simplify_mesh(&vertices, &indices, simplify_target_triangle_count, simplify_aggressiveness);
+		}
+
 		// Generate normals:
 		real_t off = 0.2;
+		lotsa<Vector3> normals;
 		normals.resize(numVertices);
 		Vector3 neighbour;
 		Vector3 pos;
@@ -889,10 +911,24 @@ namespace skwoxel
 
 		// Build arrays and mesh
 		Array arrays;
+		PackedVector3Array packed_vertices;
+		PackedVector3Array packed_normals;
+		PackedInt32Array packed_indices;
+
+		packed_vertices.resize(vertices.size());
+		memcpy(packed_vertices.ptrw(), &vertices[0], vertices.size() * sizeof(Vector3));
+		vertices.clear();
+		packed_normals.resize(normals.size());
+		memcpy(packed_normals.ptrw(), &normals[0], normals.size() * sizeof(Vector3));
+		normals.clear();
+		packed_indices.resize(indices.size());
+		memcpy(packed_indices.ptrw(), &indices[0], indices.size() * sizeof(int));
+		indices.clear();
+
 		arrays.resize(Mesh::ARRAY_MAX);
-		arrays[Mesh::ARRAY_VERTEX] = vertices;
-		arrays[Mesh::ARRAY_NORMAL] = normals;
-		arrays[Mesh::ARRAY_INDEX] = indices;
+		arrays[Mesh::ARRAY_VERTEX] = packed_vertices;
+		arrays[Mesh::ARRAY_NORMAL] = packed_normals;
+		arrays[Mesh::ARRAY_INDEX] = packed_indices;
 		Ref<ArrayMesh> mesh;
 		mesh.instantiate();
 		mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);
@@ -904,7 +940,7 @@ namespace skwoxel
 			mesh_instance->set_surface_override_material(0, material);
 		}
 		add_child(mesh_instance);
-		UtilityFunctions::print("Mesh generated with ", String::num(indices.size() / 3), " triangles");
+		UtilityFunctions::print("Mesh generated with ", String::num(packed_indices.size() / 3), " triangles");
 
 		// Generate a corresponding collision shape
 		Ref<ConcavePolygonShape3D> shape;

@@ -18,11 +18,17 @@
 #include <math.h>
 
 #include <godot_cpp/variant/vector3.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
 namespace skwoxel
 {
+	Simplify::Simplify()
+	{
+
+	}
+
 	//
 	// Main simplification function
 	//
@@ -49,6 +55,8 @@ namespace skwoxel
 		int triangle_count = triangles.size();
 		for (int iteration = 0; iteration < 100; iteration++)
 		{
+			UtilityFunctions::print(" simp iter: ", String::num(iteration), " triangles: ", String::num(triangle_count), " - ", String::num(deleted_triangles), " = ", String::num(triangle_count - deleted_triangles), " => ", String::num(triangles.size()));
+
 			if (triangle_count - deleted_triangles <= target_count)
 				break;
 
@@ -96,9 +104,11 @@ namespace skwoxel
 						deleted0.resize(v0.tcount); // normals temporarily
 						deleted1.resize(v1.tcount); // normals temporarily
 						// don't remove if flipped
-						if (flipped(p, i0, i1, v0, v1, deleted0)) continue;
+						if (flipped(p, i0, i1, v0, v1, deleted0))
+							continue;
 
-						if (flipped(p, i1, i0, v1, v0, deleted1)) continue;
+						if (flipped(p, i1, i0, v1, v0, deleted1))
+							continue;
 
 						// not flipped, so remove edge
 						(*points)[i0] = p;
@@ -177,7 +187,7 @@ namespace skwoxel
 		Vector3 p;
 		for (int k = 0; k < v.tcount; ++k)
 		{
-			Ref& r = refs[v.tstart + k];
+			Ref r = refs[v.tstart + k];
 			Triangle& t = triangles[r.tid];
 			int* index = &(*indices)[r.tid * 3];
 			if (t.deleted)
@@ -202,6 +212,7 @@ namespace skwoxel
 
 	void Simplify::update_mesh(int iteration)
 	{
+		UtilityFunctions::print(__FUNCTION__);
 		if (iteration > 0) // compact triangles
 		{
 			int dst = 0;
@@ -214,7 +225,7 @@ namespace skwoxel
 					triangles[dst++] = triangles[i];
 					for (int j = 0; j < 3; ++j)
 					{
-						indices[dst_idx + j] = indices[src_idx + j];
+						(*indices)[dst_idx + j] = (*indices)[src_idx + j];
 					}
 				}
 			}
@@ -279,8 +290,8 @@ namespace skwoxel
 			for (int i = 0; i < vertices.size(); ++i)
 			{
 				Vertex& v = vertices[i];
-				vcount.clear();
-				vids.clear();
+				vcount.resize(0);
+				vids.resize(0);
 				for (int j = 0; j < v.tcount; ++j)
 				{
 					int k = refs[v.tstart + j].tid;
@@ -345,6 +356,7 @@ namespace skwoxel
 
 	void Simplify::compact_mesh()
 	{
+		UtilityFunctions::print(__FUNCTION__);
 		int dst = 0;
 		for (int i = 0; i < vertices.size(); ++i)
 		{

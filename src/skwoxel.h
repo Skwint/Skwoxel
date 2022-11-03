@@ -90,6 +90,9 @@ namespace skwoxel
 		Vector3i air;
 		bool remove_bubbles;
 		bool remove_floaters;
+		bool simplify_mesh;
+		real_t simplify_aggressiveness;
+		int simplify_target_triangle_count;
 		bool randomize_seeds;
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
@@ -118,6 +121,12 @@ namespace skwoxel
 		bool get_remove_bubbles() const;
 		void set_remove_floaters(bool remove);
 		bool get_remove_floaters() const;
+		void set_simplify_mesh(bool p_simplify) { simplify_mesh = p_simplify; }
+		bool get_simplify_mesh() const { return simplify_mesh; }
+		void set_simplify_aggressiveness(real_t p_aggressiveness) { simplify_aggressiveness = p_aggressiveness; }
+		real_t get_simplify_aggressiveness() const { return simplify_aggressiveness; }
+		void set_simplify_target_triangle_count(int p_count) { simplify_target_triangle_count = p_count; }
+		int get_simplify_target_triangle_count() const { return simplify_target_triangle_count; }
 		void set_randomize_seeds(bool p_randomize_seeds) { randomize_seeds = p_randomize_seeds; }
 		bool get_randomize_seeds() const { return randomize_seeds; }
 

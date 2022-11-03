@@ -9,13 +9,13 @@ Skwoxel is smaller and simpler with much less integration in the editor interfac
 
 * If you want infinite terrains, use Zylann's.
 * If you want streaming tiles with dynamic LOD, use Zylann's.
-* If you want to modify your terrain with explosions at run time, *probably* use Zylann's.
+* If you want to modify your terrain with explosions at run time, use Zylann's.
 * If you only need one small area (such as a limited size level in a game) then you can use either.
 * If you need to guarantee connectivity between locations, use Skwoxel.
 
 The reason this exists is because dynamically loading tiles of voxels makes it extremely hard (impossible?) to remove disconnected floating rocks and isolated underground bubbles of air. Floating rocks are distracting and weird, and both floaters and bubbles present potential spawn points for monsters or items that cannot be pathed to, which is less than ideal if they spawn the all important key to the next dungeon, or the guy with the quest marker.
 
-It also makes generating a navigation mesh somewhat challenging.
+It also makes generating a navigation mesh somewhat challenging. More challenging. It's horrible enough already.
 
 ## Algorithm
 Skwoxel uses Marching Tetrahedra to generate an isosurface of a field, and uses the field gradients to calculate normals for a little extra smoothness in the end result.

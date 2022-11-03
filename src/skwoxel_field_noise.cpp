@@ -1,5 +1,6 @@
 #include "skwoxel_field_noise.h"
 
+#include "random.h"
 #include "skwoxel_helpers.h"
 
 using namespace godot;
@@ -55,6 +56,14 @@ namespace skwoxel
 	SkwoxelFieldNoise::~SkwoxelFieldNoise()
 	{
 
+	}
+
+	void SkwoxelFieldNoise::pre_generate(bool randomize_seeds)
+	{
+		if (randomize_seeds)
+		{
+			noise->set_seed(skwoxel::rand());
+		}
 	}
 
 	real_t SkwoxelFieldNoise::strength(const Vector3& pos) const

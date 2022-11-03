@@ -38,6 +38,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(ground);
 		SKWOXEL_SET_METHOD(remove_bubbles);
 		SKWOXEL_SET_METHOD(remove_floaters);
+		SKWOXEL_SET_METHOD(randomize_seeds);
 		SKWOXEL_SET_METHOD(generate);
 		SKWOXEL_SET_METHOD(material);
 		return false;
@@ -51,6 +52,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(ground);
 		SKWOXEL_GET_METHOD(remove_bubbles);
 		SKWOXEL_GET_METHOD(remove_floaters);
+		SKWOXEL_GET_METHOD(randomize_seeds);
 		SKWOXEL_GET_METHOD(generate);
 		SKWOXEL_GET_METHOD(material);
 		return false;
@@ -67,6 +69,7 @@ namespace skwoxel
 		list->push_back(PropertyInfo(Variant::VECTOR3I, "ground"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
 		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
+		list->push_back(PropertyInfo(Variant::BOOL, "randomize_seeds"));
 		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
 	}
 
@@ -86,6 +89,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, ground);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, randomize_seeds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
@@ -618,7 +622,7 @@ namespace skwoxel
 		allocate_voxels();
 		collect_children();
 
-		root.pre_generate();
+		root.pre_generate(randomize_seeds);
 		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
 		{
 			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)

@@ -28,12 +28,13 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
+		void pre_generate(bool randomize_seeds);
 		real_t strength(const godot::Vector3 & pos) const override;
-		godot::Ref<godot::Noise> get_noise() const { return noise; };
-		void set_noise(godot::Ref<godot::Noise> val) { noise = val; }
+		godot::Ref<godot::FastNoiseLite> get_noise() const { return noise; };
+		void set_noise(godot::Ref<godot::FastNoiseLite> val) { noise = val; }
 
 	private:
-		godot::Ref<godot::Noise> noise;
+		godot::Ref<godot::FastNoiseLite> noise;
 	};
 }
 

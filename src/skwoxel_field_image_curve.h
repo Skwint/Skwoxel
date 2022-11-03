@@ -29,7 +29,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		void pre_generate() override;
+		void pre_generate(bool randomize_seeds) override;
 		real_t strength(const godot::Vector3 & pos) const override;
 		void post_generate() override;
 

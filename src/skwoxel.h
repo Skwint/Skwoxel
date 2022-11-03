@@ -91,6 +91,7 @@ namespace skwoxel
 		Vector3i air;
 		bool remove_bubbles;
 		bool remove_floaters;
+		bool randomize_seeds;
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
 		Voxel* voxels;
@@ -118,6 +119,8 @@ namespace skwoxel
 		bool get_remove_bubbles() const;
 		void set_remove_floaters(bool remove);
 		bool get_remove_floaters() const;
+		void set_randomize_seeds(bool p_randomize_seeds) { randomize_seeds = p_randomize_seeds; }
+		bool get_randomize_seeds() const { return randomize_seeds; }
 
 		// Ungodly editor hack
 		void set_generate(bool val) { generate(); }

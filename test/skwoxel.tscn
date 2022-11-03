@@ -1,6 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
+seed = 2020453806
 frequency = 0.05
 fractal_octaves = 2
 
@@ -27,11 +28,11 @@ _data = {
 point_count = 3
 
 [node name="Skwoxel" type="Skwoxel"]
-material = null
 lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)
 ground = Vector3i(0, -20, 0)
+randomize_seeds = true
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
 centre = Vector3(-10, 0, 0)
@@ -61,8 +62,8 @@ noise = SubResource("FastNoiseLite_tm8ep")
 [node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="SkwoxelFieldMultiply"]
 
 [node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="SkwoxelFieldMultiply/SkwoxelFieldAdd"]
-point1 = Vector3(50, -30, 80)
-point2 = Vector3(50, -30, 20)
+point1 = Vector3(50, -15, 80)
+point2 = Vector3(50, -15, 20)
 radius = 10.0
 blend = 3.0
 inner_strength = 5.0

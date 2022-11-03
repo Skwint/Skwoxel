@@ -24,7 +24,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		virtual void pre_generate();
+		virtual void pre_generate(bool randomize_seeds);
 		virtual real_t strength(const godot::Vector3 & pos) const;
 		virtual void post_generate();
 		void collect_children();

@@ -46,11 +46,11 @@ namespace skwoxel
 	{
 	}
 
-	void SkwoxelField::pre_generate()
+	void SkwoxelField::pre_generate(bool randomize_seeds)
 	{
 		for (int ch = 0; ch < num_child_fields; ch++)
 		{
-			child_fields[ch]->pre_generate();
+			child_fields[ch]->pre_generate(randomize_seeds);
 		}
 	}
 

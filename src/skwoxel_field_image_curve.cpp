@@ -77,7 +77,7 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldImageCurve::pre_generate()
+	void SkwoxelFieldImageCurve::pre_generate(bool randomize_seeds)
 	{
 		real_t interval = curve->get_bake_interval();
 		for (int idx = 0; idx < curve->get_point_count(); ++idx)

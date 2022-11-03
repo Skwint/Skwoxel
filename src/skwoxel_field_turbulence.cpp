@@ -1,5 +1,6 @@
 #include "skwoxel_field_turbulence.h"
 
+#include "random.h"
 #include "skwoxel_helpers.h"
 
 using namespace godot;
@@ -59,6 +60,14 @@ namespace skwoxel
 	SkwoxelFieldTurbulence::~SkwoxelFieldTurbulence()
 	{
 
+	}
+
+	void SkwoxelFieldTurbulence::pre_generate(bool randomize_seeds)
+	{
+		if (randomize_seeds)
+		{
+			noise->set_seed(skwoxel::rand());
+		}
 	}
 
 	real_t SkwoxelFieldTurbulence::strength(const Vector3& pos) const

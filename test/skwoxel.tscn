@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = -1299681065
+seed = 2147183599
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = -837070378
+seed = -1339540886
 frequency = 0.05
 fractal_octaves = 1
 
@@ -32,7 +32,7 @@ lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)
 ground = Vector3i(0, -20, 0)
-simplify_target_triangle_count = 500000
+simplify_target_triangle_count = 100009
 randomize_seeds = true
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]

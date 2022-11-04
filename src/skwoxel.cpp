@@ -880,38 +880,9 @@ namespace skwoxel
 		// Simplify:
 		if (simplify_mesh)
 		{
-			int triangle_count = indices.size() / 3;
-			UtilityFunctions::print("Mesh pre-simplification with ", String::num(triangle_count), " triangles");
-			simplify::triangles.resize(triangle_count);
-			for (int i = 0; i < triangle_count; ++i)
-			{
-				for (int j = 0; j < 3; ++j)
-				{
-					simplify::triangles[i].v[j] = indices[3 * i + j];
-				}
-			}
-			int vertex_count = vertices.size();
-			simplify::vertices.resize(vertex_count);
-			for (int i = 0; i < vertex_count; ++i)
-			{
-				simplify::vertices[i].p = vertices[i];
-			}
-			simplify::simplify_mesh(simplify_target_triangle_count, simplify_aggressiveness);
-			triangle_count = simplify::triangles.size();
-			indices.resize(triangle_count * 3);
-			for (int i = 0; i < triangle_count; ++i)
-			{
-				for (int j = 0; j < 3; ++j)
-				{
-					indices[i * 3 + j] = simplify::triangles[i].v[j];
-				}
-			}
-			vertex_count = simplify::vertices.size();
-			vertices.resize(vertex_count);
-			for (int i = 0; i < vertex_count; ++i)
-			{
-				vertices[i] = simplify::vertices[i].p;
-			}
+			Simplify simple(vertices, indices);
+			simple.simplify_mesh(simplify_target_triangle_count, simplify_aggressiveness);
+			simple.get(vertices, indices);
 		}
 
 		// Generate normals:

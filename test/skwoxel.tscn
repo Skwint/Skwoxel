@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = 2147183599
+seed = 1319871373
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = -1339540886
+seed = -2049474530
 frequency = 0.05
 fractal_octaves = 1
 

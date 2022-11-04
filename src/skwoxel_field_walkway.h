@@ -38,7 +38,7 @@ namespace skwoxel
 		real_t get_air_strength() const { return air_strength; };
 		void set_air_strength(real_t p_air_strength) { air_strength = p_air_strength; }
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = p_blend; }
+		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
 
 	private:
 		godot::Ref<godot::Curve3D> curve;

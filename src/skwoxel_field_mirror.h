@@ -31,7 +31,7 @@ namespace skwoxel
 		real_t get_distance() const { return distance; };
 		void set_distance(real_t radius) { distance = radius; }
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t radius) { blend = radius; }
+		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
 
 	private:
 		godot::Vector3 normal;

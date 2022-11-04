@@ -55,6 +55,7 @@ air = Vector3i(0, 100, 0)
 ground = Vector3i(0, -100, 0)
 remove_bubbles = false
 remove_floaters = false
+randomize_seeds = true
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
 constant = -0.5
@@ -95,3 +96,22 @@ air_strength = -2.0
 curve = SubResource("Curve3D_k3s0p")
 floor_strength = 2.0
 air_strength = -2.0
+
+[node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 50, 0)
+axis = Vector3(0, 1, 0)
+major_radius = 40.0
+minor_radius = 5.0
+
+[node name="SkwoxelFieldTorus2" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 60, 0)
+axis = Vector3(0, 0.707107, 0.707107)
+major_radius = 40.0
+minor_radius = 5.0
+inner_strength = -1.0
+
+[node name="SkwoxelFieldTorus3" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 65, 0)
+axis = Vector3(0, 0.707107, 0.707107)
+major_radius = 40.0
+minor_radius = 5.0

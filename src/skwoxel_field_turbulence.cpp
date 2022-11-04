@@ -64,6 +64,7 @@ namespace skwoxel
 
 	void SkwoxelFieldTurbulence::pre_generate(bool randomize_seeds)
 	{
+		SkwoxelField::pre_generate(randomize_seeds);
 		if (randomize_seeds)
 		{
 			noise->set_seed(skwoxel::rand());

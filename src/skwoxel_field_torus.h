@@ -1,5 +1,5 @@
-#ifndef SKWOXEL_FIELD_CAPSULE_H
-#define SKWOXEL_FIELD_CAPSULE_H
+#ifndef SKWOXEL_FIELD_TORUS_H
+#define SKWOXEL_FIELD_TORUS_H
 
 #include "skwoxel_field.h"
 
@@ -9,12 +9,12 @@
 
 namespace skwoxel
 {
-	class SkwoxelFieldCapsule : public SkwoxelField
+	class SkwoxelFieldTorus : public SkwoxelField
 	{
-		GDCLASS(SkwoxelFieldCapsule, SkwoxelField);
+		GDCLASS(SkwoxelFieldTorus, SkwoxelField);
 	public:
-		SkwoxelFieldCapsule();
-		virtual ~SkwoxelFieldCapsule();
+		SkwoxelFieldTorus();
+		virtual ~SkwoxelFieldTorus();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -25,23 +25,27 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
+		void pre_generate(bool randomize_seeds) override;
 		real_t strength(const godot::Vector3 & pos) const override;
 
-		godot::Vector3 get_point1() const { return point1; }
-		void set_point1(const godot::Vector3& point) { point1 = point; }
-		godot::Vector3 get_point2() const { return point2; }
-		void set_point2(const godot::Vector3& point) { point2 = point; }
-		real_t get_radius() const { return radius; };
-		void set_radius(real_t p_radius) { radius = p_radius; }
+		godot::Vector3 get_centre() const { return centre; }
+		void set_centre(const godot::Vector3& p_centre) { centre = p_centre; }
+		godot::Vector3 get_axis() const { return axis; }
+		void set_axis(const godot::Vector3& p_axis) { axis = p_axis; }
+		real_t get_major_radius() const { return major_radius; };
+		void set_major_radius(real_t p_radius) { major_radius = p_radius; }
+		real_t get_minor_radius() const { return minor_radius; };
+		void set_minor_radius(real_t p_radius) { minor_radius = p_radius; }
 		real_t get_blend() const { return blend; };
 		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
 	private:
-		godot::Vector3 point1;
-		godot::Vector3 point2;
-		real_t radius;
+		godot::Vector3 centre;
+		godot::Vector3 axis;
+		real_t major_radius;
+		real_t minor_radius;
 		real_t blend;
 		real_t inner_strength;
 	};

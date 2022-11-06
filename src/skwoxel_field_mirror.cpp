@@ -80,7 +80,7 @@ namespace skwoxel
 		}
 		else
 		{
-			real_t multiplier = Math::smoothstep(-blend, blend, rad);
+			real_t multiplier = smooth_step(-blend, blend, rad);
 			return Math::lerp(SkwoxelFieldAdd::strength(reflected), SkwoxelFieldAdd::strength(pos), multiplier);
 		}
 	}

@@ -93,7 +93,7 @@ namespace skwoxel
 		Vector3 norm = relative - height * axis;
 		real_t radius = major_radius - norm.length();
 		real_t rad = sqrt(radius * radius + height * height);
-		real_t radial_multiplier = Math::smoothstep(-blend, blend, rad - minor_radius);
+		real_t radial_multiplier = smooth_step(-blend, blend, rad - minor_radius);
 		return Math::lerp(inner_strength, real_t(0.0), radial_multiplier);
 	}
 

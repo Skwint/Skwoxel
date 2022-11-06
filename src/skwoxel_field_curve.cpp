@@ -77,7 +77,7 @@ namespace skwoxel
 		{
 			Vector3 touch = curve->get_closest_point(pos);
 			float rad = (pos - touch).length();
-			float radial_multiplier = Math::smoothstep(-blend, blend, rad - radius);
+			float radial_multiplier = smooth_step(-blend, blend, rad - radius);
 			return Math::lerp((float)inner_strength, 0.0f, radial_multiplier);
 		}
 		else

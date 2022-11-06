@@ -89,8 +89,8 @@ namespace skwoxel
 			Vector3 delta = pos - touch;
 			float rad = delta.length();
 			float altitude = delta.dot(up);
-			float radial_multiplier = Math::smoothstep(-blend, blend, radius - rad);
-			float altitude_multiplier = Math::smoothstep(-blend, blend, altitude);
+			float radial_multiplier = smooth_step(-blend, blend, radius - rad);
+			float altitude_multiplier = smooth_step(-blend, blend, altitude);
 			return radial_multiplier * Math::lerp(floor_strength, air_strength, altitude_multiplier);
 		}
 		else

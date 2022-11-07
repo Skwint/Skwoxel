@@ -28,6 +28,7 @@
 #include "skwoxel_field_torus.h"
 #include "skwoxel_field_turbulence.h"
 #include "skwoxel_field_walkway.h"
+#include "skwoxel_field_wiggle.h"
 
 using namespace godot;
 
@@ -50,6 +51,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldTorus>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTurbulence>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldWalkway>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldWiggle>();
 	}
 }
 

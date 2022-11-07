@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dsh1txfb1bbol"]
+[gd_scene load_steps=8 format=3 uid="uid://dsh1txfb1bbol"]
 
 [sub_resource type="Curve3D" id="Curve3D_4fehk"]
 bake_interval = 5.0
@@ -47,6 +47,14 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_qrhbf"]
+bake_interval = 5.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 200, -80, 80, -80, 0, 0, 200, 0, 0, 0, 80, 80, -80),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="transforms" type="Skwoxel"]
 lower_bounds = Vector3i(-100, -100, -100)
@@ -115,3 +123,8 @@ centre = Vector3(0, 65, 0)
 axis = Vector3(0, 0.707107, 0.707107)
 major_radius = 40.0
 minor_radius = 5.0
+
+[node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="."]
+end_radius = 2.0
+curve = SubResource("Curve3D_qrhbf")
+radius = 20.0

@@ -19,7 +19,6 @@ namespace skwoxel
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
-		void _get_property_list(godot::List<godot::PropertyInfo>* p_list) const;
 		bool _property_can_revert(const godot::StringName& p_name) const;
 		bool _property_get_revert(const godot::StringName& p_name, godot::Variant& r_property) const;
 		godot::String _to_string() const;
@@ -36,7 +35,7 @@ namespace skwoxel
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
-	private:
+	protected:
 		godot::Ref<godot::Curve3D> curve;
 		real_t radius;
 		real_t blend;

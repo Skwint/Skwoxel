@@ -33,12 +33,6 @@ namespace skwoxel
 		return "[ wot? ]";
 	}
 
-	void SkwoxelFieldCurve::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
-	}
-
 	bool SkwoxelFieldCurve::_property_can_revert(const StringName& p_name) const {
 		return false;
 	}
@@ -55,6 +49,9 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, inner_strength);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
 	}
 
 	SkwoxelFieldCurve::SkwoxelFieldCurve() :

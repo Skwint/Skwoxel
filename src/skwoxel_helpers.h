@@ -7,6 +7,11 @@
 	ClassDB::bind_method(D_METHOD("set_" #mm, #mm), &cc::set_##mm); \
 }
 
+#define SKWOXEL_ADD_PROPERTY(type, mm) \
+{ \
+	ADD_PROPERTY(PropertyInfo(type, #mm), "set_"#mm, "get_"#mm); \
+}
+
 #define SKWOXEL_SET_METHOD(mm) \
 { \
 	if (name == #mm) { \

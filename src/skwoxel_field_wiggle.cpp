@@ -58,7 +58,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldWiggle::strength(const Vector3& pos) const
 	{
-		if (curve.is_valid())
+		if (curve.is_valid() && aabb.has_point(pos))
 		{
 			real_t offset = curve->get_closest_offset(pos);
 			real_t length = curve->get_baked_length();
@@ -70,7 +70,6 @@ namespace skwoxel
 		}
 		else
 		{
-			UtilityFunctions::print("BAD CURVE");
 			return 0.0;
 		}
 	}

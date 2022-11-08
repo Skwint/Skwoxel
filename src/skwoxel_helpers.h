@@ -30,6 +30,9 @@
 
 namespace skwoxel
 {
+	const real_t normal_offset = 0.1;
+
+
 	// identical to the godot version at time of writing
 	template <typename T>
 	inline T clamp(T val, T min, T max)

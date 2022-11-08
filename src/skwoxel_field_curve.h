@@ -4,6 +4,7 @@
 #include "skwoxel_field.h"
 
 #include <godot_cpp/core/defs.hpp>
+#include <godot_cpp/variant/aabb.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 #include <godot_cpp/classes/curve3d.hpp>
@@ -25,6 +26,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
+		void pre_generate(bool randomize_seeds);
 		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Ref<godot::Curve3D> get_curve() const { return curve; };
 		void set_curve(const godot::Ref<godot::Curve3D> cur) { curve = cur; }
@@ -37,6 +39,7 @@ namespace skwoxel
 
 	protected:
 		godot::Ref<godot::Curve3D> curve;
+		godot::AABB aabb;
 		real_t radius;
 		real_t blend;
 		real_t inner_strength;

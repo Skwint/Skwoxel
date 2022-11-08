@@ -892,7 +892,6 @@ namespace skwoxel
 		}
 
 		// Generate normals:
-		real_t off = 0.2;
 		lotsa<Vector3> normals;
 		normals.resize(vertices.size());
 		Vector3 neighbour;
@@ -903,13 +902,13 @@ namespace skwoxel
 			pos = vertices[idx];
 			real_t localStrength = sample(pos);
 			neighbour = pos;
-			neighbour.x += off;
+			neighbour.x += normal_offset;
 			gradient.x = sample(neighbour) - localStrength;
 			neighbour.x = pos.x;
-			neighbour.y += off;
+			neighbour.y += normal_offset;
 			gradient.y = sample(neighbour) - localStrength;
 			neighbour.y = pos.y;
-			neighbour.z += off;
+			neighbour.z += normal_offset;
 			gradient.z = sample(neighbour) - localStrength;
 			gradient.normalize();
 			normals[idx] = -gradient;

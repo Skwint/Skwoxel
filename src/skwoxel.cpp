@@ -5,8 +5,8 @@
 
 #include "skwoxel.h"
 
+#include <chrono>
 #include <godot_cpp/core/class_db.hpp>
-
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
@@ -127,11 +127,17 @@ namespace skwoxel
 
 	void Skwoxel::generate()
 	{
+		auto start_time = std::chrono::steady_clock::now();
+
 		delete_mesh();
 		generate_voxels();
 		filter();
 		generate_mesh();
 		delete_voxels();
+
+		auto end_time = std::chrono::steady_clock::now();
+		std::chrono::duration<double> elapsed_seconds = end_time - start_time;
+		UtilityFunctions::print("Mesh generated in ", String::num(elapsed_seconds.count()), " seconds");
 	}
 
 	void Skwoxel::delete_mesh()
@@ -925,6 +931,8 @@ namespace skwoxel
 		memcpy(packed_indices.ptrw(), &indices[0], indices.size() * sizeof(int));
 		indices.clear();
 
+		UtilityFunctions::print("Mesh generated with ", String::num(packed_indices.size() / 3), " triangles");
+
 		arrays.resize(Mesh::ARRAY_MAX);
 		arrays[Mesh::ARRAY_VERTEX] = packed_vertices;
 		arrays[Mesh::ARRAY_NORMAL] = packed_normals;
@@ -940,7 +948,6 @@ namespace skwoxel
 			mesh_instance->set_surface_override_material(0, material);
 		}
 		add_child(mesh_instance);
-		UtilityFunctions::print("Mesh generated with ", String::num(packed_indices.size() / 3), " triangles");
 
 		// Generate a corresponding collision shape
 		Ref<ConcavePolygonShape3D> shape;

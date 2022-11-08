@@ -31,8 +31,8 @@ namespace skwoxel
 		}
 		T& operator[](int index) { return *(mData + index); }
 		const T& operator[](int index) const { return *(mData + index); }
-		uint32_t size() { return mSize; }
-		uint32_t capacity() { return mCapacity; }
+		uint32_t size() const { return mSize; }
+		uint32_t capacity() const { return mCapacity; }
 		void resize(uint32_t p_size)
 		{
 			if (p_size > mCapacity)

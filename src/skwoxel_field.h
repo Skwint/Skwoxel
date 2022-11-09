@@ -5,6 +5,9 @@
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 #include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/wrapped.hpp>
+
+using godot::StringName; // This is bad, but GDCLASS is being unfriendly
 
 namespace skwoxel
 {

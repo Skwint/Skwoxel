@@ -39,6 +39,8 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(ground);
 		SKWOXEL_SET_METHOD(remove_bubbles);
 		SKWOXEL_SET_METHOD(remove_floaters);
+		SKWOXEL_SET_METHOD(simple_normals);
+		SKWOXEL_SET_METHOD(smooth_normals);
 		SKWOXEL_SET_METHOD(simplify_mesh);
 		SKWOXEL_SET_METHOD(simplify_aggressiveness);
 		SKWOXEL_SET_METHOD(simplify_target_triangle_count);
@@ -56,6 +58,8 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(ground);
 		SKWOXEL_GET_METHOD(remove_bubbles);
 		SKWOXEL_GET_METHOD(remove_floaters);
+		SKWOXEL_GET_METHOD(simple_normals);
+		SKWOXEL_GET_METHOD(smooth_normals);
 		SKWOXEL_GET_METHOD(simplify_mesh);
 		SKWOXEL_GET_METHOD(simplify_aggressiveness);
 		SKWOXEL_GET_METHOD(simplify_target_triangle_count);
@@ -70,17 +74,6 @@ namespace skwoxel
 	}
 
 	void Skwoxel::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3I, "lower_bounds"));
-		list->push_back(PropertyInfo(Variant::VECTOR3I, "upper_bounds"));
-		list->push_back(PropertyInfo(Variant::VECTOR3I, "air"));
-		list->push_back(PropertyInfo(Variant::VECTOR3I, "ground"));
-		list->push_back(PropertyInfo(Variant::BOOL, "remove_bubbles"));
-		list->push_back(PropertyInfo(Variant::BOOL, "remove_floaters"));
-		list->push_back(PropertyInfo(Variant::BOOL, "simplify_mesh"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "simplify_aggressiveness"));
-		list->push_back(PropertyInfo(Variant::INT, "simplify_target_triangle_count"));
-		list->push_back(PropertyInfo(Variant::BOOL, "randomize_seeds"));
-		list->push_back(PropertyInfo(Variant::BOOL, "generate"));
 	}
 
 	bool Skwoxel::_property_can_revert(const StringName& p_name) const {
@@ -99,6 +92,8 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, ground);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simple_normals);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, smooth_normals);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_mesh);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_aggressiveness);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_target_triangle_count);
@@ -108,6 +103,19 @@ namespace skwoxel
 		ClassDB::bind_method(D_METHOD("generate"), &Skwoxel::generate);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, lower_bounds);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, upper_bounds);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, air);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, ground);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, remove_bubbles);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, remove_floaters);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simple_normals);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, smooth_normals);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simplify_mesh);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, simplify_aggressiveness);
+		SKWOXEL_ADD_PROPERTY(Variant::INT, simplify_target_triangle_count);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, randomize_seeds);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, generate);
 	}
 
 	Skwoxel::Skwoxel() :
@@ -115,6 +123,8 @@ namespace skwoxel
 		air(0.0, 1.0, 0.0),
 		remove_bubbles(true),
 		remove_floaters(true),
+		simple_normals(true),
+		smooth_normals(true),
 		simplify_mesh(true),
 		simplify_aggressiveness(7),
 		simplify_target_triangle_count(100000)
@@ -892,26 +902,51 @@ namespace skwoxel
 		}
 
 		// Generate normals:
+		// Note that if we have simple AND smooth set it will calculate both
+		// and then use simple if the smooth results look weird.
 		lotsa<Vector3> normals;
 		normals.resize(vertices.size());
-		Vector3 neighbour;
-		Vector3 pos;
-		for (int idx = 0; idx < vertices.size(); ++idx)
+		if (simple_normals)
 		{
-			Vector3 gradient;
-			pos = vertices[idx];
-			real_t localStrength = sample(pos);
-			neighbour = pos;
-			neighbour.x += normal_offset;
-			gradient.x = sample(neighbour) - localStrength;
-			neighbour.x = pos.x;
-			neighbour.y += normal_offset;
-			gradient.y = sample(neighbour) - localStrength;
-			neighbour.y = pos.y;
-			neighbour.z += normal_offset;
-			gradient.z = sample(neighbour) - localStrength;
-			gradient.normalize();
-			normals[idx] = -gradient;
+			for (int idx = 0; idx < indices.size(); idx += 3)
+			{
+				int idx0 = indices[idx];
+				int idx1 = indices[idx + 1];
+				int idx2 = indices[idx + 2];
+				Vector3 norm = (vertices[idx2] - vertices[idx0]).cross(vertices[idx1] - vertices[idx0]).normalized();
+				normals[idx0] += norm;
+				normals[idx1] += norm;
+				normals[idx2] += norm;
+			}
+			for (int idx = 0; idx < vertices.size(); ++idx)
+			{
+				normals[idx].normalize();
+			}
+		}
+		if (smooth_normals)
+		{
+			Vector3 neighbour;
+			Vector3 pos;
+			for (int idx = 0; idx < vertices.size(); ++idx)
+			{
+				Vector3 gradient;
+				pos = vertices[idx];
+				real_t localStrength = sample(pos);
+				neighbour = pos;
+				neighbour.x += normal_offset;
+				gradient.x = sample(neighbour) - localStrength;
+				neighbour.x = pos.x;
+				neighbour.y += normal_offset;
+				gradient.y = sample(neighbour) - localStrength;
+				neighbour.y = pos.y;
+				neighbour.z += normal_offset;
+				gradient.z = sample(neighbour) - localStrength;
+				if ((!simple_normals) || gradient.dot(normals[idx]) > 0.0)
+				{
+					gradient.normalize();
+					normals[idx] = -gradient;
+				}
+			}
 		}
 
 		// Build arrays and mesh

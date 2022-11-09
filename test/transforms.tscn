@@ -63,27 +63,20 @@ air = Vector3i(0, 100, 0)
 ground = Vector3i(0, -100, 0)
 remove_bubbles = false
 remove_floaters = false
+simple_normals = true
 randomize_seeds = true
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
-constant = -0.5
 
 [node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
-point1 = Vector3(0, 75, 0)
-point2 = Vector3(0, -75, 0)
-radius = 20.0
 
 [node name="SkwoxelFieldSelect" type="SkwoxelFieldSelect" parent="."]
 
 [node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_4fehk")
-floor_strength = 2.0
-air_strength = -2.0
 
 [node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_xwow7")
-floor_strength = 2.0
-air_strength = -2.0
 
 [node name="SkwoxelFieldWalkway3" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_1vuoy")
@@ -92,37 +85,18 @@ curve = SubResource("Curve3D_1vuoy")
 
 [node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_47u76")
-floor_strength = 2.0
-air_strength = -2.0
 
 [node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_mbxnk")
-floor_strength = 2.0
-air_strength = -2.0
 
 [node name="SkwoxelFieldWalkway3" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_k3s0p")
-floor_strength = 2.0
-air_strength = -2.0
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="."]
-centre = Vector3(0, 50, 0)
-axis = Vector3(0, 1, 0)
-major_radius = 40.0
-minor_radius = 5.0
 
 [node name="SkwoxelFieldTorus2" type="SkwoxelFieldTorus" parent="."]
-centre = Vector3(0, 60, 0)
-axis = Vector3(0, 0.707107, 0.707107)
-major_radius = 40.0
-minor_radius = 5.0
-inner_strength = -1.0
 
 [node name="SkwoxelFieldTorus3" type="SkwoxelFieldTorus" parent="."]
-centre = Vector3(0, 65, 0)
-axis = Vector3(0, 0.707107, 0.707107)
-major_radius = 40.0
-minor_radius = 5.0
 
 [node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="."]
 end_radius = 2.0

@@ -91,6 +91,8 @@ namespace skwoxel
 		bool remove_bubbles;
 		bool remove_floaters;
 		bool simplify_mesh;
+		bool simple_normals;
+		bool smooth_normals;
 		real_t simplify_aggressiveness;
 		int simplify_target_triangle_count;
 		bool randomize_seeds;
@@ -121,6 +123,10 @@ namespace skwoxel
 		bool get_remove_bubbles() const;
 		void set_remove_floaters(bool remove);
 		bool get_remove_floaters() const;
+		void set_simple_normals(bool p_simple_normals) { simple_normals = p_simple_normals; if (!simple_normals) set_smooth_normals(true); }
+		bool get_simple_normals() const { return simple_normals; }
+		void set_smooth_normals(bool p_smooth_normals) { smooth_normals = p_smooth_normals; if (!smooth_normals) set_simple_normals(true); }
+		bool get_smooth_normals() const { return smooth_normals; }
 		void set_simplify_mesh(bool p_simplify) { simplify_mesh = p_simplify; }
 		bool get_simplify_mesh() const { return simplify_mesh; }
 		void set_simplify_aggressiveness(real_t p_aggressiveness) { simplify_aggressiveness = p_aggressiveness; }

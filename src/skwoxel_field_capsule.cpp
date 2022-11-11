@@ -34,15 +34,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldCapsule::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : CAPSULE]";
 	}
 
 	void SkwoxelFieldCapsule::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "point1"));
-		list->push_back(PropertyInfo(Variant::VECTOR3, "point2"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
 	}
 
 	bool SkwoxelFieldCapsule::_property_can_revert(const StringName& p_name) const {
@@ -61,8 +56,12 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCapsule, inner_strength);
 
-		//ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "radius", PROPERTY_HINT_RESOURCE_TYPE, VoxelStream::get_class_static()),
-		//	"set_stream", "get_stream");
+		// Properties
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, point1);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, point2);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
 	}
 
 	SkwoxelFieldCapsule::SkwoxelFieldCapsule() :

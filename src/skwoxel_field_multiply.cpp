@@ -22,7 +22,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldMultiply::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : MULTIPLY]";
 	}
 
 	void SkwoxelFieldMultiply::_get_property_list(List<PropertyInfo>* list) const {

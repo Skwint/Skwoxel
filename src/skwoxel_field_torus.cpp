@@ -36,16 +36,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldTorus::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : TORUS]";
 	}
 
 	void SkwoxelFieldTorus::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "centre"));
-		list->push_back(PropertyInfo(Variant::VECTOR3, "axis"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "major_radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "minor_radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
 	}
 
 	bool SkwoxelFieldTorus::_property_can_revert(const StringName& p_name) const {
@@ -64,6 +58,13 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTorus, minor_radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTorus, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTorus, inner_strength);
+
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, centre);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, axis);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, major_radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, minor_radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
 	}
 
 	SkwoxelFieldTorus::SkwoxelFieldTorus() :

@@ -30,14 +30,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldSphere::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : SPHERE]";
 	}
 
 	void SkwoxelFieldSphere::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "centre"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "inner_strength"));
 	}
 
 	bool SkwoxelFieldSphere::_property_can_revert(const StringName& p_name) const {
@@ -54,6 +50,12 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldSphere, inner_strength);
+
+		// Properties.
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, centre);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
 	}
 
 	SkwoxelFieldSphere::SkwoxelFieldSphere() :

@@ -24,11 +24,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldConstant::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : CONSTANT]";
 	}
 
 	void SkwoxelFieldConstant::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::FLOAT, "constant"));
 	}
 
 	bool SkwoxelFieldConstant::_property_can_revert(const StringName& p_name) const {
@@ -42,6 +41,9 @@ namespace skwoxel
 	void SkwoxelFieldConstant::_bind_methods() {
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldConstant, constant);
+
+		// Properties
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, constant);
 	}
 
 	SkwoxelFieldConstant::SkwoxelFieldConstant() :

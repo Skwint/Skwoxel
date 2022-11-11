@@ -26,7 +26,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldWiggle::_to_string() const {
-		return "[ skwoxel wiggle ]";
+		return "[Skwoxel field : WIGGLE]";
 	}
 
 	bool SkwoxelFieldWiggle::_property_can_revert(const StringName& p_name) const {

@@ -30,7 +30,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldCurve::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : CURVE]";
 	}
 
 	bool SkwoxelFieldCurve::_property_can_revert(const StringName& p_name) const {

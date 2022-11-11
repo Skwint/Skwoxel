@@ -34,13 +34,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldImageCurve::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : IMAGE CURVE]";
 	}
 
 	void SkwoxelFieldImageCurve::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::FLOAT, "texture_scale"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "black_strength"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "white_strength"));
 	}
 
 	bool SkwoxelFieldImageCurve::_property_can_revert(const StringName& p_name) const {
@@ -61,6 +58,9 @@ namespace skwoxel
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture2D"), "set_texture", "get_texture");
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, texture_scale);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, black_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, white_strength);
 	}
 
 	SkwoxelFieldImageCurve::SkwoxelFieldImageCurve() :

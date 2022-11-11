@@ -63,12 +63,16 @@ air = Vector3i(0, 100, 0)
 ground = Vector3i(0, -100, 0)
 remove_bubbles = false
 remove_floaters = false
-simple_normals = true
+simple_normals = false
 randomize_seeds = true
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="."]
+constant = -0.5
 
 [node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="."]
+point1 = Vector3(0, -80, 0)
+point2 = Vector3(0, 80, 0)
+radius = 20.0
 
 [node name="SkwoxelFieldSelect" type="SkwoxelFieldSelect" parent="."]
 
@@ -93,10 +97,23 @@ curve = SubResource("Curve3D_mbxnk")
 curve = SubResource("Curve3D_k3s0p")
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 50, 0)
+axis = Vector3(0, 1, 0)
+major_radius = 50.0
+minor_radius = 5.0
 
 [node name="SkwoxelFieldTorus2" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 50, 0)
+axis = Vector3(0, 0.707107, 0.707107)
+major_radius = 50.0
+minor_radius = 5.0
 
 [node name="SkwoxelFieldTorus3" type="SkwoxelFieldTorus" parent="."]
+centre = Vector3(0, 43, 0)
+axis = Vector3(0, 0.707107, 0.707107)
+major_radius = 50.0
+minor_radius = 5.0
+inner_strength = -1.0
 
 [node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="."]
 end_radius = 2.0

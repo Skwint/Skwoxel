@@ -27,11 +27,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldTurbulence::_to_string() const {
-		return "[ Skwoxel field turbulence ]";
+		return "[Skwoxel field : TURBULENCE]";
 	}
 
 	void SkwoxelFieldTurbulence::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "direction"));
 	}
 
 	bool SkwoxelFieldTurbulence::_property_can_revert(const StringName& p_name) const {
@@ -49,6 +48,7 @@ namespace skwoxel
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "noise", PROPERTY_HINT_RESOURCE_TYPE, FastNoiseLite::get_class_static(),
 			PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_EDITOR_INSTANTIATE_OBJECT),
 			"set_noise", "get_noise");
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, direction);
 	}
 
 	SkwoxelFieldTurbulence::SkwoxelFieldTurbulence() :

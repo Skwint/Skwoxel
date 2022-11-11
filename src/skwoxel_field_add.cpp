@@ -27,7 +27,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldAdd::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : CONSTANT]";
 	}
 
 	void SkwoxelFieldAdd::_get_property_list(List<PropertyInfo>* list) const {

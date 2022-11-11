@@ -28,7 +28,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelField::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : ? field ?]";
 	}
 
 	void SkwoxelField::_get_property_list(List<PropertyInfo>* list) const {

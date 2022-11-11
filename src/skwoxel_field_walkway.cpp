@@ -34,15 +34,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldWalkway::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : WALKWAY]";
 	}
 
 	void SkwoxelFieldWalkway::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::FLOAT, "radius"));
-		list->push_back(PropertyInfo(Variant::VECTOR3, "up"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "floor_strength"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "air_strength"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
 	}
 
 	bool SkwoxelFieldWalkway::_property_can_revert(const StringName& p_name) const {
@@ -63,6 +58,11 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldWalkway, blend);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, up);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, floor_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, air_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
 	}
 
 	SkwoxelFieldWalkway::SkwoxelFieldWalkway() :

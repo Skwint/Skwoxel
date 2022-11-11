@@ -26,12 +26,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldCut::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : CUT]";
 	}
 
 	void SkwoxelFieldCut::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "normal"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "distance"));
 	}
 
 	bool SkwoxelFieldCut::_property_can_revert(const StringName& p_name) const {
@@ -46,6 +44,9 @@ namespace skwoxel
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCut, normal);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCut, distance);
+
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, normal);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, distance);
 	}
 
 	SkwoxelFieldCut::SkwoxelFieldCut() :

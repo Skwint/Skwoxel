@@ -28,13 +28,10 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldMirror::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : MIRROR]";
 	}
 
 	void SkwoxelFieldMirror::_get_property_list(List<PropertyInfo>* list) const {
-		list->push_back(PropertyInfo(Variant::VECTOR3, "normal"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "distance"));
-		list->push_back(PropertyInfo(Variant::FLOAT, "blend"));
 	}
 
 	bool SkwoxelFieldMirror::_property_can_revert(const StringName& p_name) const {
@@ -50,6 +47,10 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, normal);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, distance);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, blend);
+
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, normal);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, distance);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
 	}
 
 	SkwoxelFieldMirror::SkwoxelFieldMirror() :

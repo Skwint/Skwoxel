@@ -25,7 +25,7 @@ namespace skwoxel
 	}
 
 	String SkwoxelFieldNoise::_to_string() const {
-		return "[ wot? ]";
+		return "[Skwoxel field : NOISE]";
 	}
 
 	void SkwoxelFieldNoise::_get_property_list(List<PropertyInfo>* list) const {

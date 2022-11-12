@@ -53,6 +53,8 @@ namespace skwoxel
 
 	real_t SkwoxelFieldMultiply::strength(const Vector3& pos) const
 	{
+		// maths says the product of no numbers at all is 1.
+		// I say a multiply field with no children is intuitively 0.
 		if (num_child_fields == 0)
 			return 0.0;
 

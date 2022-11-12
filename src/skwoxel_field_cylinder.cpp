@@ -106,7 +106,7 @@ namespace skwoxel
 		real_t cap_multiplier = smooth_step(blend, -blend, MAX(end1, end2));
 
 		// combined:
-		return Math::lerp(real_t(0.0), inner_strength, cap_multiplier * radial_multiplier);
+		return inner_strength * cap_multiplier * radial_multiplier;
 	}
 
 }

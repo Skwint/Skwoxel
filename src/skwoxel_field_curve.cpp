@@ -107,9 +107,9 @@ namespace skwoxel
 		if (curve.is_valid() && aabb.has_point(pos))
 		{
 			Vector3 touch = curve->get_closest_point(pos);
-			float rad = (pos - touch).length();
-			float radial_multiplier = smooth_step(-blend, blend, rad - radius);
-			return Math::lerp((float)inner_strength, 0.0f, radial_multiplier);
+			real_t rad = (pos - touch).length();
+			real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
+			return inner_strength * radial_multiplier;
 		}
 		else
 		{

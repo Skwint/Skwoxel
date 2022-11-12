@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmx2xuigcpvt4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = -554199338
+seed = 1071700700
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = 919169183
+seed = -1512618536
 frequency = 0.05
 fractal_octaves = 1
 
@@ -95,7 +95,7 @@ radius = 15.0
 curve = SubResource("Curve3D_brtmw")
 
 [node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="."]
+top_strength = -2.0
 curve = SubResource("Curve3D_6n8g1")
 radius = 5.0
-floor_strength = 2.0
-air_strength = -2.0
+inner_strength = 2.0

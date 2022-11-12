@@ -68,11 +68,12 @@ namespace skwoxel
 		{
 			Vector3 touch = curve->get_closest_point(pos);
 			Vector3 delta = pos - touch;
-			float rad = delta.length();
-			float altitude = delta.dot(up);
-			float radial_multiplier = smooth_step(-blend, blend, radius - rad);
-			float altitude_multiplier = smooth_step(-blend, blend, altitude);
-			return radial_multiplier * Math::lerp(inner_strength, top_strength, altitude_multiplier);
+			real_t rad = delta.length();
+			real_t altitude = delta.dot(up);
+			real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
+			real_t altitude_multiplier = smooth_step(-blend, blend, altitude);
+			real_t str = Math::lerp(inner_strength, top_strength, altitude_multiplier);
+			return str * radial_multiplier;
 		}
 		else
 		{

@@ -81,8 +81,8 @@ namespace skwoxel
 	{
 		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
 		real_t rad = (pos - close).length();
-		real_t radial_multiplier = smooth_step(-blend, blend, rad - radius);
-		return Math::lerp(inner_strength, real_t(0.0), radial_multiplier);
+		real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
+		return inner_strength * radial_multiplier;
 	}
 
 }

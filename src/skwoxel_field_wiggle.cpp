@@ -65,8 +65,8 @@ namespace skwoxel
 			Vector3 touch = curve->sample_baked(offset);
 			real_t rad = (pos - touch).length();
 			real_t interpolated_radius = radius + (offset / length) * (end_radius - radius);
-			real_t radial_multiplier = smooth_step(-blend, blend, rad - interpolated_radius);
-			return Math::lerp((float)inner_strength, 0.0f, radial_multiplier);
+			real_t radial_multiplier = smooth_step(-blend, blend, interpolated_radius - rad);
+			return inner_strength * radial_multiplier;
 		}
 		else
 		{

@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=6 format=3 uid="uid://dmx2xuigcpvt4"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vgqca"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = 1071700700
+seed = 1228364999
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = -1512618536
+seed = -554022279
 frequency = 0.05
 fractal_octaves = 1
 
@@ -35,6 +37,7 @@ ground = Vector3i(0, -20, 0)
 simple_normals = false
 simplify_target_triangle_count = 100009
 randomize_seeds = true
+physics_material_override = SubResource("PhysicsMaterial_vgqca")
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
 centre = Vector3(-10, 0, 0)

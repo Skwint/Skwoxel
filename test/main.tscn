@@ -1,20 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://fquntduuoap0"]
+[gd_scene load_steps=4 format=3 uid="uid://fquntduuoap0"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_nxr2c"]
 [ext_resource type="PackedScene" uid="uid://dmx2xuigcpvt4" path="res://skwoxel.tscn" id="2_t1a35"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3j3hn"]
 bounce = 0.39
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oli4w"]
-bounce = 0.5
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_aip4a"]
-radius = 5.0
-
-[sub_resource type="SphereMesh" id="SphereMesh_x70xd"]
-radius = 5.0
-height = 10.0
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_nxr2c")
@@ -27,97 +17,4 @@ transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0,
 sky_mode = 1
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -100, 20, 100)
-
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D2" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, 0)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D3" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 20, 0)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3"]
-mesh = SubResource("SphereMesh_x70xd")
-skeleton = NodePath("../../RigidBody3D3")
-
-[node name="RigidBody3D4" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 52.2588)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D4"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D4"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D5" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, 52.2588)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D5"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D5"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D6" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 20, 52.2588)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D6"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D6"]
-mesh = SubResource("SphereMesh_x70xd")
-skeleton = NodePath("../../RigidBody3D3")
-
-[node name="RigidBody3D7" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, -53.2505)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D7"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D7"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D8" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, -53.2505)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D8"]
-mesh = SubResource("SphereMesh_x70xd")
-
-[node name="RigidBody3D9" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 20, -53.2505)
-physics_material_override = SubResource("PhysicsMaterial_oli4w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D9"]
-shape = SubResource("SphereShape3D_aip4a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D9"]
-mesh = SubResource("SphereMesh_x70xd")
-skeleton = NodePath("../../RigidBody3D3")
+transform = Transform3D(0.707107, 0.241845, -0.664463, 0, 0.939693, 0.34202, 0.707107, -0.241845, 0.664463, -100, 40, 100)

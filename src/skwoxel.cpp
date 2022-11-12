@@ -957,13 +957,10 @@ namespace skwoxel
 
 		packed_vertices.resize(vertices.size());
 		memcpy(packed_vertices.ptrw(), &vertices[0], vertices.size() * sizeof(Vector3));
-		vertices.clear();
 		packed_normals.resize(normals.size());
 		memcpy(packed_normals.ptrw(), &normals[0], normals.size() * sizeof(Vector3));
-		normals.clear();
 		packed_indices.resize(indices.size());
 		memcpy(packed_indices.ptrw(), &indices[0], indices.size() * sizeof(int));
-		indices.clear();
 
 		UtilityFunctions::print("Mesh generated with ", String::num(packed_indices.size() / 3), " triangles");
 
@@ -984,14 +981,15 @@ namespace skwoxel
 		add_child(mesh_instance);
 
 		// Generate a corresponding collision shape
-		Ref<ConcavePolygonShape3D> shape;
-		shape.instantiate();
 		PackedVector3Array physics;
 		physics.resize(indices.size());
 		for (int i = 0; i < indices.size(); ++i)
 		{
 			physics[i] = vertices[indices[i]];
 		}
+		// Ref<ConcavePolygonShape3D> shape;
+		// shape.instantiate();
+		ConcavePolygonShape3D* shape = memnew(ConcavePolygonShape3D);
 		shape->set_faces(physics);
 		CollisionShape3D* collision = memnew(CollisionShape3D);
 		collision->set_shape(shape);

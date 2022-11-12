@@ -987,9 +987,8 @@ namespace skwoxel
 		{
 			physics[i] = vertices[indices[i]];
 		}
-		// Ref<ConcavePolygonShape3D> shape;
-		// shape.instantiate();
-		ConcavePolygonShape3D* shape = memnew(ConcavePolygonShape3D);
+		Ref<ConcavePolygonShape3D> shape;
+		shape.instantiate();
 		shape->set_faces(physics);
 		CollisionShape3D* collision = memnew(CollisionShape3D);
 		collision->set_shape(shape);

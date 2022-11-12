@@ -121,6 +121,16 @@ curve = SubResource("Curve3D_qrhbf")
 radius = 20.0
 
 [node name="SkwoxelFieldCylinder" type="SkwoxelFieldCylinder" parent="."]
-point1 = Vector3(20, 80, -80)
-point2 = Vector3(-20, 0, -80)
+point1 = Vector3(0, 80, -80)
+point2 = Vector3(-40, 0, -80)
 radius = 20.0
+
+[node name="SkwoxelFieldRotate" type="SkwoxelFieldRotate" parent="."]
+axis = Vector3(0, 0, 1)
+angle = -45.0
+
+[node name="SkwoxelFieldScale" type="SkwoxelFieldScale" parent="SkwoxelFieldRotate"]
+scale = Vector3(2, 4, 1)
+
+[node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="SkwoxelFieldRotate/SkwoxelFieldScale"]
+centre = Vector3(0, 0, -40)

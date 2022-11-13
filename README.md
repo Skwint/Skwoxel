@@ -1,6 +1,7 @@
 # Skwoxel
 A Small voxel GDExtension for [Godot 4](https://github.com/godotengine/godot)
 ![A skwoxel world](https://i.imgur.com/CzPdRMv.png)
+![A procedural maze](https://i.imgur.com/SOtDmHp.png)
 
 ## Alternative voxels
 There is already a far more sophisticated voxel system for Godot: [Zylann's Voxels](https://github.com/Zylann/godot_voxel)

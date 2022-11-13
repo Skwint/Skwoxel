@@ -80,14 +80,15 @@ namespace skwoxel
 		}
 
 		Vector3 reflected = pos - 2.0 * rad * normal;
+		real_t reflection = amplify * SkwoxelFieldAdd::strength(reflected);
 		if (rad < -blend)
 		{
-			return SkwoxelFieldAdd::strength(reflected);
+			return reflection;
 		}
 		else
 		{
 			real_t multiplier = smooth_step(-blend, blend, rad);
-			return Math::lerp(amplify * SkwoxelFieldAdd::strength(reflected), SkwoxelFieldAdd::strength(pos), multiplier);
+			return Math::lerp(reflection, SkwoxelFieldAdd::strength(pos), multiplier);
 		}
 	}
 

@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqg5brhlt140u"]
+
+[ext_resource type="Script" path="res://maze_scene.gd" id="1_jkq8s"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yqtcg"]
+
+[node name="maze_scene" type="Node3D"]
+script = ExtResource("1_jkq8s")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 6.18172e-08, -6.18172e-08, 0, 0.707107, 0.707107, 8.74228e-08, 0.707107, -0.707107, 40, 120, -20)
+
+[node name="Skwoxel" type="Skwoxel" parent="."]
+lower_bounds = Vector3i(-20, -20, -20)
+upper_bounds = Vector3i(100, 100, 100)
+remove_bubbles = false
+remove_floaters = false
+simple_normals = false
+physics_material_override = SubResource("PhysicsMaterial_yqtcg")
+
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
+constant = -0.5
+
+[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="Skwoxel"]
+point2 = Vector3(100, 100, 100)
+radius = 2.0

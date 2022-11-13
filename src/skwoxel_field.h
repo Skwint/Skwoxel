@@ -7,6 +7,8 @@
 #include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/classes/wrapped.hpp>
 
+#include "lotsa.h"
+
 using godot::StringName; // This is bad, but GDCLASS is being unfriendly
 
 namespace skwoxel
@@ -34,8 +36,7 @@ namespace skwoxel
 		void collect_children_of(const godot::Node* parent);
 
 	protected:
-		int num_child_fields;
-		SkwoxelField** child_fields;
+		lotsa<SkwoxelField*> child_fields;
 	};
 }
 

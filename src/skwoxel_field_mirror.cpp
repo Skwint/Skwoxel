@@ -14,6 +14,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(normal);
 		SKWOXEL_SET_METHOD(distance);
 		SKWOXEL_SET_METHOD(blend);
+		SKWOXEL_SET_METHOD(amplify);
 
 		return false;
 	}
@@ -23,6 +24,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(normal);
 		SKWOXEL_GET_METHOD(distance);
 		SKWOXEL_GET_METHOD(blend);
+		SKWOXEL_GET_METHOD(amplify);
 
 		return false;
 	}
@@ -47,16 +49,19 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, normal);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, distance);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, blend);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldMirror, amplify);
 
 		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, normal);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, distance);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, amplify);
 	}
 
 	SkwoxelFieldMirror::SkwoxelFieldMirror() :
 		SkwoxelFieldAdd(),
 		distance(0.0),
-		blend(2.0)
+		blend(2.0),
+		amplify(1.0)
 	{
 
 	}
@@ -82,7 +87,7 @@ namespace skwoxel
 		else
 		{
 			real_t multiplier = smooth_step(-blend, blend, rad);
-			return Math::lerp(SkwoxelFieldAdd::strength(reflected), SkwoxelFieldAdd::strength(pos), multiplier);
+			return Math::lerp(amplify * SkwoxelFieldAdd::strength(reflected), SkwoxelFieldAdd::strength(pos), multiplier);
 		}
 	}
 

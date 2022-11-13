@@ -57,12 +57,12 @@ namespace skwoxel
 
 	real_t SkwoxelFieldSelect::strength(const Vector3& pos) const
 	{
-		if (num_child_fields == 0)
+		if (child_fields.size() == 0)
 			return 0.0;
 
 		real_t lowest = 9999.0;
 		real_t highest = -lowest;
-		for (int ch = 0; ch < num_child_fields; ch++)
+		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
 			real_t val = child_fields[ch]->strength(pos);
 			highest = MAX(highest, val);

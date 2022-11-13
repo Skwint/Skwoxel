@@ -32,10 +32,13 @@ namespace skwoxel
 		void set_up(godot::Vector3 p_up) { up = p_up; }
 		real_t get_top_strength() const { return top_strength; };
 		void set_top_strength(real_t p_top_strength) { top_strength = p_top_strength; }
+		real_t get_altitude() const { return altitude; };
+		void set_altitude(real_t p_altitude) { altitude = p_altitude; }
 
 	private:
 		real_t top_strength;
 		godot::Vector3 up;
+		real_t altitude;
 	};
 }
 

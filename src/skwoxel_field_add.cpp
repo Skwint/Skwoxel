@@ -48,7 +48,7 @@ namespace skwoxel
 	real_t SkwoxelFieldAdd::strength(const Vector3& pos) const
 	{
 		real_t sum = 0.0;
-		for (int ch = 0; ch < num_child_fields; ch++)
+		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
 			sum += child_fields[ch]->strength(pos);
 		}

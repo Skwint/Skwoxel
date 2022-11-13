@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://co7o6nf2np04t"]
+
+[sub_resource type="Curve3D" id="Curve3D_b66yf"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 16, 11, 0, 0, 0, 0, 16, 0, 0, 0, -11, 16, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_r2si2"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, -16, -11, 0, 0, 0, 0, -16, 0, 0, 0, 11, 16, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_68123"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, -16, 0, 0, 0, 0, 11, -16, 0, 0, 16, 0, 0, 0, 8, 0, 16, 0, 0, 0, 0, 0, 0, 16, -11),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="room" type="SkwoxelFieldAdd"]
+
+[node name="ramp_up_1" type="SkwoxelFieldWalkway" parent="."]
+top_strength = -2.0
+curve = SubResource("Curve3D_b66yf")
+radius = 4.0
+inner_strength = 2.0
+
+[node name="ramp_up_2" type="SkwoxelFieldWalkway" parent="."]
+top_strength = -2.0
+curve = SubResource("Curve3D_r2si2")
+radius = 4.0
+inner_strength = 2.0
+
+[node name="ramp_up_3" type="SkwoxelFieldWalkway" parent="."]
+top_strength = -2.0
+curve = SubResource("Curve3D_68123")
+radius = 4.0
+inner_strength = 2.0
+
+[node name="donut_floor" type="SkwoxelFieldMultiply" parent="."]
+
+[node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="donut_floor"]
+axis = Vector3(0, 1, 0)
+major_radius = 17.0
+inner_strength = 2.0
+
+[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="donut_floor"]
+normal = Vector3(0, 1, 0)
+
+[node name="full_floor" type="SkwoxelFieldCylinder" parent="."]
+point2 = Vector3(0, -3, 0)
+radius = 14.0
+inner_strength = 2.0

@@ -12,19 +12,19 @@ transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0,
 sky_mode = 1
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-1, 6.18172e-08, -6.18172e-08, 0, 0.707107, 0.707107, 8.74228e-08, 0.707107, -0.707107, 40, 120, -20)
+transform = Transform3D(-0.939693, 0.0593912, -0.336824, 0, 0.984808, 0.173648, 0.34202, 0.163176, -0.925417, 30, 40, -60)
 
 [node name="Skwoxel" type="Skwoxel" parent="."]
-lower_bounds = Vector3i(-20, -20, -20)
-upper_bounds = Vector3i(100, 100, 100)
+lower_bounds = Vector3i(-30, -5, -30)
+upper_bounds = Vector3i(210, 55, 210)
 remove_bubbles = false
 remove_floaters = false
 simple_normals = false
+simplify_mesh = false
+simplify_aggressiveness = 5.0
+simplify_target_triangle_count = 200000
+randomize_seeds = true
 physics_material_override = SubResource("PhysicsMaterial_yqtcg")
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
-constant = -0.5
-
-[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="Skwoxel"]
-point2 = Vector3(100, 100, 100)
-radius = 2.0
+constant = -1.0

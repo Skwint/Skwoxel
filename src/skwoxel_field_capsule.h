@@ -38,7 +38,7 @@ namespace skwoxel
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
-	private:
+	protected:
 		godot::Vector3 point1;
 		godot::Vector3 point2;
 		real_t radius;

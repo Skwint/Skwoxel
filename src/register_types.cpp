@@ -15,6 +15,7 @@
 #include "skwoxel_field.h"
 #include "skwoxel_field_add.h"
 #include "skwoxel_field_capsule.h"
+#include "skwoxel_field_capsule_sliced.h"
 #include "skwoxel_field_constant.h"
 #include "skwoxel_field_curve.h"
 #include "skwoxel_field_cylinder.h"
@@ -40,6 +41,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelField>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldAdd>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCapsule>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldCapsuleSliced>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldConstant>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCurve>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCylinder>();

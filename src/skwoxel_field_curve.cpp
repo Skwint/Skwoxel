@@ -68,43 +68,47 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldCurve::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldCurve::calculate_bounds(real_t max_radius)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
-
-		real_t border = radius + blend + normal_offset;
+		real_t border = max_radius + blend + normal_offset;
 		Vector3 border_size(border, border, border);
 		AABB little_box;
 		little_box.set_size(2.0 * border_size);
 		if (curve.is_valid())
 		{
-			aabb.set_position(curve->get_point_position(0));
-			aabb.set_size(Vector3(0.0, 0.0, 0.0));
+			bounds.set_position(curve->get_point_position(0));
+			bounds.set_size(Vector3(0.0, 0.0, 0.0));
 			int num = curve->get_point_count();
 			for (int pp = 0; pp < num; ++pp)
 			{
 				Vector3 pos = curve->get_point_position(pp);
 				little_box.set_position(pos - border_size);
-				aabb.merge_with(little_box);
+				bounds.merge_with(little_box);
 				if (pp != 0)
 				{
 					Vector3 in = pos + curve->get_point_in(pp);
 					little_box.set_position(in - border_size);
-					aabb.merge_with(little_box);
+					bounds.merge_with(little_box);
 				}
 				if (pp < num - 1)
 				{
 					Vector3 out = pos + curve->get_point_out(pp);
 					little_box.set_position(out - border_size);
-					aabb.merge_with(little_box);
+					bounds.merge_with(little_box);
 				}
 			}
 		}
 	}
 
+	void SkwoxelFieldCurve::pre_generate(bool randomize_seeds)
+	{
+		SkwoxelField::pre_generate(randomize_seeds);
+		calculate_bounds(radius);
+	}
+
 	real_t SkwoxelFieldCurve::strength(const Vector3& pos) const
 	{
-		if (curve.is_valid() && aabb.has_point(pos))
+		if (curve.is_valid() && bounds.has_point(pos))
 		{
 			Vector3 touch = curve->get_closest_point(pos);
 			real_t rad = (pos - touch).length();

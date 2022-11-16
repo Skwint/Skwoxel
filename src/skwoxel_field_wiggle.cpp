@@ -56,9 +56,16 @@ namespace skwoxel
 
 	}
 
+	void SkwoxelFieldWiggle::pre_generate(bool randomize_seeds)
+	{
+		// Take care we are skipping the SkwoxelFieldCurve version of this function here
+		SkwoxelField::pre_generate(randomize_seeds);
+		calculate_bounds(MAX(radius, end_radius));
+	}
+
 	real_t SkwoxelFieldWiggle::strength(const Vector3& pos) const
 	{
-		if (curve.is_valid() && aabb.has_point(pos))
+		if (curve.is_valid() && bounds.has_point(pos))
 		{
 			real_t offset = curve->get_closest_offset(pos);
 			real_t length = curve->get_baked_length();

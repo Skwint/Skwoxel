@@ -1,7 +1,7 @@
-#ifndef SKWOXEL_FIELD_CUT_H
-#define SKWOXEL_FIELD_CUT_H
+#ifndef SKWOXEL_FIELD_CAPSULE_SLICED_H
+#define SKWOXEL_FIELD_CAPSULE_SLICED_H
 
-#include "skwoxel_field_add.h"
+#include "skwoxel_field_capsule.h"
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
@@ -9,12 +9,12 @@
 
 namespace skwoxel
 {
-	class SkwoxelFieldCut : public SkwoxelFieldAdd
+	class SkwoxelFieldCapsuleSliced : public SkwoxelFieldCapsule
 	{
-		GDCLASS(SkwoxelFieldCut, SkwoxelFieldAdd);
+		GDCLASS(SkwoxelFieldCapsuleSliced, SkwoxelFieldCapsule);
 	public:
-		SkwoxelFieldCut();
-		virtual ~SkwoxelFieldCut();
+		SkwoxelFieldCapsuleSliced();
+		virtual ~SkwoxelFieldCapsuleSliced();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -26,14 +26,18 @@ namespace skwoxel
 		static void _bind_methods();
 
 		real_t strength(const godot::Vector3 & pos) const override;
-		godot::Vector3 get_normal() const { return normal; };
-		void set_normal(godot::Vector3 pos) { normal = pos; }
-		real_t get_distance() const { return distance; };
-		void set_distance(real_t dist) { distance = dist; }
+
+		godot::Vector3 get_up() const { return up; };
+		void set_up(godot::Vector3 p_up) { up = p_up; }
+		real_t get_top_strength() const { return top_strength; };
+		void set_top_strength(real_t p_top_strength) { top_strength = p_top_strength; }
+		real_t get_altitude() const { return altitude; };
+		void set_altitude(real_t p_altitude) { altitude = p_altitude; }
 
 	private:
-		godot::Vector3 normal;
-		real_t distance;
+		godot::Vector3 up;
+		real_t altitude;
+		real_t top_strength;
 	};
 }
 

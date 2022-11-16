@@ -77,7 +77,7 @@ func _ready():
 	skwox.generate()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 func create_room(pos, x, y, z):
@@ -130,7 +130,7 @@ func create_path(dir, end) :
 		var walk : SkwoxelFieldWalkway = SkwoxelFieldWalkway.new()
 		var curve : Curve3D = Curve3D.new()
 		curve.add_point(sdir, sdir, sdir)
-		curve.add_point(end, edir)
+		curve.add_point(epos, edir)
 		curve.bake_interval = 2.0
 		walk.set_curve(curve)
 		walk.set_radius(4.0)

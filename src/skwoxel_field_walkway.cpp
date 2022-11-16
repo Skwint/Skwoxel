@@ -69,7 +69,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldWalkway::strength(const Vector3& pos) const
 	{
-		if (curve.is_valid() && aabb.has_point(pos))
+		if (curve.is_valid() && bounds.has_point(pos))
 		{
 			Vector3 touch = curve->get_closest_point(pos);
 			Vector3 delta = pos - touch;

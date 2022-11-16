@@ -38,8 +38,11 @@ namespace skwoxel
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
 	protected:
+		void calculate_bounds(real_t max_radius);
+
+	protected:
 		godot::Ref<godot::Curve3D> curve;
-		godot::AABB aabb;
+		godot::AABB bounds;
 		real_t radius;
 		real_t blend;
 		real_t inner_strength;

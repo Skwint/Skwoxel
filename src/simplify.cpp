@@ -341,8 +341,8 @@ namespace skwoxel
 				n = (p[1] - p[0]).cross(p[2] - p[0]);
 				n.normalize();
 				t.n = n;
-				for (int j = 0; j < 3; ++j) vertices[t.v[j]].q =
-					vertices[t.v[j]].q + SymetricMatrix(n.x, n.y, n.z, -n.dot(p[0]));
+				for (int j = 0; j < 3; ++j)
+					vertices[t.v[j]].q = vertices[t.v[j]].q + SymetricMatrix(n.x, n.y, n.z, -n.dot(p[0]));
 			}
 			for (int i = 0; i < triangles.size(); ++i)
 			{

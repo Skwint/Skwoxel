@@ -14,6 +14,7 @@
 #include "skwoxel.h"
 #include "skwoxel_field.h"
 #include "skwoxel_field_add.h"
+#include "skwoxel_field_box.h"
 #include "skwoxel_field_capsule.h"
 #include "skwoxel_field_capsule_sliced.h"
 #include "skwoxel_field_constant.h"
@@ -29,6 +30,7 @@
 #include "skwoxel_field_sphere.h"
 #include "skwoxel_field_torus.h"
 #include "skwoxel_field_translate.h"
+#include "skwoxel_field_trigger.h"
 #include "skwoxel_field_turbulence.h"
 #include "skwoxel_field_walkway.h"
 #include "skwoxel_field_wiggle.h"
@@ -40,6 +42,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::Skwoxel>();
 		ClassDB::register_class<skwoxel::SkwoxelField>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldAdd>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldBox>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCapsule>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldCapsuleSliced>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldConstant>();
@@ -55,6 +58,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldSphere>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTorus>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTranslate>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldTrigger>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTurbulence>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldWalkway>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldWiggle>();

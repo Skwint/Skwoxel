@@ -634,7 +634,7 @@ namespace skwoxel
 
 	real_t Skwoxel::sample(const Vector3& pos) const
 	{
-		return root.strength(pos);
+		return root.strength(pos, pos);
 	}
 
 	void Skwoxel::collect_children()

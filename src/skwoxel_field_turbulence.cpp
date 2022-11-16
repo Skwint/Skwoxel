@@ -71,9 +71,9 @@ namespace skwoxel
 		}
 	}
 
-	real_t SkwoxelFieldTurbulence::strength(const Vector3& pos) const
+	real_t SkwoxelFieldTurbulence::strength(const Vector3 & pos, const Vector3& untransformed) const
 	{
 		real_t str = noise->get_noise_3dv(pos);
-		return SkwoxelFieldAdd::strength(pos + str * direction);
+		return SkwoxelFieldAdd::strength(pos + str * direction, untransformed);
 	}
 }

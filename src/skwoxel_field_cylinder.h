@@ -26,7 +26,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds);
-		real_t strength(const godot::Vector3& pos) const override;
+		real_t strength(const godot::Vector3& pos, const godot::Vector3& untransformed) const override;
 
 		godot::Vector3 get_point1() const { return point1; }
 		void set_point1(const godot::Vector3& point) { point1 = point; }

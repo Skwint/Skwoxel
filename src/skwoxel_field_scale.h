@@ -26,7 +26,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 		godot::Vector3 get_scale() const { return scale; };
 		void set_scale(godot::Vector3 p_scale) { scale = p_scale; }
 

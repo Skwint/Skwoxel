@@ -57,8 +57,8 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldTranslate::strength(const Vector3& pos) const
+	real_t SkwoxelFieldTranslate::strength(const Vector3 & pos, const Vector3& untransformed) const
 	{
-		return SkwoxelFieldAdd::strength(pos - translation);
+		return SkwoxelFieldAdd::strength(pos - translation, untransformed);
 	}
 }

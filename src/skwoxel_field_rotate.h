@@ -28,7 +28,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds);
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 		godot::Vector3 get_axis() const { return axis; };
 		void set_axis(godot::Vector3 p_axis) { axis = p_axis; }
 		real_t get_angle() const { return angle; };

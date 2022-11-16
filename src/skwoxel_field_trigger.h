@@ -1,20 +1,26 @@
-#ifndef SKWOXEL_FIELD_MIRROR_H
-#define SKWOXEL_FIELD_MIRROR_H
+#ifndef SKWOXEL_FIELD_TRIGGER_H
+#define SKWOXEL_FIELD_TRIGGER_H
 
-#include "skwoxel_field_add.h"
+#include "skwoxel_field.h"
 
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
+#include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/wrapped.hpp>
+
+#include "lotsa.h"
+
+using godot::StringName; // This is bad, but GDCLASS is being unfriendly
 
 namespace skwoxel
 {
-	class SkwoxelFieldMirror : public SkwoxelFieldAdd
+	class SkwoxelFieldTrigger : public SkwoxelField
 	{
-		GDCLASS(SkwoxelFieldMirror, SkwoxelFieldAdd);
+		GDCLASS(SkwoxelFieldTrigger, SkwoxelField);
 	public:
-		SkwoxelFieldMirror();
-		virtual ~SkwoxelFieldMirror();
+		SkwoxelFieldTrigger();
+		virtual ~SkwoxelFieldTrigger();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -25,21 +31,18 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
+		void pre_generate(bool randomize_seeds) override;
 		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
-		godot::Vector3 get_normal() const { return normal; };
-		void set_normal(godot::Vector3 pos) { normal = pos; }
-		real_t get_distance() const { return distance; };
-		void set_distance(real_t radius) { distance = radius; }
-		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
-		real_t get_amplify() const { return amplify; };
-		void set_amplify(real_t p_amplify) { amplify = p_amplify; }
+		void post_generate() override;
+		godot::Vector3 get_point() const { return point; }
+		void set_point(const godot::Vector3& p_point) { point = p_point; }
+
+	protected:
+		godot::Vector3 point;
 
 	private:
-		godot::Vector3 normal;
-		real_t distance;
-		real_t blend;
-		real_t amplify;
+		mutable godot::Vector3 closest;
+		mutable real_t distance_squared;
 	};
 }
 

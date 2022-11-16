@@ -26,7 +26,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds) override;
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 
 		godot::Vector3 get_centre() const { return centre; }
 		void set_centre(const godot::Vector3& p_centre) { centre = p_centre; }

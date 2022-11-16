@@ -27,7 +27,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds);
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 		godot::Ref<godot::Curve3D> get_curve() const { return curve; };
 		void set_curve(const godot::Ref<godot::Curve3D> cur) { curve = cur; }
 		real_t get_radius() const { return radius; };

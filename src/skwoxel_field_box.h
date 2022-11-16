@@ -1,20 +1,20 @@
-#ifndef SKWOXEL_FIELD_MIRROR_H
-#define SKWOXEL_FIELD_MIRROR_H
+#ifndef SKWOXEL_FIELD_BOX_H
+#define SKWOXEL_FIELD_BOX_H
 
-#include "skwoxel_field_add.h"
+#include "skwoxel_field.h"
 
 #include <godot_cpp/core/defs.hpp>
-#include <godot_cpp/variant/vector3.hpp>
+#include <godot_cpp/variant/aabb.hpp>
 #include <godot_cpp/core/binder_common.hpp>
 
 namespace skwoxel
 {
-	class SkwoxelFieldMirror : public SkwoxelFieldAdd
+	class SkwoxelFieldBox : public SkwoxelField
 	{
-		GDCLASS(SkwoxelFieldMirror, SkwoxelFieldAdd);
+		GDCLASS(SkwoxelFieldBox, SkwoxelField);
 	public:
-		SkwoxelFieldMirror();
-		virtual ~SkwoxelFieldMirror();
+		SkwoxelFieldBox();
+		virtual ~SkwoxelFieldBox();
 
 		bool _set(const godot::StringName& p_name, const godot::Variant& p_value);
 		bool _get(const godot::StringName& p_name, godot::Variant& r_ret) const;
@@ -26,20 +26,17 @@ namespace skwoxel
 		static void _bind_methods();
 
 		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
-		godot::Vector3 get_normal() const { return normal; };
-		void set_normal(godot::Vector3 pos) { normal = pos; }
-		real_t get_distance() const { return distance; };
-		void set_distance(real_t radius) { distance = radius; }
+		godot::AABB get_aabb() const { return aabb; };
+		void set_aabb(godot::AABB p_aabb) { aabb = p_aabb; }
 		real_t get_blend() const { return blend; };
 		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
-		real_t get_amplify() const { return amplify; };
-		void set_amplify(real_t p_amplify) { amplify = p_amplify; }
+		real_t get_inner_strength() const { return inner_strength; };
+		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 
 	private:
-		godot::Vector3 normal;
-		real_t distance;
+		godot::AABB aabb;
 		real_t blend;
-		real_t amplify;
+		real_t inner_strength;
 	};
 }
 

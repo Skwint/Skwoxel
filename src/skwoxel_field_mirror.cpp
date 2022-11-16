@@ -71,16 +71,16 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldMirror::strength(const Vector3& pos) const
+	real_t SkwoxelFieldMirror::strength(const Vector3 & pos, const Vector3& untransformed) const
 	{
 		real_t rad = pos.dot(normal) - distance;
 		if (rad > blend)
 		{
-			return SkwoxelFieldAdd::strength(pos);
+			return SkwoxelFieldAdd::strength(pos, untransformed);
 		}
 
 		Vector3 reflected = pos - 2.0 * rad * normal;
-		real_t reflection = amplify * SkwoxelFieldAdd::strength(reflected);
+		real_t reflection = amplify * SkwoxelFieldAdd::strength(reflected, untransformed);
 		if (rad < -blend)
 		{
 			return reflection;
@@ -88,7 +88,7 @@ namespace skwoxel
 		else
 		{
 			real_t multiplier = smooth_step(-blend, blend, rad);
-			return Math::lerp(reflection, SkwoxelFieldAdd::strength(pos), multiplier);
+			return Math::lerp(reflection, SkwoxelFieldAdd::strength(pos, untransformed), multiplier);
 		}
 	}
 

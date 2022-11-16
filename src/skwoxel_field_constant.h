@@ -25,7 +25,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 		real_t get_constant() const { return constant; };
 		void set_constant(real_t val) { constant = val; }
 

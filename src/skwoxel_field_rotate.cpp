@@ -69,8 +69,8 @@ namespace skwoxel
 		rotator.set_axis_angle(axis.normalized(), -angle);
 	}
 
-	real_t SkwoxelFieldRotate::strength(const Vector3& pos) const
+	real_t SkwoxelFieldRotate::strength(const Vector3 & pos, const Vector3& untransformed) const
 	{
-		return SkwoxelFieldAdd::strength(rotator.xform(pos));
+		return SkwoxelFieldAdd::strength(rotator.xform(pos), untransformed);
 	}
 }

@@ -45,12 +45,12 @@ namespace skwoxel
 	{
 	}
 
-	real_t SkwoxelFieldAdd::strength(const Vector3& pos) const
+	real_t SkwoxelFieldAdd::strength(const Vector3 & pos, const Vector3& untransformed) const
 	{
 		real_t sum = 0.0;
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			sum += child_fields[ch]->strength(pos);
+			sum += child_fields[ch]->strength(pos, untransformed);
 		}
 		return sum;
 	}

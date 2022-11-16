@@ -30,7 +30,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		virtual void pre_generate(bool randomize_seeds);
-		virtual real_t strength(const godot::Vector3 & pos) const;
+		virtual real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const;
 		virtual void post_generate();
 		void collect_children();
 		void collect_children_of(const godot::Node* parent);

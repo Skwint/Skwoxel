@@ -26,7 +26,7 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds);
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
 		real_t get_end_radius() const { return end_radius; };
 		void set_end_radius(real_t p_strength) { end_radius = p_strength; }
 

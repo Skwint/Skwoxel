@@ -5,6 +5,7 @@
 
 #include "skwoxel.h"
 
+#include <thread>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
@@ -24,6 +25,8 @@
 #define SKWOXEL_COLLISION_NAME "SkwoxelCollision"
 
 using namespace godot;
+using std::vector;
+using std::thread;
 
 namespace skwoxel
 {
@@ -42,6 +45,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(simple_normals);
 		SKWOXEL_SET_METHOD(smooth_normals);
 		SKWOXEL_SET_METHOD(minimum_edge);
+		SKWOXEL_SET_METHOD(num_threads);
 		SKWOXEL_SET_METHOD(randomize_seeds);
 		SKWOXEL_SET_METHOD(generate);
 		SKWOXEL_SET_METHOD(material);
@@ -59,6 +63,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(simple_normals);
 		SKWOXEL_GET_METHOD(smooth_normals);
 		SKWOXEL_GET_METHOD(minimum_edge);
+		SKWOXEL_GET_METHOD(num_threads);
 		SKWOXEL_GET_METHOD(randomize_seeds);
 		SKWOXEL_GET_METHOD(generate);
 		SKWOXEL_GET_METHOD(material);
@@ -91,6 +96,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simple_normals);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, smooth_normals);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, minimum_edge);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, num_threads);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, randomize_seeds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
@@ -106,6 +112,7 @@ namespace skwoxel
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simple_normals);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, smooth_normals);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, minimum_edge);
+		SKWOXEL_ADD_PROPERTY(Variant::INT, num_threads);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, randomize_seeds);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, generate);
 	}
@@ -657,7 +664,38 @@ namespace skwoxel
 		delete_voxels();
 		allocate_voxels();
 
-		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
+		if (num_threads < 2)
+		{
+			generate_voxels_thread(lower_bounds.z, upper_bounds.z);
+		}
+		else
+		{
+			int zsize = upper_bounds.z + 1 - lower_bounds.z;
+			int dz = zsize / num_threads;
+			if (dz * num_threads < zsize)
+				dz++;
+
+			vector<thread> threads;
+			for (int low = lower_bounds.z; low < upper_bounds.z; low += dz)
+			{
+				int high = low + dz - 1;
+				if (high > upper_bounds.z)
+				{
+					high = upper_bounds.z;
+				}
+				threads.push_back(thread(&Skwoxel::generate_voxels_thread, this, low, high));
+			}
+			for (auto& tt : threads)
+			{
+				tt.join();
+			}
+			threads.clear();
+		}
+	}
+
+	void Skwoxel::generate_voxels_thread(int lowz, int highz)
+	{
+		for (int z = lowz; z <= highz; ++z)
 		{
 			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
 			{

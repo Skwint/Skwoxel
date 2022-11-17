@@ -69,6 +69,7 @@ namespace skwoxel
 		void allocate_voxels();
 		void delete_voxels();
 		void generate_voxels();
+		void generate_voxels_thread(int lowz, int highz);
 		void generate_triggers();
 		void delete_mesh();
 		void generate_mesh();
@@ -101,6 +102,7 @@ namespace skwoxel
 		bool smooth_normals;
 		real_t minimum_edge;
 		bool randomize_seeds;
+		int num_threads = 4;
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
 		lotsa<Voxel> voxels;
@@ -138,6 +140,8 @@ namespace skwoxel
 		real_t get_minimum_edge() const { return minimum_edge; }
 		void set_randomize_seeds(bool p_randomize_seeds) { randomize_seeds = p_randomize_seeds; }
 		bool get_randomize_seeds() const { return randomize_seeds; }
+		void set_num_threads(int p_num_threads) { num_threads = p_num_threads; }
+		int get_num_threads() const { return num_threads; }
 
 		// Ungodly editor hack
 		void set_generate(bool val) { generate(); }

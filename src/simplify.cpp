@@ -67,12 +67,7 @@ namespace skwoxel
 	//
 	// Main simplification function 
 	//
-	// target_count  : target nr. of triangles
-	// agressiveness : sharpness to increase the threshold.
-	//                 5..8 are good numbers
-	//                 more iterations yield higher quality
-	//
-	void Simplify::simplify_mesh(int target_count, double agressiveness)
+	void Simplify::simplify_mesh(double target_edge)
 	{
 		// init
 		for (int i = 0; i < triangles.size(); ++i)
@@ -84,29 +79,16 @@ namespace skwoxel
 		lotsa<int> deleted0, deleted1;
 		int triangle_count = triangles.size();
 
-		for (int iteration = 0; iteration < 100; ++iteration)
+		const int num_iterations = 5;
+		for (int iteration = num_iterations; iteration >= 0; --iteration)
 		{
-			// target number of triangles reached ? Then break
-			if (triangle_count - deleted_triangles <= target_count)
-				break;
+			double threshold = target_edge / pow(2.0, float(iteration));
 
-			// update mesh once in a while
-			if (iteration % 5 == 0)
-			{
-				update_mesh(iteration);
-			}
+			update_mesh(iteration == num_iterations);
 
 			// clear dirty flag
 			for (int i = 0; i < triangles.size(); ++i)
 				triangles[i].dirty = 0;
-
-			//
-			// All triangles with edges below the threshold will be removed
-			//
-			// The following numbers works well for most models.
-			// If it does not, try to adjust the 3 parameters
-			//
-			double threshold = 0.000000001 * pow(double(iteration + 3), agressiveness);
 
 			// remove vertices & mark deleted triangles			
 			for (int i = 0; i < triangles.size(); ++i)
@@ -163,9 +145,6 @@ namespace skwoxel
 						break;
 					}
 				}
-				// done?
-				if (triangle_count - deleted_triangles <= target_count)
-					break;
 			}
 		}
 
@@ -233,9 +212,9 @@ namespace skwoxel
 
 	// compact triangles, compute edge error and build reference list
 
-	void Simplify::update_mesh(int iteration)
+	void Simplify::update_mesh(bool first)
 	{
-		if (iteration > 0) // compact triangles
+		if (!first) // compact triangles
 		{
 			int dst = 0;
 			for (int i = 0; i < triangles.size(); ++i)
@@ -287,70 +266,67 @@ namespace skwoxel
 		// recomputing during the simplification is not required,
 		// but mostly improves the result for closed meshes
 		//
-		if (iteration == 0)
+		// Identify boundary : vertices[].border=0,1
+
+		lotsa<int> vcount, vids;
+
+		for (int i = 0; i < vertices.size(); ++i)
+			vertices[i].border = 0;
+
+		for (int i = 0; i < vertices.size(); ++i)
 		{
-			// Identify boundary : vertices[].border=0,1
-
-			lotsa<int> vcount, vids;
-
-			for (int i = 0; i < vertices.size(); ++i)
-				vertices[i].border = 0;
-
-			for (int i = 0; i < vertices.size(); ++i)
+			Vertex& v = vertices[i];
+			vcount.clear();
+			vids.clear();
+			for (int j = 0; j < v.tcount; ++j)
 			{
-				Vertex& v = vertices[i];
-				vcount.clear();
-				vids.clear();
-				for (int j = 0; j < v.tcount; ++j)
+				int k = refs[v.tstart + j].tid;
+				Triangle& t = triangles[k];
+				for (int k = 0; k < 3; ++k)
 				{
-					int k = refs[v.tstart + j].tid;
-					Triangle& t = triangles[k];
-					for (int k = 0; k < 3; ++k)
+					int ofs = 0;
+					int id = t.v[k];
+					while (ofs < vcount.size())
 					{
-						int ofs = 0;
-						int id = t.v[k];
-						while (ofs < vcount.size())
-						{
-							if (vids[ofs] == id)break;
-							ofs++;
-						}
-						if (ofs == vcount.size())
-						{
-							vcount.push_back(1);
-							vids.push_back(id);
-						}
-						else
-							vcount[ofs]++;
+						if (vids[ofs] == id)break;
+						ofs++;
 					}
-				}
-				for (int j = 0; j < vcount.size(); ++j)
-				{
-					if (vcount[j] == 1)
-						vertices[vids[j]].border = 1;
+					if (ofs == vcount.size())
+					{
+						vcount.push_back(1);
+						vids.push_back(id);
+					}
+					else
+						vcount[ofs]++;
 				}
 			}
-			//initialize errors
-			for (int i = 0; i < vertices.size(); ++i)
-				vertices[i].q = SymetricMatrix(0.0);
+			for (int j = 0; j < vcount.size(); ++j)
+			{
+				if (vcount[j] == 1)
+					vertices[vids[j]].border = 1;
+			}
+		}
+		//initialize errors
+		for (int i = 0; i < vertices.size(); ++i)
+			vertices[i].q = SymetricMatrix(0.0);
 
-			for (int i = 0; i < triangles.size(); ++i)
-			{
-				Triangle& t = triangles[i];
-				Vector3 n, p[3];
-				for (int j = 0; j < 3; ++j) p[j] = vertices[t.v[j]].p;
-				n = (p[1] - p[0]).cross(p[2] - p[0]);
-				n.normalize();
-				t.n = n;
-				for (int j = 0; j < 3; ++j)
-					vertices[t.v[j]].q = vertices[t.v[j]].q + SymetricMatrix(n.x, n.y, n.z, -n.dot(p[0]));
-			}
-			for (int i = 0; i < triangles.size(); ++i)
-			{
-				// Calc Edge Error
-				Triangle& t = triangles[i]; Vector3 p;
-				for (int j = 0; j < 3; ++j) t.err[j] = calculate_error(t.v[j], t.v[(j + 1) % 3], p);
-				t.err[3] = MIN(t.err[0], MIN(t.err[1], t.err[2]));
-			}
+		for (int i = 0; i < triangles.size(); ++i)
+		{
+			Triangle& t = triangles[i];
+			Vector3 n, p[3];
+			for (int j = 0; j < 3; ++j) p[j] = vertices[t.v[j]].p;
+			n = (p[1] - p[0]).cross(p[2] - p[0]);
+			n.normalize();
+			t.n = n;
+			for (int j = 0; j < 3; ++j)
+				vertices[t.v[j]].q = vertices[t.v[j]].q + SymetricMatrix(n.x, n.y, n.z, -n.dot(p[0]));
+		}
+		for (int i = 0; i < triangles.size(); ++i)
+		{
+			// Calc Edge Error
+			Triangle& t = triangles[i]; Vector3 p;
+			for (int j = 0; j < 3; ++j) t.err[j] = calculate_error(t.v[j], t.v[(j + 1) % 3], p);
+			t.err[3] = MIN(t.err[0], MIN(t.err[1], t.err[2]));
 		}
 	}
 

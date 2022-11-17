@@ -16,6 +16,7 @@
 #include <godot_cpp/classes/label.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 
+#include "random.h"
 #include "skwoxel_helpers.h"
 #include "skwoxel_field.h"
 #include "simplify.h"
@@ -41,9 +42,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(remove_floaters);
 		SKWOXEL_SET_METHOD(simple_normals);
 		SKWOXEL_SET_METHOD(smooth_normals);
-		SKWOXEL_SET_METHOD(simplify_mesh);
-		SKWOXEL_SET_METHOD(simplify_aggressiveness);
-		SKWOXEL_SET_METHOD(simplify_target_triangle_count);
+		SKWOXEL_SET_METHOD(minimum_edge);
 		SKWOXEL_SET_METHOD(randomize_seeds);
 		SKWOXEL_SET_METHOD(generate);
 		SKWOXEL_SET_METHOD(material);
@@ -60,9 +59,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(remove_floaters);
 		SKWOXEL_GET_METHOD(simple_normals);
 		SKWOXEL_GET_METHOD(smooth_normals);
-		SKWOXEL_GET_METHOD(simplify_mesh);
-		SKWOXEL_GET_METHOD(simplify_aggressiveness);
-		SKWOXEL_GET_METHOD(simplify_target_triangle_count);
+		SKWOXEL_GET_METHOD(minimum_edge);
 		SKWOXEL_GET_METHOD(randomize_seeds);
 		SKWOXEL_GET_METHOD(generate);
 		SKWOXEL_GET_METHOD(material);
@@ -94,9 +91,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simple_normals);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, smooth_normals);
-		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_mesh);
-		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_aggressiveness);
-		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simplify_target_triangle_count);
+		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, minimum_edge);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, randomize_seeds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, generate);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, material);
@@ -111,9 +106,7 @@ namespace skwoxel
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, remove_floaters);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simple_normals);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, smooth_normals);
-		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simplify_mesh);
-		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, simplify_aggressiveness);
-		SKWOXEL_ADD_PROPERTY(Variant::INT, simplify_target_triangle_count);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, minimum_edge);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, randomize_seeds);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, generate);
 	}
@@ -125,9 +118,7 @@ namespace skwoxel
 		remove_floaters(true),
 		simple_normals(true),
 		smooth_normals(true),
-		simplify_mesh(true),
-		simplify_aggressiveness(7),
-		simplify_target_triangle_count(100000)
+		minimum_edge(0.02)
 	{
 	}
 
@@ -894,10 +885,12 @@ namespace skwoxel
 		}
 
 		// Simplify:
-		if (simplify_mesh)
+		// simplifying the mesh too much can move vertices so far out of position that the smooth normals
+		// go very wrong and simple normals should be used instead.
+		if (minimum_edge > 0.0)
 		{
 			Simplify simple(vertices, indices);
-			simple.simplify_mesh(simplify_target_triangle_count, simplify_aggressiveness);
+			simple.simplify_mesh(minimum_edge);
 			simple.get(vertices, indices);
 		}
 
@@ -913,14 +906,10 @@ namespace skwoxel
 				int idx0 = indices[idx];
 				int idx1 = indices[idx + 1];
 				int idx2 = indices[idx + 2];
-				Vector3 norm = (vertices[idx2] - vertices[idx0]).cross(vertices[idx1] - vertices[idx0]).normalized();
+				Vector3 norm = (vertices[idx2] - vertices[idx0]).cross(vertices[idx1] - vertices[idx0]);//.normalized();
 				normals[idx0] += norm;
 				normals[idx1] += norm;
 				normals[idx2] += norm;
-			}
-			for (int idx = 0; idx < vertices.size(); ++idx)
-			{
-				normals[idx].normalize();
 			}
 		}
 		if (smooth_normals)
@@ -941,11 +930,22 @@ namespace skwoxel
 				neighbour.y = pos.y;
 				neighbour.z += normal_offset;
 				gradient.z = sample(neighbour) - localStrength;
-				if ((!simple_normals) || gradient.dot(normals[idx]) > 0.0)
+				if ((!simple_normals) || gradient.dot(normals[idx]) < 0.0)
 				{
 					gradient.normalize();
 					normals[idx] = -gradient;
 				}
+				else
+				{
+					normals[idx].normalize();
+				}
+			}
+		}
+		else
+		{
+			for (int idx = 0; idx < vertices.size(); ++idx)
+			{
+				normals[idx].normalize();
 			}
 		}
 

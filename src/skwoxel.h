@@ -93,8 +93,7 @@ namespace skwoxel
 		bool simplify_mesh;
 		bool simple_normals;
 		bool smooth_normals;
-		real_t simplify_aggressiveness;
-		int simplify_target_triangle_count;
+		real_t minimum_edge;
 		bool randomize_seeds;
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
@@ -127,12 +126,8 @@ namespace skwoxel
 		bool get_simple_normals() const { return simple_normals; }
 		void set_smooth_normals(bool p_smooth_normals) { smooth_normals = p_smooth_normals; if (!smooth_normals) set_simple_normals(true); }
 		bool get_smooth_normals() const { return smooth_normals; }
-		void set_simplify_mesh(bool p_simplify) { simplify_mesh = p_simplify; }
-		bool get_simplify_mesh() const { return simplify_mesh; }
-		void set_simplify_aggressiveness(real_t p_aggressiveness) { simplify_aggressiveness = p_aggressiveness; }
-		real_t get_simplify_aggressiveness() const { return simplify_aggressiveness; }
-		void set_simplify_target_triangle_count(int p_count) { simplify_target_triangle_count = p_count; }
-		int get_simplify_target_triangle_count() const { return simplify_target_triangle_count; }
+		void set_minimum_edge(real_t p_minimum_edge) { minimum_edge = p_minimum_edge; }
+		real_t get_minimum_edge() const { return minimum_edge; }
 		void set_randomize_seeds(bool p_randomize_seeds) { randomize_seeds = p_randomize_seeds; }
 		bool get_randomize_seeds() const { return randomize_seeds; }
 

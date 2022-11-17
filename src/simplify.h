@@ -46,14 +46,14 @@ namespace skwoxel
 		Simplify(lotsa<godot::Vector3>& points, lotsa<int>& indices);
 		void set(lotsa<godot::Vector3>& points, lotsa<int>& indices);
 		void get(lotsa<godot::Vector3>& points, lotsa<int>& indices);
-		void simplify_mesh(int target_count, double agressiveness = 7);
+		void simplify_mesh(double target_edge);
 
 	private:
 		double vertex_error(SymetricMatrix q, double x, double y, double z);
 		double calculate_error(int id_v1, int id_v2, godot::Vector3& p_result);
 		bool flipped(godot::Vector3 p, int i0, int i1, Vertex& v0, Vertex& v1, lotsa<int>& deleted);
 		void update_triangles(int i0, Vertex& v, lotsa<int>& deleted, int& deleted_triangles);
-		void update_mesh(int iteration);
+		void update_mesh(bool first);
 		void compact_mesh();
 
 	private:

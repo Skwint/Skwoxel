@@ -3,12 +3,12 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vgqca"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = -1187793111
+seed = 1413232927
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = 629934458
+seed = 707904282
 frequency = 0.05
 fractal_octaves = 1
 
@@ -34,9 +34,6 @@ lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
 air = Vector3i(-100, 20, -100)
 ground = Vector3i(0, -20, 0)
-simple_normals = false
-simplify_target_triangle_count = 100009
-randomize_seeds = true
 physics_material_override = SubResource("PhysicsMaterial_vgqca")
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]
@@ -85,7 +82,7 @@ normal = Vector3(1, 0, -1)
 blend = 4.0
 
 [node name="SkwoxelFieldMirror" type="SkwoxelFieldMirror" parent="."]
-normal = Vector3(1, 0, 0)
+normal = Vector3(-1, 0, 0)
 distance = -20.0
 
 [node name="SkwoxelFieldTurbulence" type="SkwoxelFieldTurbulence" parent="SkwoxelFieldMirror"]

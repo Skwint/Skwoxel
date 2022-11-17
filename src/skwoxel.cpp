@@ -5,7 +5,6 @@
 
 #include "skwoxel.h"
 
-#include <chrono>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
@@ -126,19 +125,34 @@ namespace skwoxel
 	{
 	}
 
+	void Skwoxel::report(const String& str)
+	{
+		auto end_time = std::chrono::steady_clock::now();
+		std::chrono::duration<double> elapsed_seconds_start = end_time - start_time;
+		std::chrono::duration<double> elapsed_seconds_last = end_time - last_time;
+		last_time = end_time;
+		UtilityFunctions::print("<Skwoxel> ", String::num(elapsed_seconds_start.count()), " : ", str, " (", String::num(elapsed_seconds_last.count()), ")");
+	}
+
 	void Skwoxel::generate()
 	{
-		auto start_time = std::chrono::steady_clock::now();
+		start_time = std::chrono::steady_clock::now();
+		last_time = start_time;
 
 		delete_mesh();
+		collect_children();
+		root.pre_generate(randomize_seeds);
 		generate_voxels();
+		report("Voxel generation complete");
+		generate_triggers();
+		report("Triggers complete");
 		filter();
+		report("Filtering complete");
 		generate_mesh();
+		report("Mesh generation complete");
+		root.post_generate();
 		delete_voxels();
 
-		auto end_time = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed_seconds = end_time - start_time;
-		UtilityFunctions::print("Mesh generated in ", String::num(elapsed_seconds.count()), " seconds");
 	}
 
 	void Skwoxel::delete_mesh()
@@ -625,7 +639,12 @@ namespace skwoxel
 
 	real_t Skwoxel::sample(const Vector3& pos) const
 	{
-		return root.strength(pos, pos);
+		return root.strength(pos);
+	}
+
+	void Skwoxel::trigger(const Vector3& pos)
+	{
+		root.trigger(pos, pos);
 	}
 
 	void Skwoxel::collect_children()
@@ -637,9 +656,7 @@ namespace skwoxel
 	{
 		delete_voxels();
 		allocate_voxels();
-		collect_children();
 
-		root.pre_generate(randomize_seeds);
 		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
 		{
 			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
@@ -653,7 +670,22 @@ namespace skwoxel
 				}
 			}
 		}
-		root.post_generate();
+	}
+
+	void Skwoxel::generate_triggers()
+	{
+		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
+		{
+			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
+			{
+				Voxel* voxel = &voxel_at_global_unsafe(lower_bounds.x, y, z);
+				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
+				{
+					trigger(Vector3(x, y, z));
+					++voxel;
+				}
+			}
+		}
 	}
 
 	void Skwoxel::generate_mesh()
@@ -789,6 +821,7 @@ namespace skwoxel
 			}
 			start.z++;
 		}
+		report("- Vertex generation complete");
 
 		// Create all the triangles.
 		lotsa<int> indices;
@@ -883,6 +916,7 @@ namespace skwoxel
 				}
 			}
 		}
+		report("- Triangle generation complete");
 
 		// Simplify:
 		// simplifying the mesh too much can move vertices so far out of position that the smooth normals
@@ -892,7 +926,9 @@ namespace skwoxel
 			Simplify simple(vertices, indices);
 			simple.simplify_mesh(minimum_edge);
 			simple.get(vertices, indices);
+			report("- Simplification complete");
 		}
+
 
 		// Generate normals:
 		// Note that if we have simple AND smooth set it will calculate both
@@ -914,6 +950,9 @@ namespace skwoxel
 		}
 		if (smooth_normals)
 		{
+			// Each smooth normal costs 4 calls to the field sampling function,
+			// but because there are so few of them compared to the original voxel
+			// count the impact on total time taken is small.
 			Vector3 neighbour;
 			Vector3 pos;
 			for (int idx = 0; idx < vertices.size(); ++idx)
@@ -949,6 +988,8 @@ namespace skwoxel
 			}
 		}
 
+		report("- Normals generated");
+
 		// Build arrays and mesh
 		Array arrays;
 		PackedVector3Array packed_vertices;
@@ -979,6 +1020,7 @@ namespace skwoxel
 			mesh_instance->set_surface_override_material(0, material);
 		}
 		add_child(mesh_instance);
+		report("- Graphics mesh generated");
 
 		// Generate a corresponding collision shape
 		PackedVector3Array physics;
@@ -994,6 +1036,7 @@ namespace skwoxel
 		collision->set_shape(shape);
 		collision->set_name(SKWOXEL_COLLISION_NAME);
 		add_child(collision);
+		report("- Collision mesh generated");
 	}
 
 	// Properties.

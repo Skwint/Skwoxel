@@ -32,7 +32,8 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds) override;
-		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
+		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
+		real_t strength(const godot::Vector3 & pos) const override;
 		void post_generate() override;
 		godot::Vector3 get_point() const { return point; }
 		void set_point(const godot::Vector3& p_point) { point = p_point; }
@@ -41,8 +42,8 @@ namespace skwoxel
 		godot::Vector3 point;
 
 	private:
-		mutable godot::Vector3 closest;
-		mutable real_t distance_squared;
+		godot::Vector3 closest;
+		real_t distance_squared;
 	};
 }
 

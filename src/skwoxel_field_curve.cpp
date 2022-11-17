@@ -106,7 +106,7 @@ namespace skwoxel
 		calculate_bounds(radius);
 	}
 
-	real_t SkwoxelFieldCurve::strength(const Vector3 & pos, const Vector3& untransformed) const
+	real_t SkwoxelFieldCurve::strength(const Vector3& pos) const
 	{
 		if (curve.is_valid() && bounds.has_point(pos))
 		{

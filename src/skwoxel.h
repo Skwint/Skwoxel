@@ -6,6 +6,7 @@
 #ifndef SKWOXEL_SKWOXEL_H
 #define SKWOXEL_SKWOXEL_H
 
+#include <chrono>
 #include <godot_cpp/classes/static_body3d.hpp>
 #include <godot_cpp/classes/global_constants.hpp>
 #include <godot_cpp/classes/material.hpp>
@@ -63,10 +64,12 @@ namespace skwoxel
 		String _to_string() const;
 
 		real_t sample(const Vector3& pos) const;
+		void trigger(const Vector3& pos);
 		void collect_children();
 		void allocate_voxels();
 		void delete_voxels();
 		void generate_voxels();
+		void generate_triggers();
 		void delete_mesh();
 		void generate_mesh();
 		void generate_air_flags();
@@ -84,6 +87,9 @@ namespace skwoxel
 		inline Voxel& voxel_at_global(int x, int y, int z);
 
 	private:
+		void report(const godot::String& str);
+
+	private:
 		Vector3i lower_bounds;
 		Vector3i upper_bounds;
 		Vector3i ground;
@@ -98,6 +104,8 @@ namespace skwoxel
 		Ref<Material> material;
 		SkwoxelFieldAdd root;
 		lotsa<Voxel> voxels;
+		std::chrono::time_point<std::chrono::steady_clock> start_time;
+		std::chrono::time_point<std::chrono::steady_clock> last_time;
 
 	public:
 		Skwoxel();

@@ -29,7 +29,8 @@ namespace skwoxel
 		static void _bind_methods();
 
 		void pre_generate(bool randomize_seeds);
-		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
+		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
+		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Vector3 get_direction() const { return direction; };
 		void set_direction(godot::Vector3 dir) { direction = dir; }
 		godot::Ref<godot::FastNoiseLite> get_noise() const { return noise; };

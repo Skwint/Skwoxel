@@ -61,15 +61,18 @@ namespace skwoxel
 		SkwoxelField::pre_generate(randomize_seeds);
 	}
 
-	real_t SkwoxelFieldTrigger::strength(const Vector3 & pos, const Vector3& untransformed) const
+	void SkwoxelFieldTrigger::trigger(const Vector3& pos, const Vector3& untransformed)
 	{
-		// This is the wrong point we need the point it came from ...
 		real_t distsq = (pos - point).length_squared();
 		if (distsq < distance_squared)
 		{
 			closest = untransformed;
 			distance_squared = distsq;
 		}
+	}
+
+	real_t SkwoxelFieldTrigger::strength(const Vector3& pos) const
+	{
 		return 0.0;
 	}
 

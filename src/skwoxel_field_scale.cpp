@@ -57,8 +57,13 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldScale::strength(const Vector3 & pos, const Vector3& untransformed) const
+	void SkwoxelFieldScale::trigger(const Vector3& pos, const Vector3& untransformed)
 	{
-		return SkwoxelFieldAdd::strength(pos / scale, untransformed);
+		return SkwoxelFieldAdd::trigger(pos / scale, untransformed);
+	}
+
+	real_t SkwoxelFieldScale::strength(const Vector3& pos) const
+	{
+		return SkwoxelFieldAdd::strength(pos / scale);
 	}
 }

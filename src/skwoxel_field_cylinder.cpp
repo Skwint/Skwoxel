@@ -86,7 +86,7 @@ namespace skwoxel
 			normal = (point2 - point1) / length;
 	}
 
-	real_t SkwoxelFieldCylinder::strength(const Vector3 & pos, const Vector3& untransformed) const
+	real_t SkwoxelFieldCylinder::strength(const Vector3& pos) const
 	{
 		auto rel = pos - point1;
 		if (length <= 1e-20f) {

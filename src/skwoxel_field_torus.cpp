@@ -87,7 +87,7 @@ namespace skwoxel
 		axis.normalize();
 	}
 
-	real_t SkwoxelFieldTorus::strength(const Vector3 & pos, const Vector3& untransformed) const
+	real_t SkwoxelFieldTorus::strength(const Vector3& pos) const
 	{
 		Vector3 relative = pos - centre;
 		real_t height = relative.dot(axis);

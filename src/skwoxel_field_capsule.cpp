@@ -77,7 +77,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldCapsule::strength(const Vector3 & pos, const Vector3& untransformed) const
+	real_t SkwoxelFieldCapsule::strength(const Vector3& pos) const
 	{
 		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
 		real_t rad = (pos - close).length();

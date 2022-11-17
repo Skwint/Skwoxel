@@ -55,7 +55,15 @@ namespace skwoxel
 		ADD_PROPERTY(PropertyInfo(Variant::INT, "criteria", PROPERTY_HINT_ENUM, "Strongest,Highest,Lowest"), "set_criteria", "get_criteria");
 	}
 
-	real_t SkwoxelFieldSelect::strength(const Vector3 & pos, const Vector3& untransformed) const
+	void SkwoxelFieldSelect::trigger(const Vector3& pos, const Vector3& untransformed)
+	{
+		for (int ch = 0; ch < child_fields.size(); ch++)
+		{
+			child_fields[ch]->trigger(pos, untransformed);
+		}
+	}
+
+	real_t SkwoxelFieldSelect::strength(const Vector3& pos) const
 	{
 		if (child_fields.size() == 0)
 			return 0.0;
@@ -64,7 +72,7 @@ namespace skwoxel
 		real_t highest = -lowest;
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			real_t val = child_fields[ch]->strength(pos, untransformed);
+			real_t val = child_fields[ch]->strength(pos);
 			highest = MAX(highest, val);
 			lowest = MIN(lowest, val);
 		}

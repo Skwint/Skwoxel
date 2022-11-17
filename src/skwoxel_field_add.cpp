@@ -45,12 +45,20 @@ namespace skwoxel
 	{
 	}
 
-	real_t SkwoxelFieldAdd::strength(const Vector3 & pos, const Vector3& untransformed) const
+	void SkwoxelFieldAdd::trigger(const Vector3& pos, const Vector3& untransformed)
+	{
+		for (int ch = 0; ch < child_fields.size(); ch++)
+		{
+			child_fields[ch]->trigger(pos, untransformed);
+		}
+	}
+
+	real_t SkwoxelFieldAdd::strength(const Vector3& pos) const
 	{
 		real_t sum = 0.0;
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			sum += child_fields[ch]->strength(pos, untransformed);
+			sum += child_fields[ch]->strength(pos);
 		}
 		return sum;
 	}

@@ -63,7 +63,7 @@ namespace skwoxel
 		calculate_bounds(MAX(radius, end_radius));
 	}
 
-	real_t SkwoxelFieldWiggle::strength(const Vector3 & pos, const Vector3& untransformed) const
+	real_t SkwoxelFieldWiggle::strength(const Vector3& pos) const
 	{
 		if (curve.is_valid() && bounds.has_point(pos))
 		{

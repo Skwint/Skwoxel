@@ -25,7 +25,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;
+		real_t strength(const godot::Vector3 & pos) const override;
 		godot::AABB get_aabb() const { return aabb; };
 		void set_aabb(godot::AABB p_aabb) { aabb = p_aabb; }
 		real_t get_blend() const { return blend; };

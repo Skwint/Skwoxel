@@ -26,7 +26,8 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		virtual real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed) const override;;
+		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
+		virtual real_t strength(const godot::Vector3 & pos) const override;;
 		int get_criteria() const { return criteria; };
 		void set_criteria(int p_criteria) { criteria = p_criteria; }
 

@@ -101,3 +101,14 @@ top_strength = -2.0
 curve = SubResource("Curve3D_6n8g1")
 radius = 5.0
 inner_strength = 2.0
+
+[node name="SkwoxelFieldDisplace" type="SkwoxelFieldDisplace" parent="."]
+direction = Vector3(10, 0, 0)
+
+[node name="SkwoxelFieldSphere2" type="SkwoxelFieldSphere" parent="SkwoxelFieldDisplace"]
+centre = Vector3(40, 0, 0)
+radius = 15.0
+blend = 3.0
+
+[node name="displacement" type="SkwoxelFieldBox" parent="SkwoxelFieldDisplace"]
+aabb = AABB(0, -5, -10, 100, 100, 20)

@@ -73,7 +73,7 @@ namespace skwoxel
 		real_t x_up = smooth_step(-blend, blend, pos.x - low.x);
 		real_t x_down = smooth_step(-blend, blend, high.x - pos.x);
 		real_t y_up = smooth_step(-blend, blend, pos.y - low.y);
-		real_t y_down = smooth_step(-blend, blend, high.x - pos.y);
+		real_t y_down = smooth_step(-blend, blend, high.y - pos.y);
 		real_t z_up = smooth_step(-blend, blend, pos.z - low.z);
 		real_t z_down = smooth_step(-blend, blend, high.z - pos.z);
 		return inner_strength * x_up * x_down * y_up * y_down * z_up * z_down;

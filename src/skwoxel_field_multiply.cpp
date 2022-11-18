@@ -3,6 +3,7 @@
 #include "skwoxel_helpers.h"
 
 using namespace godot;
+using std::vector;
 
 namespace skwoxel
 {

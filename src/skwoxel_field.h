@@ -1,6 +1,7 @@
 #ifndef SKWOXEL_FIELD_H
 #define SKWOXEL_FIELD_H
 
+#include <vector>
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/core/binder_common.hpp>
@@ -8,8 +9,6 @@
 #include <godot_cpp/classes/wrapped.hpp>
 
 #include "lotsa.h"
-
-using godot::StringName; // This is bad, but GDCLASS is being unfriendly
 
 namespace skwoxel
 {
@@ -32,7 +31,7 @@ namespace skwoxel
 		virtual void pre_generate(bool randomize_seeds);
 		virtual void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed);
 		virtual real_t strength(const godot::Vector3 & pos) const;
-		virtual void post_generate();
+		virtual void post_generate(std::vector<godot::Vector3>& air_points, std::vector<godot::Vector3>& ground_points);
 		void collect_children();
 		void collect_children_of(const godot::Node* parent);
 

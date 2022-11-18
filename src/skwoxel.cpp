@@ -38,8 +38,6 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_SET_METHOD(lower_bounds);
 		SKWOXEL_SET_METHOD(upper_bounds);
-		SKWOXEL_SET_METHOD(air);
-		SKWOXEL_SET_METHOD(ground);
 		SKWOXEL_SET_METHOD(remove_bubbles);
 		SKWOXEL_SET_METHOD(remove_floaters);
 		SKWOXEL_SET_METHOD(simple_normals);
@@ -56,8 +54,6 @@ namespace skwoxel
 		String name = p_name;
 		SKWOXEL_GET_METHOD(lower_bounds);
 		SKWOXEL_GET_METHOD(upper_bounds);
-		SKWOXEL_GET_METHOD(air);
-		SKWOXEL_GET_METHOD(ground);
 		SKWOXEL_GET_METHOD(remove_bubbles);
 		SKWOXEL_GET_METHOD(remove_floaters);
 		SKWOXEL_GET_METHOD(simple_normals);
@@ -89,8 +85,6 @@ namespace skwoxel
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, lower_bounds);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, upper_bounds);
-		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, air);
-		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, ground);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_bubbles);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, remove_floaters);
 		SKWOXEL_BIND_SET_GET_METHOD(Skwoxel, simple_normals);
@@ -105,8 +99,6 @@ namespace skwoxel
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
 		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, lower_bounds);
 		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, upper_bounds);
-		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, air);
-		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3I, ground);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, remove_bubbles);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, remove_floaters);
 		SKWOXEL_ADD_PROPERTY(Variant::BOOL, simple_normals);
@@ -118,8 +110,6 @@ namespace skwoxel
 	}
 
 	Skwoxel::Skwoxel() :
-		ground(0.0, -1.0, 0.0),
-		air(0.0, 1.0, 0.0),
 		remove_bubbles(true),
 		remove_floaters(true),
 		simple_normals(true),
@@ -147,17 +137,19 @@ namespace skwoxel
 		last_time = start_time;
 
 		delete_mesh();
+		air_points.clear();
+		ground_points.clear();
 		collect_children();
 		root.pre_generate(randomize_seeds);
 		generate_voxels();
 		report("Voxel generation complete");
 		generate_triggers();
 		report("Triggers complete");
+		root.post_generate(air_points, ground_points);
 		filter();
 		report("Filtering complete");
 		generate_mesh();
 		report("Mesh generation complete");
-		root.post_generate();
 		delete_voxels();
 
 	}
@@ -191,7 +183,10 @@ namespace skwoxel
 	void Skwoxel::generate_air_flags()
 	{
 		bool changed = true;
-		voxel_at_global(air.x, air.y, air.z).flags |= Voxel::AIR;
+		for (auto& air : air_points)
+		{
+			voxel_at_global(round(air.x), round(air.y), round(air.z)).flags |= Voxel::AIR;
+		}
 		while (changed)
 		{
 			changed = false;
@@ -393,7 +388,10 @@ namespace skwoxel
 	void Skwoxel::generate_ground_flags()
 	{
 		bool changed = true;
-		voxel_at_global(ground.x, ground.y, ground.z).flags |= Voxel::GROUND;
+		for (auto& ground : ground_points)
+		{
+			voxel_at_global(round(ground.x), round(ground.y), round(ground.z)).flags |= Voxel::GROUND;
+		}
 		while (changed)
 		{
 			changed = false;
@@ -606,6 +604,11 @@ namespace skwoxel
 
 	void Skwoxel::filter_bubbles()
 	{
+		if (air_points.size() == 0)
+		{
+			UtilityFunctions::print("Cannot remove bubbles because no air triggers exist to say what isn't a bubble.");
+			return;
+		}
 		generate_air_flags();
 		for (int z = 0; z < size_z(); ++z)
 		{
@@ -626,6 +629,11 @@ namespace skwoxel
 
 	void Skwoxel::filter_floaters()
 	{
+		if (ground_points.size() == 0)
+		{
+			UtilityFunctions::print("Cannot remove floaters because no ground triggers exist to say what isn't a floater.");
+			return;
+		}
 		generate_ground_flags();
 		for (int z = 0; z < size_z(); ++z)
 		{
@@ -1092,22 +1100,6 @@ namespace skwoxel
 
 	Vector3i Skwoxel::get_upper_bounds() const {
 		return upper_bounds;
-	}
-
-	void Skwoxel::set_ground(const Vector3i& pos) {
-		ground = pos;
-	}
-
-	Vector3i Skwoxel::get_ground() const {
-		return ground;
-	}
-
-	void Skwoxel::set_air(const Vector3i& pos) {
-		air = pos;
-	}
-
-	Vector3i Skwoxel::get_air() const {
-		return air;
 	}
 
 	void Skwoxel::set_remove_bubbles(bool remove) {

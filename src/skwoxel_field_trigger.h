@@ -11,8 +11,6 @@
 
 #include "lotsa.h"
 
-using godot::StringName; // This is bad, but GDCLASS is being unfriendly
-
 namespace skwoxel
 {
 	class SkwoxelFieldTrigger : public SkwoxelField
@@ -34,9 +32,13 @@ namespace skwoxel
 		void pre_generate(bool randomize_seeds) override;
 		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
 		real_t strength(const godot::Vector3 & pos) const override;
-		void post_generate() override;
+		void post_generate(std::vector<godot::Vector3>& air_points, std::vector<godot::Vector3>& ground_points) override;
 		godot::Vector3 get_point() const { return point; }
 		void set_point(const godot::Vector3& p_point) { point = p_point; }
+		bool get_air() const { return air; }
+		void set_air(bool p_air) { air = p_air; if (air) ground = false; }
+		bool get_ground() const { return ground; }
+		void set_ground(bool p_ground) { ground = p_ground; if (ground) air = false; }
 
 	protected:
 		godot::Vector3 point;
@@ -44,6 +46,8 @@ namespace skwoxel
 	private:
 		godot::Vector3 closest;
 		real_t distance_squared;
+		bool air;
+		bool ground;
 	};
 }
 

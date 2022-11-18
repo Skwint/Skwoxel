@@ -1,6 +1,7 @@
 #include "skwoxel_field.h"
 
 using namespace godot;
+using std::vector;
 
 namespace skwoxel
 {
@@ -61,11 +62,11 @@ namespace skwoxel
 	{
 	}
 
-	void SkwoxelField::post_generate()
+	void SkwoxelField::post_generate(vector<Vector3>& air_points, vector<Vector3>& ground_points)
 	{
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			child_fields[ch]->post_generate();
+			child_fields[ch]->post_generate(air_points, ground_points);
 		}
 	}
 

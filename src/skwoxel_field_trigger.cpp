@@ -3,6 +3,7 @@
 #include "skwoxel_helpers.h"
 
 using namespace godot;
+using std::vector;
 
 namespace skwoxel
 {
@@ -23,12 +24,16 @@ namespace skwoxel
 	bool SkwoxelFieldTrigger::_set(const StringName& p_name, const Variant& p_value) {
 		String name = p_name;
 		SKWOXEL_SET_METHOD(point);
+		SKWOXEL_SET_METHOD(air);
+		SKWOXEL_SET_METHOD(ground);
 		return false;
 	}
 
 	bool SkwoxelFieldTrigger::_get(const StringName& p_name, Variant& r_ret) const {
 		String name = p_name;
 		SKWOXEL_GET_METHOD(point);
+		SKWOXEL_GET_METHOD(air);
+		SKWOXEL_GET_METHOD(ground);
 		return false;
 	}
 
@@ -50,7 +55,13 @@ namespace skwoxel
 	void SkwoxelFieldTrigger::_bind_methods()
 	{
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTrigger, point);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTrigger, air);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTrigger, ground);
+
 		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, point);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, air);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, ground);
+
 		ADD_SIGNAL(MethodInfo(SKWOXEL_SIGNAL_TRIGGER, PropertyInfo(Variant::VECTOR3, "point")));
 	}
 
@@ -76,9 +87,17 @@ namespace skwoxel
 		return 0.0;
 	}
 
-	void SkwoxelFieldTrigger::post_generate()
+	void SkwoxelFieldTrigger::post_generate(vector<Vector3>& air_points, vector<Vector3>& ground_points)
 	{
 		emit_signal(SKWOXEL_SIGNAL_TRIGGER, closest);
-		SkwoxelField::post_generate();
+		if (air)
+		{
+			air_points.push_back(closest);
+		}
+		else if (ground)
+		{
+			ground_points.push_back(closest);
+		}
+		SkwoxelField::post_generate(air_points, ground_points);
 	}
 }

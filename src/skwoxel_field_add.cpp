@@ -1,6 +1,7 @@
 #include "skwoxel_field_add.h"
 
 using namespace godot;
+using std::vector;
 
 namespace skwoxel
 {

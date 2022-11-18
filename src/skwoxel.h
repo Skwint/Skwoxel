@@ -7,6 +7,7 @@
 #define SKWOXEL_SKWOXEL_H
 
 #include <chrono>
+#include <vector>
 #include <godot_cpp/classes/static_body3d.hpp>
 #include <godot_cpp/classes/global_constants.hpp>
 #include <godot_cpp/classes/material.hpp>
@@ -91,10 +92,10 @@ namespace skwoxel
 		void report(const godot::String& str);
 
 	private:
-		Vector3i lower_bounds;
-		Vector3i upper_bounds;
-		Vector3i ground;
-		Vector3i air;
+		godot::Vector3i lower_bounds;
+		godot::Vector3i upper_bounds;
+		std::vector<godot::Vector3> air_points;
+		std::vector<godot::Vector3> ground_points;
 		bool remove_bubbles;
 		bool remove_floaters;
 		bool simplify_mesh;
@@ -122,10 +123,6 @@ namespace skwoxel
 		Vector3i get_lower_bounds() const;
 		void set_upper_bounds(const Vector3i& bounds);
 		Vector3i get_upper_bounds() const;
-		void set_ground(const Vector3i& pos);
-		Vector3i get_ground() const;
-		void set_air(const Vector3i& pos);
-		Vector3i get_air() const;
 		void set_material(godot::Ref<godot::Material> p_material) { material = p_material; }
 		godot::Ref<godot::Material> get_material() const { return material; }
 		void set_remove_bubbles(bool remove);

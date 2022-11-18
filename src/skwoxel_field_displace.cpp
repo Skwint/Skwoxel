@@ -4,6 +4,7 @@
 #include "skwoxel_helpers.h"
 
 using namespace godot;
+using std::vector;
 
 namespace skwoxel
 {
@@ -52,7 +53,7 @@ namespace skwoxel
 
 	SkwoxelFieldDisplace::SkwoxelFieldDisplace() :
 		SkwoxelFieldAdd(),
-		direction(0.0, 0.0, 0.0),
+		direction(0.0, 1.0, 0.0),
 		magnitude("displacement")
 	{
 

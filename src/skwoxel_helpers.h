@@ -28,6 +28,10 @@
 	} \
 }
 
+#define SKWOXEL_INLINE_SET_GET(type, mm) \
+	type get_##mm() const { return mm;} \
+	void set_#mm(type p_##mm) { mm = p_##mm; }
+
 namespace skwoxel
 {
 	const real_t normal_offset = 0.1;

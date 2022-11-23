@@ -34,6 +34,7 @@
 #include "skwoxel_field_translate.h"
 #include "skwoxel_field_trigger.h"
 #include "skwoxel_field_turbulence.h"
+#include "skwoxel_field_twister.h"
 #include "skwoxel_field_walkway.h"
 #include "skwoxel_field_wiggle.h"
 
@@ -64,6 +65,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldTranslate>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTrigger>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldTurbulence>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldTwister>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldWalkway>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldWiggle>();
 	}

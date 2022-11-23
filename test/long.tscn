@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://hhcka5vnjwdg"]
+
+[ext_resource type="Script" path="res://long.gd" id="1_bwy55"]
+
+[node name="long" type="Node3D"]
+script = ExtResource("1_bwy55")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.984808, -0.0301537, 0.17101, 0, 0.984808, 0.173648, -0.173648, 0.17101, -0.969847, 30, 40, -60)
+
+[node name="Skwoxel" type="Skwoxel" parent="."]
+lower_bounds = Vector3i(-20, -20, 0)
+upper_bounds = Vector3i(20, 20, 200)
+num_threads = 1
+
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
+constant = 1.0
+
+[node name="SkwoxelFieldTwister" type="SkwoxelFieldTwister" parent="Skwoxel"]
+num_points = 10
+length = 200.0
+radius = 10.0
+blend = 3.0
+inner_strength = -2.0

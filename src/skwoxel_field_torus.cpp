@@ -69,6 +69,7 @@ namespace skwoxel
 
 	SkwoxelFieldTorus::SkwoxelFieldTorus() :
 		SkwoxelField(),
+		axis(0.0, 1.0, 0.0),
 		major_radius(6.0),
 		minor_radius(3.0),
 		blend(2.0),

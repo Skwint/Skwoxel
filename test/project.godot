@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Skwoxel Test Project"
-run/main_scene="res://main.tscn"
+run/main_scene="res://long.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 

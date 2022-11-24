@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=3 uid="uid://dhb5opib0dytf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdc57"]
+transparency = 1
+albedo_color = Color(0.254902, 0.592157, 1, 0.156863)
+refraction_enabled = true
+disable_receive_shadows = true
+
+[sub_resource type="Curve3D" id="Curve3D_rfdfd"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 10, 0, 80, 0, 0, 0, -10, 0, 0, 0, 0, 80, 100, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_my3ot"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 10, 0, -40, 0, 69.2, 0, -10, 0, 0, 0, 0, -40, 110, 69.2),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_57qha"]
+bake_interval = 2.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 10, 0, -40, 0, -69.2, 0, -10, 0, 0, 0, 0, -40, 80, -69.2),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wqclv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kk342"]
+
+[node name="Twisted" type="Node3D"]
+
+[node name="Skwoxel" type="Skwoxel" parent="."]
+material = SubResource("StandardMaterial3D_sdc57")
+lower_bounds = Vector3i(-130, -10, -130)
+upper_bounds = Vector3i(130, 150, 130)
+remove_bubbles = false
+remove_floaters = false
+
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
+constant = -1.0
+
+[node name="SkwoxelFieldMultiply2" type="SkwoxelFieldMultiply" parent="Skwoxel"]
+
+[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="Skwoxel/SkwoxelFieldMultiply2"]
+normal = Vector3(0, -1, 0)
+
+[node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="Skwoxel/SkwoxelFieldMultiply2"]
+
+[node name="SkwoxelFieldRotate" type="SkwoxelFieldRotate" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd"]
+angle = 0.1
+twist = 0.1
+
+[node name="SkwoxelFieldDisplace3" type="SkwoxelFieldDisplace3" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate"]
+scale = Vector3(50, 50, 1)
+
+[node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+axis = Vector3(0, 1, 0)
+major_radius = 80.0
+minor_radius = 10.0
+blend = 4.0
+inner_strength = 2.0
+
+[node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+end_radius = 1.0
+curve = SubResource("Curve3D_rfdfd")
+radius = 20.0
+blend = 4.0
+inner_strength = 2.0
+
+[node name="SkwoxelFieldWiggle2" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+end_radius = 1.0
+curve = SubResource("Curve3D_my3ot")
+radius = 25.0
+blend = 4.0
+inner_strength = 2.0
+
+[node name="SkwoxelFieldWiggle3" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+end_radius = 1.0
+curve = SubResource("Curve3D_57qha")
+radius = 15.0
+blend = 4.0
+inner_strength = 2.0
+
+[node name="dispx" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+noise = SubResource("FastNoiseLite_wqclv")
+
+[node name="dispy" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+noise = SubResource("FastNoiseLite_kk342")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+sky_mode = 1

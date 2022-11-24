@@ -9,6 +9,8 @@
 #include <godot_cpp/core/binder_common.hpp>
 #include <godot_cpp/classes/ref.hpp>
 
+#include "skwoxel_helpers.h"
+
 namespace skwoxel
 {
 	class SkwoxelFieldRotate : public SkwoxelFieldAdd
@@ -32,13 +34,15 @@ namespace skwoxel
 		real_t strength(const godot::Vector3 & pos) const override;
 		godot::Vector3 get_axis() const { return axis; };
 		void set_axis(godot::Vector3 p_axis) { axis = p_axis; }
-		real_t get_angle() const { return angle; };
-		void set_angle(real_t p_angle) { angle = p_angle; }
+		SKWOXEL_INLINE_SET_GET(real_t, angle)
+		SKWOXEL_INLINE_SET_GET(real_t, twist)
 
 	private:
 		godot::Basis rotator;
 		godot::Vector3 axis;
+		godot::Vector3 axis_normalized;
 		real_t angle;
+		real_t twist;
 	};
 }
 

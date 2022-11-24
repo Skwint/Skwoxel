@@ -29,9 +29,9 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		void pre_generate(bool randomize_seeds) override;
-		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
-		real_t strength(const godot::Vector3 & pos) const override;
+		void pre_generate(bool randomize_seeds, int num_threads) override;
+
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		void post_generate(std::vector<godot::Vector3>& air_points, std::vector<godot::Vector3>& ground_points) override;
 		godot::Vector3 get_point() const { return point; }
 		void set_point(const godot::Vector3& p_point) { point = p_point; }
@@ -44,8 +44,8 @@ namespace skwoxel
 		godot::Vector3 point;
 
 	private:
-		godot::Vector3 closest;
-		real_t distance_squared;
+		mutable std::vector<godot::Vector3> closest;
+		mutable std::vector<real_t> distance_squared;
 		bool air;
 		bool ground;
 	};

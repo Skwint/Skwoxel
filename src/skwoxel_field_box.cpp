@@ -66,7 +66,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldBox::strength(const Vector3& pos) const
+	real_t SkwoxelFieldBox::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		Vector3 low = aabb.get_position();
 		Vector3 high = low + aabb.get_size();

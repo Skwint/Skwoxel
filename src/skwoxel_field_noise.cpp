@@ -58,16 +58,16 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldNoise::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldNoise::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		if (randomize_seeds)
 		{
 			noise->set_seed(skwoxel::rand());
 		}
 	}
 
-	real_t SkwoxelFieldNoise::strength(const Vector3& pos) const
+	real_t SkwoxelFieldNoise::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		return noise->get_noise_3dv(pos);
 	}

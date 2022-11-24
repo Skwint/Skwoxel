@@ -58,7 +58,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldConstant::strength(const Vector3& pos) const
+	real_t SkwoxelFieldConstant::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		return constant;
 	}

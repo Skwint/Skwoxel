@@ -88,9 +88,9 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldTwister::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldTwister::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 
 		real_t hop_length = length / (points.size() - 1);
 		int steps_per_hop = (int)ceil(hop_length / step);
@@ -114,7 +114,7 @@ namespace skwoxel
 		cache[cache.size() - 1] = Vector3(points[points.size() - 1].x, points[points.size() - 1].y, length);
 	}
 
-	real_t SkwoxelFieldTwister::strength(const Vector3& pos) const
+	real_t SkwoxelFieldTwister::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t first_index_f = max(real_t(0.0), (pos.z - radius) / cache_step);
 		real_t last_index_f = min(length, (pos.z + radius)) / cache_step;

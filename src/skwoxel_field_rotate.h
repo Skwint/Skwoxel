@@ -29,9 +29,9 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		void pre_generate(bool randomize_seeds);
-		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
-		real_t strength(const godot::Vector3 & pos) const override;
+		void pre_generate(bool randomize_seeds, int num_threads);
+
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		godot::Vector3 get_axis() const { return axis; };
 		void set_axis(godot::Vector3 p_axis) { axis = p_axis; }
 		SKWOXEL_INLINE_SET_GET(real_t, angle)

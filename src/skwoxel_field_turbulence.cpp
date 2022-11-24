@@ -63,24 +63,18 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldTurbulence::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldTurbulence::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		if (randomize_seeds)
 		{
 			noise->set_seed(skwoxel::rand());
 		}
 	}
 
-	void SkwoxelFieldTurbulence::trigger(const Vector3& pos, const Vector3& untransformed)
+	real_t SkwoxelFieldTurbulence::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t str = noise->get_noise_3dv(pos);
-		return SkwoxelFieldAdd::trigger(pos + str * direction, untransformed);
-	}
-
-	real_t SkwoxelFieldTurbulence::strength(const Vector3& pos) const
-	{
-		real_t str = noise->get_noise_3dv(pos);
-		return SkwoxelFieldAdd::strength(pos + str * direction);
+		return SkwoxelFieldAdd::strength(pos + str * direction, untransformed, thread_num);
 	}
 }

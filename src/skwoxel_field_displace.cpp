@@ -64,7 +64,7 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldDisplace::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldDisplace::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		Node* node = find_child(magnitude, false, false);
 		displacement = dynamic_cast<SkwoxelField*>(node);
@@ -72,31 +72,15 @@ namespace skwoxel
 		{
 			UtilityFunctions::print("Displace field has no child named [", magnitude, "]");
 		}
-		SkwoxelFieldAdd::pre_generate(randomize_seeds);
+		SkwoxelFieldAdd::pre_generate(randomize_seeds, num_threads);
 	}
 
-	void SkwoxelFieldDisplace::trigger(const Vector3& pos, const Vector3& untransformed)
+	real_t SkwoxelFieldDisplace::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t offset = 0.0;
 		if (displacement)
 		{
-			offset = displacement->strength(pos);
-		}
-		Vector3 disp = pos - offset * direction;
-		for (int ch = 0; ch < child_fields.size(); ch++)
-		{
-			SkwoxelField* child = child_fields[ch];
-			if (child != displacement)
-				child->trigger(disp, untransformed);
-		}
-	}
-
-	real_t SkwoxelFieldDisplace::strength(const Vector3& pos) const
-	{
-		real_t offset = 0.0;
-		if (displacement)
-		{
-			offset = displacement->strength(pos);
+			offset = displacement->strength(pos, untransformed, thread_num);
 		}
 		Vector3 disp = pos - offset * direction;
 		real_t sum = 0.0;
@@ -104,7 +88,7 @@ namespace skwoxel
 		{
 			SkwoxelField* child = child_fields[ch];
 			if (child != displacement)
-				sum += child->strength(disp);
+				sum += child->strength(disp, untransformed, thread_num);
 		}
 		return sum;
 	}

@@ -52,15 +52,7 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldMultiply::trigger(const Vector3& pos, const Vector3& untransformed)
-	{
-		for (int ch = 0; ch < child_fields.size(); ch++)
-		{
-			child_fields[ch]->trigger(pos, untransformed);
-		}
-	}
-
-	real_t SkwoxelFieldMultiply::strength(const Vector3& pos) const
+	real_t SkwoxelFieldMultiply::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		// maths says the product of no numbers at all is 1.
 		// I say a multiply field with no children is intuitively 0.
@@ -70,7 +62,7 @@ namespace skwoxel
 		real_t prod = 1.0;
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			prod *= child_fields[ch]->strength(pos);
+			prod *= child_fields[ch]->strength(pos, untransformed, thread_num);
 		}
 		return prod;
 	}

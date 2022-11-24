@@ -65,38 +65,42 @@ namespace skwoxel
 		ADD_SIGNAL(MethodInfo(SKWOXEL_SIGNAL_TRIGGER, PropertyInfo(Variant::VECTOR3, "point")));
 	}
 
-	void SkwoxelFieldTrigger::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldTrigger::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		distance_squared = 99999999.0;
-		closest = point;
-		SkwoxelField::pre_generate(randomize_seeds);
+		closest.resize(num_threads);
+		distance_squared.resize(num_threads);
+		for (auto& dist : distance_squared)
+			dist = 99999999.0;
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 	}
 
-	void SkwoxelFieldTrigger::trigger(const Vector3& pos, const Vector3& untransformed)
+	real_t SkwoxelFieldTrigger::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t distsq = (pos - point).length_squared();
-		if (distsq < distance_squared)
+		if (distsq < distance_squared[thread_num])
 		{
-			closest = untransformed;
-			distance_squared = distsq;
+			closest[thread_num] = untransformed;
+			distance_squared[thread_num] = distsq;
 		}
-	}
-
-	real_t SkwoxelFieldTrigger::strength(const Vector3& pos) const
-	{
 		return 0.0;
 	}
 
 	void SkwoxelFieldTrigger::post_generate(vector<Vector3>& air_points, vector<Vector3>& ground_points)
 	{
-		emit_signal(SKWOXEL_SIGNAL_TRIGGER, closest);
+		int index = 0;
+		for (int idx = 1; idx < closest.size(); ++idx)
+		{
+			if (distance_squared[idx] < distance_squared[index])
+				index = idx;
+		}
+		emit_signal(SKWOXEL_SIGNAL_TRIGGER, closest[index]);
 		if (air)
 		{
-			air_points.push_back(closest);
+			air_points.push_back(closest[index]);
 		}
 		else if (ground)
 		{
-			ground_points.push_back(closest);
+			ground_points.push_back(closest[index]);
 		}
 		SkwoxelField::post_generate(air_points, ground_points);
 	}

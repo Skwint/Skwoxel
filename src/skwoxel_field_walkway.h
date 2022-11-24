@@ -27,7 +27,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		godot::Vector3 get_up() const { return up; };
 		void set_up(godot::Vector3 p_up) { up = p_up; }
 		real_t get_top_strength() const { return top_strength; };

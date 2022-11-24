@@ -77,16 +77,16 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldCylinder::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldCylinder::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 
 		length = (point2 - point1).length();
 		if (length > 1e-20)
 			normal = (point2 - point1) / length;
 	}
 
-	real_t SkwoxelFieldCylinder::strength(const Vector3& pos) const
+	real_t SkwoxelFieldCylinder::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		auto rel = pos - point1;
 		if (length <= 1e-20f) {

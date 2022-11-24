@@ -82,13 +82,13 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldTorus::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldTorus::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		axis.normalize();
 	}
 
-	real_t SkwoxelFieldTorus::strength(const Vector3& pos) const
+	real_t SkwoxelFieldTorus::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		Vector3 relative = pos - centre;
 		real_t height = relative.dot(axis);

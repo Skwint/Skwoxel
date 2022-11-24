@@ -26,8 +26,8 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
-		real_t strength(const godot::Vector3 & pos) const override;
+
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 	};
 }
 

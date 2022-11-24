@@ -45,21 +45,17 @@ namespace skwoxel
 	{
 	}
 
-	void SkwoxelField::pre_generate(bool randomize_seeds)
+	void SkwoxelField::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			child_fields[ch]->pre_generate(randomize_seeds);
+			child_fields[ch]->pre_generate(randomize_seeds, num_threads);
 		}
 	}
 
-	real_t SkwoxelField::strength(const Vector3& pos) const
+	real_t SkwoxelField::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		return 0.0;
-	}
-
-	void SkwoxelField::trigger(const Vector3 & pos, const Vector3& untransformed)
-	{
 	}
 
 	void SkwoxelField::post_generate(vector<Vector3>& air_points, vector<Vector3>& ground_points)

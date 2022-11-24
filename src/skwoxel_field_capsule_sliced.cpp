@@ -69,7 +69,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldCapsuleSliced::strength(const Vector3& pos) const
+	real_t SkwoxelFieldCapsuleSliced::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
 		Vector3 delta = pos - close;

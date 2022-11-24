@@ -27,9 +27,9 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		void pre_generate(bool randomize_seeds) override;
-		void trigger(const godot::Vector3& pos, const godot::Vector3& untransformed) override;
-		real_t strength(const godot::Vector3 & pos) const override;
+		void pre_generate(bool randomize_seeds, int num_threads) override;
+
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		godot::Vector3 get_direction() const { return direction; }
 		void set_direction(godot::Vector3 p_direction) { direction = p_direction; }
 		godot::String get_magnitude() const { return magnitude; }

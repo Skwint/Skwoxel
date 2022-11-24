@@ -67,7 +67,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldWalkway::strength(const Vector3& pos) const
+	real_t SkwoxelFieldWalkway::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		if (curve.is_valid() && bounds.has_point(pos))
 		{

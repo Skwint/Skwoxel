@@ -73,7 +73,7 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldDisplace3::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldDisplace3::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		int count = 0;
 		for (int i = 0; i < 3; ++i)
@@ -87,36 +87,17 @@ namespace skwoxel
 					UtilityFunctions::print("Displace 3 field has no child named [", magnitude[i], "]");
 			}
 		}
-		SkwoxelFieldAdd::pre_generate(randomize_seeds);
+		SkwoxelFieldAdd::pre_generate(randomize_seeds, num_threads);
 	}
 
-	void SkwoxelFieldDisplace3::trigger(const Vector3& pos, const Vector3& untransformed)
+	real_t SkwoxelFieldDisplace3::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		Vector3 offset(0.0, 0.0, 0.0);
 		for (int i = 0; i < 3; ++i)
 		{
 			if (displacement[i])
 			{
-				offset[i] = displacement[i]->strength(pos) * scale[i];
-			}
-		}
-		Vector3 disp = pos - offset;
-		for (int ch = 0; ch < child_fields.size(); ch++)
-		{
-			SkwoxelField* child = child_fields[ch];
-			if (child != displacement[0] && child != displacement[1] && child != displacement[2])
-				child->trigger(disp, untransformed);
-		}
-	}
-
-	real_t SkwoxelFieldDisplace3::strength(const Vector3& pos) const
-	{
-		Vector3 offset(0.0, 0.0, 0.0);
-		for (int i = 0; i < 3; ++i)
-		{
-			if (displacement[i])
-			{
-				offset[i] = displacement[i]->strength(pos) * scale[i];
+				offset[i] = displacement[i]->strength(pos, untransformed, thread_num) * scale[i];
 			}
 		}
 		Vector3 disp = pos - offset;
@@ -125,7 +106,7 @@ namespace skwoxel
 		{
 			SkwoxelField* child = child_fields[ch];
 			if (child != displacement[0] && child != displacement[1] && child != displacement[2])
-				sum += child->strength(disp);
+				sum += child->strength(disp, untransformed, thread_num);
 		}
 		return sum;
 	}

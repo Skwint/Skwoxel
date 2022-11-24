@@ -69,26 +69,21 @@ namespace skwoxel
 
 	}
 	
-	void SkwoxelFieldRotate::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldRotate::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelFieldAdd::pre_generate(randomize_seeds);
+		SkwoxelFieldAdd::pre_generate(randomize_seeds, num_threads);
 		axis_normalized = axis.normalized();
 		rotator.set_axis_angle(axis_normalized, -angle);
 	}
 
-	void SkwoxelFieldRotate::trigger(const Vector3& pos, const Vector3& untransformed)
-	{
-		return SkwoxelFieldAdd::trigger(rotator.xform(pos), untransformed);
-	}
-
-	real_t SkwoxelFieldRotate::strength(const Vector3& pos) const
+	real_t SkwoxelFieldRotate::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		if (twist != 0.0) // intentional equate of real
 		{
 			godot::Basis twisted_rotator;
 			twisted_rotator.set_axis_angle(axis_normalized, -angle * twist * pos.dot(axis_normalized));
-			return SkwoxelFieldAdd::strength(twisted_rotator.xform(pos));
+			return SkwoxelFieldAdd::strength(twisted_rotator.xform(pos), untransformed, thread_num);
 		}
-		return SkwoxelFieldAdd::strength(rotator.xform(pos));
+		return SkwoxelFieldAdd::strength(rotator.xform(pos), untransformed, thread_num);
 	}
 }

@@ -140,11 +140,9 @@ namespace skwoxel
 		air_points.clear();
 		ground_points.clear();
 		collect_children();
-		root.pre_generate(randomize_seeds);
+		root.pre_generate(randomize_seeds, num_threads);
 		generate_voxels();
 		report("Voxel generation complete");
-		generate_triggers();
-		report("Triggers complete");
 		root.post_generate(air_points, ground_points);
 		filter();
 		report("Filtering complete");
@@ -652,14 +650,9 @@ namespace skwoxel
 		}
 	}
 
-	real_t Skwoxel::sample(const Vector3& pos) const
+	real_t Skwoxel::sample(const Vector3& pos, int thread_num) const
 	{
-		return root.strength(pos);
-	}
-
-	void Skwoxel::trigger(const Vector3& pos)
-	{
-		root.trigger(pos, pos);
+		return root.strength(pos, pos, thread_num);
 	}
 
 	void Skwoxel::collect_children()
@@ -674,7 +667,7 @@ namespace skwoxel
 
 		if (num_threads < 2)
 		{
-			generate_voxels_thread(lower_bounds.z, upper_bounds.z);
+			generate_voxels_thread(lower_bounds.z, upper_bounds.z, 0);
 		}
 		else
 		{
@@ -684,6 +677,7 @@ namespace skwoxel
 				dz++;
 
 			vector<thread> threads;
+			int thread_num = 0;
 			for (int low = lower_bounds.z; low < upper_bounds.z; low += dz)
 			{
 				int high = low + dz - 1;
@@ -691,7 +685,7 @@ namespace skwoxel
 				{
 					high = upper_bounds.z;
 				}
-				threads.push_back(thread(&Skwoxel::generate_voxels_thread, this, low, high));
+				threads.push_back(thread(&Skwoxel::generate_voxels_thread, this, low, high, thread_num));
 			}
 			for (auto& tt : threads)
 			{
@@ -701,7 +695,7 @@ namespace skwoxel
 		}
 	}
 
-	void Skwoxel::generate_voxels_thread(int lowz, int highz)
+	void Skwoxel::generate_voxels_thread(int lowz, int highz, int thread_num)
 	{
 		for (int z = lowz; z <= highz; ++z)
 		{
@@ -710,24 +704,8 @@ namespace skwoxel
 				Voxel* voxel = &voxel_at_global_unsafe(lower_bounds.x, y, z);
 				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
 				{
-					voxel->strength = sample(Vector3(x, y, z));
+					voxel->strength = sample(Vector3(x, y, z), thread_num);
 					voxel->flags = 0;
-					++voxel;
-				}
-			}
-		}
-	}
-
-	void Skwoxel::generate_triggers()
-	{
-		for (int z = lower_bounds.z; z <= upper_bounds.z; ++z)
-		{
-			for (int y = lower_bounds.y; y <= upper_bounds.y; ++y)
-			{
-				Voxel* voxel = &voxel_at_global_unsafe(lower_bounds.x, y, z);
-				for (int x = lower_bounds.x; x <= upper_bounds.x; ++x)
-				{
-					trigger(Vector3(x, y, z));
 					++voxel;
 				}
 			}

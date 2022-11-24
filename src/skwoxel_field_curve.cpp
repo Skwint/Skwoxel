@@ -100,13 +100,13 @@ namespace skwoxel
 		}
 	}
 
-	void SkwoxelFieldCurve::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldCurve::pre_generate(bool randomize_seeds, int num_threads)
 	{
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		calculate_bounds(radius);
 	}
 
-	real_t SkwoxelFieldCurve::strength(const Vector3& pos) const
+	real_t SkwoxelFieldCurve::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		if (curve.is_valid() && bounds.has_point(pos))
 		{

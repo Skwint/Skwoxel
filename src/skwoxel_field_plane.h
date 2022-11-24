@@ -25,7 +25,7 @@ namespace skwoxel
 		void _notification(int p_what);
 		static void _bind_methods();
 
-		real_t strength(const godot::Vector3 & pos) const override;
+		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		godot::Vector3 get_normal() const { return normal; };
 		void set_normal(godot::Vector3 pos) { normal = pos; }
 		real_t get_distance() const { return distance; };

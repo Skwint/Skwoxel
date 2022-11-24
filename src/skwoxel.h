@@ -64,14 +64,12 @@ namespace skwoxel
 
 		String _to_string() const;
 
-		real_t sample(const Vector3& pos) const;
-		void trigger(const Vector3& pos);
+		real_t sample(const Vector3& pos, int thread_num = 0) const;
 		void collect_children();
 		void allocate_voxels();
 		void delete_voxels();
 		void generate_voxels();
-		void generate_voxels_thread(int lowz, int highz);
-		void generate_triggers();
+		void generate_voxels_thread(int lowz, int highz, int thread_num);
 		void delete_mesh();
 		void generate_mesh();
 		void generate_air_flags();

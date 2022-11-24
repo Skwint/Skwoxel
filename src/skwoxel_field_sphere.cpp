@@ -72,7 +72,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldSphere::strength(const Vector3& pos) const
+	real_t SkwoxelFieldSphere::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t rad = (pos - centre).length();
 		real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);

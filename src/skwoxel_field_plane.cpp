@@ -71,7 +71,7 @@ namespace skwoxel
 
 	}
 
-	real_t SkwoxelFieldPlane::strength(const Vector3& pos) const
+	real_t SkwoxelFieldPlane::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t rad = pos.dot(normal);
 		real_t radial_multiplier = smooth_step(-blend, blend, distance - rad);

@@ -56,14 +56,14 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldWiggle::pre_generate(bool randomize_seeds)
+	void SkwoxelFieldWiggle::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		// Take care we are skipping the SkwoxelFieldCurve version of this function here
-		SkwoxelField::pre_generate(randomize_seeds);
+		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		calculate_bounds(MAX(radius, end_radius));
 	}
 
-	real_t SkwoxelFieldWiggle::strength(const Vector3& pos) const
+	real_t SkwoxelFieldWiggle::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		if (curve.is_valid() && bounds.has_point(pos))
 		{

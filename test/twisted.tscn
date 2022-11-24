@@ -61,7 +61,6 @@ twist = 0.1
 scale = Vector3(50, 50, 1)
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
-axis = Vector3(0, 1, 0)
 major_radius = 80.0
 minor_radius = 10.0
 blend = 4.0

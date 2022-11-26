@@ -21,6 +21,12 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(radius);
 		SKWOXEL_SET_METHOD(blend);
 		SKWOXEL_SET_METHOD(inner_strength);
+		SKWOXEL_SET_METHOD(sliced_up);
+		SKWOXEL_SET_METHOD(sliced_in);
+		SKWOXEL_SET_METHOD(sliced_out);
+		SKWOXEL_SET_METHOD(slice_altitude);
+		SKWOXEL_SET_METHOD(top_strength);
+		SKWOXEL_SET_METHOD(up);
 
 		return false;
 	}
@@ -33,6 +39,12 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(radius);
 		SKWOXEL_GET_METHOD(blend);
 		SKWOXEL_GET_METHOD(inner_strength);
+		SKWOXEL_GET_METHOD(sliced_up);
+		SKWOXEL_GET_METHOD(sliced_in);
+		SKWOXEL_GET_METHOD(sliced_out);
+		SKWOXEL_GET_METHOD(slice_altitude);
+		SKWOXEL_GET_METHOD(top_strength);
+		SKWOXEL_GET_METHOD(up);
 
 		return false;
 	}
@@ -60,6 +72,12 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, inner_strength);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_up);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_in);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_out);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, slice_altitude);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, top_strength);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, up);
 		ClassDB::bind_method(D_METHOD("get_point", "index"), &SkwoxelFieldTwister::get_point, Variant::INT);
 		ClassDB::bind_method(D_METHOD("set_point", "index", "pos"), &SkwoxelFieldTwister::set_point, Variant::INT, Variant::VECTOR2);
 
@@ -70,6 +88,12 @@ namespace skwoxel
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_up);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_in);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_out);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, slice_altitude);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, top_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, up);
 	}
 
 	SkwoxelFieldTwister::SkwoxelFieldTwister() :
@@ -112,6 +136,8 @@ namespace skwoxel
 			}
 		}
 		cache[cache.size() - 1] = Vector3(points[points.size() - 1].x, points[points.size() - 1].y, length);
+
+		up.normalize();
 	}
 
 	real_t SkwoxelFieldTwister::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
@@ -125,15 +151,41 @@ namespace skwoxel
 		if (first_index > cache.size() - 1)
 			return 0.0;
 		Vector3 close;
+		Vector3 closest;
 		real_t dist_sq = 99999999.0;
 		for (int index = first_index; index < last_index - 1; ++index)
 		{
 			close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, cache[index], cache[index + 1]);
-			dist_sq = min(dist_sq, (pos - close).length_squared());
+			real_t new_dist_sq = (pos - close).length_squared();
+			if (new_dist_sq < dist_sq)
+			{
+				dist_sq = new_dist_sq;
+				closest = close;
+			}
 		}
 		real_t rad = sqrt(dist_sq);
 		real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
-		return inner_strength * radial_multiplier;
+		real_t str = inner_strength;
+		if (sliced_up || sliced_in || sliced_out)
+		{
+			Vector3 delta = pos - closest;
+			real_t height;
+			if (sliced_up)
+			{
+				height = delta.dot(up) - slice_altitude;
+			}
+			else if (sliced_out)
+			{
+				height = delta.dot(closest.normalized()) - slice_altitude;
+			}
+			else if (sliced_in)
+			{
+				height = slice_altitude - delta.dot(closest.normalized());
+			}
+			real_t altitude_multiplier = smooth_step(-blend, blend, height);
+			str = Math::lerp(inner_strength, top_strength, altitude_multiplier);
+		}
+		return str * radial_multiplier;
 	}
 
 	void SkwoxelFieldTwister::set_num_points(int p_num_points)

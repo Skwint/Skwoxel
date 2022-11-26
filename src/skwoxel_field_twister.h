@@ -45,6 +45,15 @@ namespace skwoxel
 		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
+		real_t get_sliced_up() const { return sliced_up; }
+		void set_sliced_up(bool p_sliced_up) { sliced_up = p_sliced_up; sliced_in = false; sliced_out = false; }
+		real_t get_sliced_in() const { return sliced_in; }
+		void set_sliced_in(bool p_sliced_in) { sliced_in = p_sliced_in; sliced_out = false; sliced_up = false; }
+		real_t get_sliced_out() const { return sliced_out; }
+		void set_sliced_out(bool p_sliced_out) { sliced_out = p_sliced_out; sliced_in = false; sliced_up = false; }
+		SKWOXEL_INLINE_SET_GET(real_t, slice_altitude);
+		SKWOXEL_INLINE_SET_GET(real_t, top_strength);
+		SKWOXEL_INLINE_SET_GET(godot::Vector3, up);
 
 	protected:
 		std::vector<godot::Vector2> points;
@@ -53,6 +62,12 @@ namespace skwoxel
 		real_t radius;
 		real_t blend;
 		real_t inner_strength;
+		bool sliced_up = false;
+		bool sliced_in = false;
+		bool sliced_out = false;
+		real_t slice_altitude = 0.0;
+		real_t top_strength = -1.0;
+		godot::Vector3 up = godot::Vector3(0.0, 1.0, 0.0);
 	private:
 		real_t cache_step;
 		std::vector<godot::Vector3> cache;

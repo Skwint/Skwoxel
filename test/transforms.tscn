@@ -59,8 +59,6 @@ point_count = 2
 [node name="transforms" type="Skwoxel"]
 lower_bounds = Vector3i(-100, -100, -100)
 upper_bounds = Vector3i(100, 100, 100)
-air = Vector3i(0, 100, 0)
-ground = Vector3i(0, -100, 0)
 remove_bubbles = false
 remove_floaters = false
 simple_normals = false
@@ -98,7 +96,6 @@ curve = SubResource("Curve3D_k3s0p")
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="."]
 centre = Vector3(0, 50, 0)
-axis = Vector3(0, 1, 0)
 major_radius = 50.0
 minor_radius = 5.0
 

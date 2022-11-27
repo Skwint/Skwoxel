@@ -20,9 +20,6 @@ upper_bounds = Vector3i(210, 55, 210)
 remove_bubbles = false
 remove_floaters = false
 simple_normals = false
-simplify_mesh = false
-simplify_aggressiveness = 5.0
-simplify_target_triangle_count = 200000
 randomize_seeds = true
 physics_material_override = SubResource("PhysicsMaterial_yqtcg")
 

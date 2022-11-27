@@ -16,6 +16,7 @@ transform = Transform3D(-0.984808, -0.0301537, 0.17101, 0, 0.984808, 0.173648, -
 lower_bounds = Vector3i(-50, -50, 0)
 upper_bounds = Vector3i(50, 50, 200)
 num_threads = 1
+randomize_seeds = true
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
 constant = 1.0
@@ -32,6 +33,6 @@ num_points = 10
 length = 200.0
 radius = 10.0
 blend = 3.0
-inner_strength = -2.0
-sliced_in = 1.0
+inner_strength = 2.0
+slice = 2
 top_strength = -2.0

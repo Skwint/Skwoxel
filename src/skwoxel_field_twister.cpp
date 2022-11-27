@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <godot_cpp/classes/geometry3d.hpp>
+#include <godot_cpp/variant/Vector2.hpp>
 
 #include "skwoxel_helpers.h"
 
@@ -21,9 +22,7 @@ namespace skwoxel
 		SKWOXEL_SET_METHOD(radius);
 		SKWOXEL_SET_METHOD(blend);
 		SKWOXEL_SET_METHOD(inner_strength);
-		SKWOXEL_SET_METHOD(sliced_up);
-		SKWOXEL_SET_METHOD(sliced_in);
-		SKWOXEL_SET_METHOD(sliced_out);
+		SKWOXEL_SET_METHOD(slice);
 		SKWOXEL_SET_METHOD(slice_altitude);
 		SKWOXEL_SET_METHOD(top_strength);
 		SKWOXEL_SET_METHOD(up);
@@ -39,9 +38,7 @@ namespace skwoxel
 		SKWOXEL_GET_METHOD(radius);
 		SKWOXEL_GET_METHOD(blend);
 		SKWOXEL_GET_METHOD(inner_strength);
-		SKWOXEL_GET_METHOD(sliced_up);
-		SKWOXEL_GET_METHOD(sliced_in);
-		SKWOXEL_GET_METHOD(sliced_out);
+		SKWOXEL_GET_METHOD(slice);
 		SKWOXEL_GET_METHOD(slice_altitude);
 		SKWOXEL_GET_METHOD(top_strength);
 		SKWOXEL_GET_METHOD(up);
@@ -72,9 +69,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, inner_strength);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_up);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_in);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, sliced_out);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, slice);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, slice_altitude);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, top_strength);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldTwister, up);
@@ -88,9 +83,7 @@ namespace skwoxel
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
-		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_up);
-		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_in);
-		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced_out);
+		ADD_PROPERTY(PropertyInfo(Variant::INT, "slice", PROPERTY_HINT_ENUM, "none,up,in,out"), "set_slice", "get_slice");
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, slice_altitude);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, top_strength);
 		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, up);
@@ -166,21 +159,24 @@ namespace skwoxel
 		real_t rad = sqrt(dist_sq);
 		real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
 		real_t str = inner_strength;
-		if (sliced_up || sliced_in || sliced_out)
+		if (slice != NONE)
 		{
 			Vector3 delta = pos - closest;
 			real_t height;
-			if (sliced_up)
+			if (slice == UP)
 			{
 				height = delta.dot(up) - slice_altitude;
 			}
-			else if (sliced_out)
+			else
 			{
-				height = delta.dot(closest.normalized()) - slice_altitude;
-			}
-			else if (sliced_in)
-			{
-				height = slice_altitude - delta.dot(closest.normalized());
+				Vector2 clopos(closest.x, closest.y);
+				Vector2 relpos(delta.x, delta.y);
+				clopos.normalize();
+				height = relpos.dot(clopos) - slice_altitude;
+				if (slice == IN)
+				{
+					height *= -1.0;
+				}
 			}
 			real_t altitude_multiplier = smooth_step(-blend, blend, height);
 			str = Math::lerp(inner_strength, top_strength, altitude_multiplier);

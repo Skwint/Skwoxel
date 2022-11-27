@@ -47,7 +47,6 @@ inner_strength = 2.0
 [node name="donut_floor" type="SkwoxelFieldMultiply" parent="."]
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="donut_floor"]
-axis = Vector3(0, 1, 0)
 major_radius = 17.0
 inner_strength = 2.0
 

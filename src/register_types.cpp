@@ -25,6 +25,7 @@
 #include "skwoxel_field_mirror.h"
 #include "skwoxel_field_multiply.h"
 #include "skwoxel_field_noise.h"
+#include "skwoxel_field_noise_dim.h"
 #include "skwoxel_field_plane.h"
 #include "skwoxel_field_rotate.h"
 #include "skwoxel_field_scale.h"
@@ -56,6 +57,7 @@ void initialize_skwoxel_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<skwoxel::SkwoxelFieldMirror>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldMultiply>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldNoise>();
+		ClassDB::register_class<skwoxel::SkwoxelFieldNoiseDim>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldPlane>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldRotate>();
 		ClassDB::register_class<skwoxel::SkwoxelFieldScale>();

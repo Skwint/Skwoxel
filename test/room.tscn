@@ -27,25 +27,22 @@ point_count = 3
 [node name="room" type="SkwoxelFieldAdd"]
 
 [node name="ramp_up_1" type="SkwoxelFieldCurve" parent="."]
+curve = SubResource("Curve3D_b66yf")
+inner_strength = 2.0
 sliced = true
 outer_strength = -2.0
-curve = SubResource("Curve3D_b66yf")
-radius = 4.0
-inner_strength = 2.0
 
 [node name="ramp_up_2" type="SkwoxelFieldCurve" parent="."]
+curve = SubResource("Curve3D_r2si2")
+inner_strength = 2.0
 sliced = true
 outer_strength = -2.0
-curve = SubResource("Curve3D_r2si2")
-radius = 4.0
-inner_strength = 2.0
 
 [node name="ramp_up_3" type="SkwoxelFieldCurve" parent="."]
+curve = SubResource("Curve3D_68123")
+inner_strength = 2.0
 sliced = true
 outer_strength = -2.0
-curve = SubResource("Curve3D_68123")
-radius = 4.0
-inner_strength = 2.0
 
 [node name="donut_floor" type="SkwoxelFieldMultiply" parent="."]
 

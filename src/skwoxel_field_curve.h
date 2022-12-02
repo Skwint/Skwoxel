@@ -41,7 +41,8 @@ namespace skwoxel
 		SKWOXEL_INLINE_SET_GET(bool, sliced);
 		SKWOXEL_INLINE_SET_GET(real_t, outer_strength);
 		SKWOXEL_INLINE_SET_GET(real_t, altitude);
-		SKWOXEL_INLINE_SET_GET(const godot::Vector3&, up)
+		SKWOXEL_INLINE_SET_GET(const godot::Vector3&, up);
+		void balance_control_points();
 
 	protected:
 		void calculate_bounds(real_t max_start_radius);

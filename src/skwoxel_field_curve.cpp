@@ -64,6 +64,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, outer_strength);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, altitude);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, up);
+		ClassDB::bind_method(D_METHOD("balance_control_points"), &SkwoxelFieldCurve::balance_control_points);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, start_radius);
@@ -115,6 +116,32 @@ namespace skwoxel
 					little_box.set_position(out - border_size);
 					bounds.merge_with(little_box);
 				}
+			}
+		}
+	}
+
+	// We often want as smooth a curve as possible, which is generally when the control
+	// points are evenly distributes, so lets automate that for those that want it
+	// This is very approximate - it's only correct for straight lines
+	void SkwoxelFieldCurve::balance_control_points()
+	{
+		if (curve.is_valid())
+		{
+			int num = curve->get_point_count();
+			for (int pp = 0; pp < num - 1; ++pp)
+			{
+				Vector3 p0 = curve->get_point_position(pp);
+				Vector3 p1 = curve->get_point_position(pp + 1);
+				Vector3 dir = p1 - p0;
+				real_t dist = dir.length() / 3.0;
+				Vector3 ctrlout = curve->get_point_out(pp);
+				Vector3 ctrlin = curve->get_point_in(pp + 1);
+				ctrlout.normalize();
+				ctrlin.normalize();
+				ctrlout *= dist;
+				ctrlin *= dist;
+				curve->set_point_out(pp, ctrlout);
+				curve->set_point_in(pp + 1, ctrlin);
 			}
 		}
 	}

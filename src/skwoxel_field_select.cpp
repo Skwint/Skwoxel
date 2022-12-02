@@ -58,16 +58,20 @@ namespace skwoxel
 
 	real_t SkwoxelFieldSelect::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
-		if (child_fields.size() == 0)
-			return 0.0;
-
-		real_t lowest = 9999.0;
+		real_t lowest = 9999999.0;
 		real_t highest = -lowest;
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			real_t val = child_fields[ch]->strength(pos, untransformed, thread_num);
-			highest = MAX(highest, val);
-			lowest = MIN(lowest, val);
+			if (child_fields[ch]->is_enabled())
+			{
+				real_t val = child_fields[ch]->strength(pos, untransformed, thread_num);
+				highest = MAX(highest, val);
+				lowest = MIN(lowest, val);
+			}
+		}
+		if (highest < lowest)
+		{
+			return 0.0;
 		}
 		switch (criteria)
 		{

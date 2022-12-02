@@ -78,7 +78,7 @@ namespace skwoxel
 	real_t SkwoxelFieldDisplace::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t offset = 0.0;
-		if (displacement)
+		if (displacement && displacement->is_enabled())
 		{
 			offset = displacement->strength(pos, untransformed, thread_num);
 		}
@@ -87,7 +87,7 @@ namespace skwoxel
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
 			SkwoxelField* child = child_fields[ch];
-			if (child != displacement)
+			if (child != displacement && child->is_enabled())
 				sum += child->strength(disp, untransformed, thread_num);
 		}
 		return sum;

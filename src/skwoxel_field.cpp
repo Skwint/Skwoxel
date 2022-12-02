@@ -19,10 +19,14 @@ namespace skwoxel
 	}
 
 	bool SkwoxelField::_set(const StringName& p_name, const Variant& p_value) {
+		String name = p_name;
+		SKWOXEL_SET_METHOD(enabled);
 		return false;
 	}
 
 	bool SkwoxelField::_get(const StringName& p_name, Variant& r_ret) const {
+		String name = p_name;
+		SKWOXEL_GET_METHOD(enabled);
 		return false;
 	}
 
@@ -43,13 +47,16 @@ namespace skwoxel
 
 	void SkwoxelField::_bind_methods()
 	{
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelField, enabled);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, enabled);
 	}
 
 	void SkwoxelField::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			child_fields[ch]->pre_generate(randomize_seeds, num_threads);
+			if (child_fields[ch]->is_enabled())
+				child_fields[ch]->pre_generate(randomize_seeds, num_threads);
 		}
 	}
 
@@ -62,7 +69,8 @@ namespace skwoxel
 	{
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
-			child_fields[ch]->post_generate(air_points, ground_points);
+			if (child_fields[ch]->is_enabled())
+				child_fields[ch]->post_generate(air_points, ground_points);
 		}
 	}
 

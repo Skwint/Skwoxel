@@ -49,9 +49,13 @@ namespace skwoxel
 	real_t SkwoxelFieldAdd::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
 		real_t sum = 0.0;
-		for (int ch = 0; ch < child_fields.size(); ch++)
+		if (enabled)
 		{
-			sum += child_fields[ch]->strength(pos, untransformed, thread_num);
+			for (int ch = 0; ch < child_fields.size(); ch++)
+			{
+				if (child_fields[ch]->is_enabled())
+					sum += child_fields[ch]->strength(pos, untransformed, thread_num);
+			}
 		}
 		return sum;
 	}

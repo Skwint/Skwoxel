@@ -9,6 +9,7 @@
 #include <godot_cpp/classes/wrapped.hpp>
 
 #include "lotsa.h"
+#include "skwoxel_helpers.h"
 
 namespace skwoxel
 {
@@ -27,15 +28,18 @@ namespace skwoxel
 		godot::String _to_string() const;
 		void _notification(int p_what);
 		static void _bind_methods();
+		inline bool is_enabled() const { return enabled; }
 
 		virtual void pre_generate(bool randomize_seeds, int num_threads);
 		virtual real_t strength(const godot::Vector3 & pos, const godot::Vector3& untransformed, int thread_num) const;
 		virtual void post_generate(std::vector<godot::Vector3>& air_points, std::vector<godot::Vector3>& ground_points);
 		void collect_children();
 		void collect_children_of(const godot::Node* parent);
+		SKWOXEL_INLINE_SET_GET(bool, enabled);
 
 	protected:
 		lotsa<SkwoxelField*> child_fields;
+		bool enabled = true;
 	};
 }
 

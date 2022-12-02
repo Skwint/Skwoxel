@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhb5opib0dytf"]
+[gd_scene load_steps=8 format=3 uid="uid://dhb5opib0dytf"]
+
+[ext_resource type="Script" path="res://twisted.gd" id="1_w7bbj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdc57"]
 transparency = 1
@@ -31,70 +33,72 @@ _data = {
 point_count = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wqclv"]
+seed = -1000441232
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_kk342"]
+seed = -271161841
 
 [node name="Twisted" type="Node3D"]
+script = ExtResource("1_w7bbj")
 
 [node name="Skwoxel" type="Skwoxel" parent="."]
 material = SubResource("StandardMaterial3D_sdc57")
-lower_bounds = Vector3i(-130, -10, -130)
+lower_bounds = Vector3i(-130, -20, -130)
 upper_bounds = Vector3i(130, 150, 130)
 remove_bubbles = false
 remove_floaters = false
+minimum_edge = 0.01
+randomize_seeds = true
 
-[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
-constant = -1.0
-
-[node name="SkwoxelFieldMultiply2" type="SkwoxelFieldMultiply" parent="Skwoxel"]
-
-[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="Skwoxel/SkwoxelFieldMultiply2"]
-normal = Vector3(0, -1, 0)
-
-[node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="Skwoxel/SkwoxelFieldMultiply2"]
-
-[node name="SkwoxelFieldRotate" type="SkwoxelFieldRotate" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd"]
+[node name="SkwoxelFieldRotate" type="SkwoxelFieldRotate" parent="Skwoxel"]
 angle = 0.1
 twist = 0.1
 
-[node name="SkwoxelFieldDisplace3" type="SkwoxelFieldDisplace3" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate"]
+[node name="SkwoxelFieldDisplace3" type="SkwoxelFieldDisplace3" parent="Skwoxel/SkwoxelFieldRotate"]
 scale = Vector3(50, 50, 1)
 
-[node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+[node name="SkwoxelFieldPlane" type="SkwoxelFieldPlane" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+normal = Vector3(0, 1, 0)
+inner_strength = 2.0
+
+[node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
 major_radius = 80.0
 minor_radius = 10.0
 blend = 4.0
 inner_strength = 2.0
 
-[node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
-end_radius = 1.0
+[node name="SkwoxelFieldWiggle" type="SkwoxelFieldCurve" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
 curve = SubResource("Curve3D_rfdfd")
-radius = 20.0
+start_radius = 20.0
+end_radius = 1.0
 blend = 4.0
 inner_strength = 2.0
 
-[node name="SkwoxelFieldWiggle2" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
-end_radius = 1.0
+[node name="SkwoxelFieldWiggle2" type="SkwoxelFieldCurve" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
 curve = SubResource("Curve3D_my3ot")
-radius = 25.0
-blend = 4.0
-inner_strength = 2.0
-
-[node name="SkwoxelFieldWiggle3" type="SkwoxelFieldWiggle" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+start_radius = 25.0
 end_radius = 1.0
-curve = SubResource("Curve3D_57qha")
-radius = 15.0
 blend = 4.0
 inner_strength = 2.0
 
-[node name="dispx" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+[node name="SkwoxelFieldWiggle3" type="SkwoxelFieldCurve" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+curve = SubResource("Curve3D_57qha")
+start_radius = 15.0
+end_radius = 1.0
+blend = 4.0
+inner_strength = 2.0
+
+[node name="dispx" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
 noise = SubResource("FastNoiseLite_wqclv")
 
-[node name="dispy" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldMultiply2/SkwoxelFieldAdd/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
+[node name="dispy" type="SkwoxelFieldNoise" parent="Skwoxel/SkwoxelFieldRotate/SkwoxelFieldDisplace3"]
 noise = SubResource("FastNoiseLite_kk342")
 
+[node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
+constant = -1.0
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, 0)
+transform = Transform3D(-4.37114e-08, -0.34202, 0.939693, 0, 0.939693, 0.34202, -1, 1.49502e-08, -4.10753e-08, 170, 80, -30)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)

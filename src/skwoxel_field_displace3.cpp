@@ -85,6 +85,8 @@ namespace skwoxel
 				displacement[i] = dynamic_cast<SkwoxelField*>(node);
 				if (!displacement[i])
 					UtilityFunctions::print("Displace 3 field has no child named [", magnitude[i], "]");
+				else if (!displacement[i]->is_enabled())
+					displacement[i] = 0;
 			}
 		}
 		SkwoxelFieldAdd::pre_generate(randomize_seeds, num_threads);
@@ -105,7 +107,7 @@ namespace skwoxel
 		for (int ch = 0; ch < child_fields.size(); ch++)
 		{
 			SkwoxelField* child = child_fields[ch];
-			if (child != displacement[0] && child != displacement[1] && child != displacement[2])
+			if (child->is_enabled() && child != displacement[0] && child != displacement[1] && child != displacement[2])
 				sum += child->strength(disp, untransformed, thread_num);
 		}
 		return sum;

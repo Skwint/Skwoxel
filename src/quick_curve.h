@@ -5,7 +5,7 @@
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/curve3d.hpp>
 
-#include "lotsa.h"
+#include <vector>
 
 namespace skwoxel
 {
@@ -16,30 +16,28 @@ namespace skwoxel
 	class QuickCurve
 	{
 	public:
+		struct Point
+		{
+			godot::Vector3 pos;
+			real_t offset;
+			real_t distance_squared;
+		};
+	public:
 		QuickCurve();
 		void set_curve(godot::Ref<godot::Curve3D> curve);
 
-		bool seek_closest(const godot::Vector3& pos) const;
-		const godot::Vector3& get_seek_point() const { return seek_point; }
-		int get_seek_index() const { return seek_index; }
-		real_t get_seek_offset() const { return seek_offset; }
-		real_t get_seek_distance_squared() const { return seek_distance_squared; }
-		real_t get_seek_total_offset() const;
+		Point seek_closest(const godot::Vector3& pos) const;
 
 	protected:
+		void seek_closest(const godot::Vector3& pos, Point& point, int bezier_index) const;
 		inline godot::Vector3 sample(int index, float offset) const
 		{
-			return points[index].bezier_interpolate(points[index + 1], points[index + 2], points[index + 3], offset);
+			return control_points[index].bezier_interpolate(control_points[index + 1], control_points[index + 2], control_points[index + 3], offset);
 		}
 
 	protected:
-		lotsa<godot::Vector3> points;
-		mutable godot::Vector3 seek_point;
-		mutable godot::Vector3 seek_before;
-		mutable godot::Vector3 seek_after;
-		mutable int seek_index;
-		mutable real_t seek_offset;
-		mutable real_t seek_distance_squared;
+		std::vector<godot::Vector3> control_points;
+		Point bad;
 	};
 }
 

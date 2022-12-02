@@ -3,12 +3,12 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vgqca"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = -470089338
+seed = 1920796729
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = 1693755639
+seed = -403947403
 frequency = 0.05
 fractal_octaves = 1
 
@@ -95,11 +95,13 @@ radius = 15.0
 [node name="SkwoxelFieldCurve" type="SkwoxelFieldCurve" parent="."]
 curve = SubResource("Curve3D_brtmw")
 
-[node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="."]
-top_strength = -2.0
+[node name="SkwoxelFieldWalkway" type="SkwoxelFieldCurve" parent="."]
 curve = SubResource("Curve3D_6n8g1")
-radius = 5.0
+start_radius = 5.0
+end_radius = 5.0
 inner_strength = 2.0
+sliced = true
+outer_strength = -2.0
 
 [node name="SkwoxelFieldDisplace" type="SkwoxelFieldDisplace" parent="."]
 direction = Vector3(10, 0, 0)

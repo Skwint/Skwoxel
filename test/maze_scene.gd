@@ -127,13 +127,14 @@ func create_path(dir, end) :
 		angle = randf_range(-0.5, 0.5)
 		var edir = -dir.rotated(Vector3(0,1,0),angle)
 		var epos = end + edir
-		var walk : SkwoxelFieldWalkway = SkwoxelFieldWalkway.new()
+		var walk : SkwoxelFieldCurve = SkwoxelFieldCurve.new()
 		var curve : Curve3D = Curve3D.new()
 		curve.add_point(sdir, sdir, sdir)
 		curve.add_point(epos, edir)
-		curve.bake_interval = 2.0
 		walk.set_curve(curve)
-		walk.set_radius(4.0)
+		walk.set_start_radius(4.0)
+		walk.set_end_radius(4.0)
 		walk.set_inner_strength(2.0)
-		walk.set_top_strength(-2.0)
+		walk.set_outer_strength(-2.0)
+		walk.sliced = true
 		return walk;

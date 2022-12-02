@@ -1,5 +1,7 @@
 #include "skwoxel_field_curve.h"
 
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #include "skwoxel_helpers.h"
 
 using namespace godot;
@@ -12,9 +14,14 @@ namespace skwoxel
 	bool SkwoxelFieldCurve::_set(const StringName& p_name, const Variant& p_value) {
 		String name = p_name;
 		SKWOXEL_SET_METHOD(curve);
-		SKWOXEL_SET_METHOD(radius);
+		SKWOXEL_SET_METHOD(start_radius);
+		SKWOXEL_SET_METHOD(end_radius);
 		SKWOXEL_SET_METHOD(blend);
 		SKWOXEL_SET_METHOD(inner_strength);
+		SKWOXEL_SET_METHOD(sliced);
+		SKWOXEL_SET_METHOD(outer_strength);
+		SKWOXEL_SET_METHOD(altitude);
+		SKWOXEL_SET_METHOD(up);
 
 		return false;
 	}
@@ -22,9 +29,14 @@ namespace skwoxel
 	bool SkwoxelFieldCurve::_get(const StringName& p_name, Variant& r_ret) const {
 		String name = p_name;
 		SKWOXEL_GET_METHOD(curve);
-		SKWOXEL_GET_METHOD(radius);
+		SKWOXEL_GET_METHOD(start_radius);
+		SKWOXEL_GET_METHOD(end_radius);
 		SKWOXEL_GET_METHOD(blend);
 		SKWOXEL_GET_METHOD(inner_strength);
+		SKWOXEL_GET_METHOD(sliced);
+		SKWOXEL_GET_METHOD(outer_strength);
+		SKWOXEL_GET_METHOD(altitude);
+		SKWOXEL_GET_METHOD(up);
 
 		return false;
 	}
@@ -44,21 +56,28 @@ namespace skwoxel
 	void SkwoxelFieldCurve::_bind_methods() {
 		// Methods.
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, curve);
-		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, start_radius);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, end_radius);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, blend);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, inner_strength);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, sliced);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, outer_strength);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, altitude);
+		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, up);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
-		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, start_radius);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, end_radius);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, blend);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, inner_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::BOOL, sliced);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, outer_strength);
+		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, altitude);
+		SKWOXEL_ADD_PROPERTY(Variant::VECTOR3, up);
 	}
 
 	SkwoxelFieldCurve::SkwoxelFieldCurve() :
-		SkwoxelField(),
-		radius(10.0),
-		blend(2.0),
-		inner_strength(1.0)
+		SkwoxelField()
 	{
 
 	}
@@ -68,9 +87,9 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldCurve::calculate_bounds(real_t max_radius)
+	void SkwoxelFieldCurve::calculate_bounds(real_t max_start_radius)
 	{
-		real_t border = max_radius + blend + normal_offset;
+		real_t border = max_start_radius + blend + normal_offset;
 		Vector3 border_size(border, border, border);
 		AABB little_box;
 		little_box.set_size(2.0 * border_size);
@@ -103,21 +122,32 @@ namespace skwoxel
 	void SkwoxelFieldCurve::pre_generate(bool randomize_seeds, int num_threads)
 	{
 		SkwoxelField::pre_generate(randomize_seeds, num_threads);
-		calculate_bounds(radius);
+		quick.set_curve(curve);
+		calculate_bounds(start_radius);
 	}
 
 	real_t SkwoxelFieldCurve::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
-		if (curve.is_valid() && bounds.has_point(pos))
+		if (bounds.has_point(pos))
 		{
-			Vector3 touch = curve->get_closest_point(pos);
-			real_t rad = (pos - touch).length();
-			real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
-			return inner_strength * radial_multiplier;
+			auto touch = quick.seek_closest(pos);
+			if (touch.distance_squared >= 0.0)
+			{
+				real_t offset = touch.offset;
+				Vector3 delta = pos - touch.pos;
+				real_t rad = delta.length();
+				real_t interpolated_radius = Math::lerp(start_radius, end_radius, offset);
+				real_t radial_multiplier = smooth_step(-blend, blend, interpolated_radius - rad);
+				real_t str = inner_strength;
+				if (sliced)
+				{
+					real_t height = delta.dot(up) - altitude;
+					real_t altitude_multiplier = smooth_step(-blend, blend, height);
+					str = Math::lerp(inner_strength, outer_strength, altitude_multiplier);
+				}
+				return str * radial_multiplier;
+			}
 		}
-		else
-		{
-			return 0.0;
-		}
+		return 0.0;
 	}
 }

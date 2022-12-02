@@ -9,6 +9,9 @@
 #include <godot_cpp/core/binder_common.hpp>
 #include <godot_cpp/classes/curve3d.hpp>
 
+#include "quick_curve.h"
+#include "skwoxel_helpers.h"
+
 namespace skwoxel
 {
 	class SkwoxelFieldCurve : public SkwoxelField
@@ -30,22 +33,31 @@ namespace skwoxel
 		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 		godot::Ref<godot::Curve3D> get_curve() const { return curve; };
 		void set_curve(const godot::Ref<godot::Curve3D> cur) { curve = cur; }
-		real_t get_radius() const { return radius; };
-		void set_radius(real_t p_radius) { radius = p_radius; }
+		SKWOXEL_INLINE_SET_GET(real_t, start_radius);
+		SKWOXEL_INLINE_SET_GET(real_t, end_radius);
 		real_t get_blend() const { return blend; };
 		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
-		real_t get_inner_strength() const { return inner_strength; };
-		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
+		SKWOXEL_INLINE_SET_GET(real_t, inner_strength);
+		SKWOXEL_INLINE_SET_GET(bool, sliced);
+		SKWOXEL_INLINE_SET_GET(real_t, outer_strength);
+		SKWOXEL_INLINE_SET_GET(real_t, altitude);
+		SKWOXEL_INLINE_SET_GET(const godot::Vector3&, up)
 
 	protected:
-		void calculate_bounds(real_t max_radius);
+		void calculate_bounds(real_t max_start_radius);
 
 	protected:
 		godot::Ref<godot::Curve3D> curve;
+		QuickCurve quick;
 		godot::AABB bounds;
-		real_t radius;
-		real_t blend;
-		real_t inner_strength;
+		real_t start_radius = 10.0;
+		real_t end_radius = 10.0;
+		real_t blend = 2.0;
+		real_t inner_strength = 1.0;
+		bool sliced = false;
+		real_t outer_strength = -1.0;
+		real_t altitude = 0.0;
+		godot::Vector3 up = godot::Vector3(0.0, 1.0, 0.0);
 	};
 }
 

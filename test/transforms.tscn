@@ -74,25 +74,43 @@ radius = 20.0
 
 [node name="SkwoxelFieldSelect" type="SkwoxelFieldSelect" parent="."]
 
-[node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
+[node name="SkwoxelFieldWalkway" type="SkwoxelFieldCurve" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_4fehk")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
-[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
+[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldCurve" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_xwow7")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
-[node name="SkwoxelFieldWalkway3" type="SkwoxelFieldWalkway" parent="SkwoxelFieldSelect"]
+[node name="SkwoxelFieldWalkway3" type="SkwoxelFieldCurve" parent="SkwoxelFieldSelect"]
 curve = SubResource("Curve3D_1vuoy")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
 [node name="SkwoxelFieldAdd" type="SkwoxelFieldAdd" parent="."]
 
-[node name="SkwoxelFieldWalkway" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
+[node name="SkwoxelFieldWalkway" type="SkwoxelFieldCurve" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_47u76")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
-[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
+[node name="SkwoxelFieldWalkway2" type="SkwoxelFieldCurve" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_mbxnk")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
-[node name="SkwoxelFieldWalkway3" type="SkwoxelFieldWalkway" parent="SkwoxelFieldAdd"]
+[node name="SkwoxelFieldWalkway3" type="SkwoxelFieldCurve" parent="SkwoxelFieldAdd"]
 curve = SubResource("Curve3D_k3s0p")
+start_radius = 5.0
+end_radius = 5.0
+sliced = true
 
 [node name="SkwoxelFieldTorus" type="SkwoxelFieldTorus" parent="."]
 centre = Vector3(0, 50, 0)
@@ -112,10 +130,10 @@ major_radius = 50.0
 minor_radius = 5.0
 inner_strength = -1.0
 
-[node name="SkwoxelFieldWiggle" type="SkwoxelFieldWiggle" parent="."]
-end_radius = 2.0
+[node name="SkwoxelFieldWiggle" type="SkwoxelFieldCurve" parent="."]
 curve = SubResource("Curve3D_qrhbf")
-radius = 20.0
+start_radius = 5.0
+end_radius = 1.0
 
 [node name="SkwoxelFieldCylinder" type="SkwoxelFieldCylinder" parent="."]
 point1 = Vector3(0, 80, -80)

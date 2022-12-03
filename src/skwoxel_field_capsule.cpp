@@ -2,6 +2,7 @@
 
 #include <godot_cpp/classes/geometry3d.hpp>
 
+#include "geometry.h"
 #include "skwoxel_helpers.h"
 
 using namespace godot;
@@ -79,7 +80,7 @@ namespace skwoxel
 
 	real_t SkwoxelFieldCapsule::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
-		Vector3 close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, point1, point2);
+		Vector3 close = get_closest_point_to_segment(pos, point1, point2);
 		real_t rad = (pos - close).length();
 		real_t radial_multiplier = smooth_step(-blend, blend, radius - rad);
 		return inner_strength * radial_multiplier;

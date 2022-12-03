@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <godot_cpp/classes/geometry3d.hpp>
 #include <godot_cpp/variant/Vector2.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
+#include "geometry.h"
 #include "skwoxel_helpers.h"
 
 using namespace godot;
@@ -135,8 +137,9 @@ namespace skwoxel
 
 	real_t SkwoxelFieldTwister::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const
 	{
-		real_t first_index_f = max(real_t(0.0), (pos.z - radius) / cache_step);
-		real_t last_index_f = min(length, (pos.z + radius)) / cache_step;
+		real_t range = radius + blend;
+		real_t first_index_f = max(real_t(0.0), (pos.z - range) / cache_step);
+		real_t last_index_f = min(length, (pos.z + range)) / cache_step;
 		int first_index = int(first_index_f);
 		int last_index = int(ceil(last_index_f));
 		if (last_index < 0)
@@ -148,7 +151,7 @@ namespace skwoxel
 		real_t dist_sq = 99999999.0;
 		for (int index = first_index; index < last_index - 1; ++index)
 		{
-			close = Geometry3D::get_singleton()->get_closest_point_to_segment(pos, cache[index], cache[index + 1]);
+			close = get_closest_point_to_segment(pos, cache[index], cache[index + 1]);
 			real_t new_dist_sq = (pos - close).length_squared();
 			if (new_dist_sq < dist_sq)
 			{

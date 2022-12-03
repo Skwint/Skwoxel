@@ -124,13 +124,13 @@ namespace skwoxel
 
 	void Skwoxel::report(const String& str)
 	{
-#ifdef SKWOXEL_PROFILING
+		/**/
 		auto end_time = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed_seconds_start = end_time - start_time;
 		std::chrono::duration<double> elapsed_seconds_last = end_time - last_time;
 		last_time = end_time;
 		UtilityFunctions::print("<Skwoxel> ", String::num(elapsed_seconds_start.count()), " : ", str, " (", String::num(elapsed_seconds_last.count()), ")");
-#endif
+		/**/
 	}
 
 	void Skwoxel::generate()
@@ -142,10 +142,13 @@ namespace skwoxel
 		air_points.clear();
 		ground_points.clear();
 		collect_children();
+		report("Children collected");
 		root.pre_generate(randomize_seeds, num_threads);
+		report("Voxel pre generate complete");
 		generate_voxels();
 		report("Voxel generation complete");
 		root.post_generate(air_points, ground_points);
+		report("Voxel post generate complete");
 		filter();
 		report("Filtering complete");
 		generate_mesh();

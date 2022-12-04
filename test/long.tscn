@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://hhcka5vnjwdg"]
+[gd_scene load_steps=3 format=3 uid="uid://hhcka5vnjwdg"]
 
 [ext_resource type="Script" path="res://long.gd" id="1_bwy55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eu0sy"]
+emission_enabled = true
+emission = Color(0.105882, 0.290196, 0.0784314, 1)
 
 [node name="long" type="Node3D"]
 script = ExtResource("1_bwy55")
@@ -10,45 +14,44 @@ transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0,
 sky_mode = 1
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.984808, -0.0301537, 0.17101, 0, 0.984808, 0.173648, -0.173648, 0.17101, -0.969847, 30, 40, -60)
+transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 50, 0, -100)
 
 [node name="Skwoxel" type="Skwoxel" parent="."]
+material = SubResource("StandardMaterial3D_eu0sy")
 lower_bounds = Vector3i(-100, -100, 0)
 upper_bounds = Vector3i(100, 100, 200)
+smooth_normals = false
 num_threads = 1
-randomize_seeds = true
 
 [node name="SkwoxelFieldConstant" type="SkwoxelFieldConstant" parent="Skwoxel"]
-constant = 1.0
+constant = -1.0
 
 [node name="SkwoxelFieldTwister" type="SkwoxelFieldTwister" parent="Skwoxel"]
-num_points = 10
 length = 200.0
 radius = 10.0
 blend = 3.0
-inner_strength = -2.0
+inner_strength = 2.0
+
+[node name="SkwoxelFieldTwister3" type="SkwoxelFieldTwister" parent="Skwoxel"]
+length = 200.0
+radius = 10.0
+blend = 3.0
+inner_strength = 2.0
+slice = 3
+top_strength = -2.0
+
+[node name="SkwoxelFieldTwister4" type="SkwoxelFieldTwister" parent="Skwoxel"]
+length = 200.0
+radius = 10.0
+blend = 3.0
+inner_strength = 2.0
+slice = 1
+top_strength = -2.0
 
 [node name="SkwoxelFieldTwister2" type="SkwoxelFieldTwister" parent="Skwoxel"]
-num_points = 10
 length = 200.0
 radius = 10.0
 blend = 3.0
 inner_strength = 2.0
 slice = 2
 top_strength = -2.0
-
-[node name="SkwoxelFieldTwist" type="SkwoxelFieldTwist" parent="Skwoxel"]
-num_points = 10
-length = 200.0
-
-[node name="SkwoxelFieldTwister" type="SkwoxelFieldTwister" parent="Skwoxel/SkwoxelFieldTwist"]
-num_points = 10
-length = 200.0
-radius = 4.0
-inner_strength = -2.0
-
-[node name="SkwoxelFieldCapsule" type="SkwoxelFieldCapsule" parent="Skwoxel/SkwoxelFieldTwist"]
-point2 = Vector3(0, 0, 200)
-radius = 2.0
-blend = 1.0
-inner_strength = -2.0

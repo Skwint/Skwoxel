@@ -7,6 +7,7 @@
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/core/binder_common.hpp>
+#include <godot_cpp/classes/curve2d.hpp>
 
 #include "skwoxel_helpers.h"
 
@@ -15,6 +16,13 @@ namespace skwoxel
 	class SkwoxelFieldTwister : public SkwoxelField
 	{
 		GDCLASS(SkwoxelFieldTwister, SkwoxelField);
+	public:
+		struct Point
+		{
+			godot::Vector3 pos;
+			real_t offset;
+			real_t distance_squared;
+		};
 	private:
 		enum Slice
 		{
@@ -39,31 +47,25 @@ namespace skwoxel
 		void pre_generate(bool randomize_seeds, int num_threads) override;
 		real_t strength(const godot::Vector3 & pos, const godot::Vector3 & untransformed, int thread_num) const override;
 
-		int get_num_points() const { return points.size(); }
-		void set_num_points(int p_num_points);
-		godot::Vector2 get_point(int idx) const { if (idx >= 0 && idx < points.size()) return points[idx]; return godot::Vector2(0.0, 0.0); }
-		void set_point(int idx, godot::Vector2 point);
-		real_t get_length() const { return length; }
-		void set_length(real_t p_length) { length = p_length; }
-		real_t get_step() const { return step; };
-		void set_step(real_t p_step) { step = MAX(1.0, p_step); }
-		real_t get_radius() const { return radius; };
-		void set_radius(real_t p_radius) { radius = p_radius; }
+		godot::Ref<godot::Curve2D> get_curve() const { return curve; };
+		void set_curve(const godot::Ref<godot::Curve2D> cur) { curve = cur; }
 		real_t get_blend() const { return blend; };
 		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
-		real_t get_inner_strength() const { return inner_strength; };
-		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 		int get_slice() const { return (int)slice; };
 		void set_slice(int p_slice) { slice = (Slice)p_slice; }
+		SKWOXEL_INLINE_SET_GET(real_t, radius);
+		SKWOXEL_INLINE_SET_GET(real_t, inner_strength);
+		SKWOXEL_INLINE_SET_GET(real_t, length);
 		SKWOXEL_INLINE_SET_GET(real_t, slice_altitude);
 		SKWOXEL_INLINE_SET_GET(real_t, top_strength);
 		SKWOXEL_INLINE_SET_GET(godot::Vector3, up);
+		void auto_control_points();
+
 
 	protected:
-		std::vector<godot::Vector2> points;
-		real_t length;
-		real_t step;
+		godot::Ref<godot::Curve2D> curve;
 		real_t radius;
+		real_t length;
 		real_t blend;
 		real_t inner_strength;
 		Slice slice = NONE;
@@ -71,7 +73,6 @@ namespace skwoxel
 		real_t top_strength = -1.0;
 		godot::Vector3 up = godot::Vector3(0.0, 1.0, 0.0);
 	private:
-		real_t cache_step;
 		std::vector<godot::Vector3> cache;
 	};
 }

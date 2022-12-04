@@ -65,6 +65,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, altitude);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldCurve, up);
 		ClassDB::bind_method(D_METHOD("balance_control_points"), &SkwoxelFieldCurve::balance_control_points);
+		ClassDB::bind_method(D_METHOD("set_all_control_points", "direction"), &SkwoxelFieldCurve::set_all_control_points, Variant::VECTOR3);
 
 		ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve3D"), "set_curve", "get_curve");
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, start_radius);
@@ -142,6 +143,19 @@ namespace skwoxel
 				ctrlin *= dist;
 				curve->set_point_out(pp, ctrlout);
 				curve->set_point_in(pp + 1, ctrlin);
+			}
+		}
+	}
+
+	void SkwoxelFieldCurve::set_all_control_points(const Vector3& direction)
+	{
+		if (curve.is_valid())
+		{
+			int num = curve->get_point_count();
+			for (int pp = 0; pp < num - 1; ++pp)
+			{
+				curve->set_point_out(pp, direction);
+				curve->set_point_in(pp + 1, -direction);
 			}
 		}
 	}

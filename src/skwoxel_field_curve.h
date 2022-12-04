@@ -43,6 +43,7 @@ namespace skwoxel
 		SKWOXEL_INLINE_SET_GET(real_t, altitude);
 		SKWOXEL_INLINE_SET_GET(const godot::Vector3&, up);
 		void balance_control_points();
+		void set_all_control_points(const godot::Vector3& direction);
 
 	protected:
 		void calculate_bounds(real_t max_start_radius);

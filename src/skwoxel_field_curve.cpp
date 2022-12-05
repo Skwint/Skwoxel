@@ -89,9 +89,9 @@ namespace skwoxel
 
 	}
 
-	void SkwoxelFieldCurve::calculate_bounds(real_t max_start_radius)
+	void SkwoxelFieldCurve::calculate_bounds()
 	{
-		real_t border = max_start_radius + blend + normal_offset;
+		real_t border = std::max(start_radius, end_radius) + blend + normal_offset;
 		Vector3 border_size(border, border, border);
 		AABB little_box;
 		little_box.set_size(2.0 * border_size);
@@ -152,10 +152,10 @@ namespace skwoxel
 		if (curve.is_valid())
 		{
 			int num = curve->get_point_count();
-			for (int pp = 0; pp < num - 1; ++pp)
+			for (int pp = 0; pp < num; ++pp)
 			{
 				curve->set_point_out(pp, direction);
-				curve->set_point_in(pp + 1, -direction);
+				curve->set_point_in(pp, -direction);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ namespace skwoxel
 	{
 		SkwoxelField::pre_generate(randomize_seeds, num_threads);
 		quick.set_curve(curve);
-		calculate_bounds(start_radius);
+		calculate_bounds();
 	}
 
 	real_t SkwoxelFieldCurve::strength(const Vector3& pos, const Vector3& untransformed, int thread_num) const

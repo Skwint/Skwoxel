@@ -23,7 +23,7 @@ namespace skwoxel
 		}
 		else if (d >= 1.0f)
 		{
-			return p_b; // After first point.
+			return p_b; // After last point.
 		}
 		else
 		{

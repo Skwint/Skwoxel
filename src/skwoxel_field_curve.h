@@ -46,7 +46,7 @@ namespace skwoxel
 		void set_all_control_points(const godot::Vector3& direction);
 
 	protected:
-		void calculate_bounds(real_t max_start_radius);
+		void calculate_bounds();
 
 	protected:
 		godot::Ref<godot::Curve3D> curve;

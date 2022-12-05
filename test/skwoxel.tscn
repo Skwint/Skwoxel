@@ -1,14 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmx2xuigcpvt4"]
+[gd_scene load_steps=7 format=3 uid="uid://dmx2xuigcpvt4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v3r23"]
+metallic_specular = 0.0
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vgqca"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tm8ep"]
-seed = 1920796729
+seed = 1725181391
 frequency = 0.05
 fractal_octaves = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0uk55"]
-seed = -403947403
+seed = 1998795543
 frequency = 0.05
 fractal_octaves = 1
 
@@ -30,9 +33,11 @@ _data = {
 point_count = 3
 
 [node name="Skwoxel" type="Skwoxel"]
+material = SubResource("StandardMaterial3D_v3r23")
 lower_bounds = Vector3i(-100, -20, -100)
 upper_bounds = Vector3i(100, 20, 100)
-randomize_seeds = true
+smooth_normals = false
+randomize_seeds = false
 physics_material_override = SubResource("PhysicsMaterial_vgqca")
 
 [node name="SkwoxelFieldSphere" type="SkwoxelFieldSphere" parent="."]

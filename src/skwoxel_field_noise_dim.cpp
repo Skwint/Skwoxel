@@ -61,7 +61,7 @@ namespace skwoxel
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldNoiseDim, gain);
 		SKWOXEL_BIND_SET_GET_METHOD(SkwoxelFieldNoiseDim, lacunarity);
 
-		ADD_PROPERTY(PropertyInfo(Variant::INT, "dimensions", PROPERTY_HINT_ENUM, "XYZ,XYZT"), "set_dimensions", "get_dimensions");
+		ADD_PROPERTY(PropertyInfo(Variant::INT, "dimensions", PROPERTY_HINT_ENUM, "X,Y,Z,XT,YT,ZT,XY,XZ,YZ,XYT,XZT,YZT,XYZ,XYZT"), "set_dimensions", "get_dimensions");
 		SKWOXEL_ADD_PROPERTY(Variant::INT, seed);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, frequency);
 		SKWOXEL_ADD_PROPERTY(Variant::FLOAT, t);
@@ -101,32 +101,103 @@ namespace skwoxel
 	{
 		real_t val = 0.0;
 		real_t amplitude = 1.0;
+		real_t v1;
+		Vector2 v2;
+		Vector3 v3;
+		Vector4 v4;
 		switch (dimensions)
 		{
+		case X:
+			v1 = pos.x;
+			break;
+		case Y:
+			v1 = pos.y;
+			break;
+		case Z:
+			v1 = pos.z;
+			break;
+		case XT:
+			v2 = Vector2(pos.x, t);
+			break;
+		case YT:
+			v2 = Vector2(pos.x, t);
+			break;
+		case ZT:
+			v2 = Vector2(pos.x, t);
+			break;
+		case XY:
+			v2 = Vector2(pos.x, pos.y);
+			break;
+		case XZ:
+			v2 = Vector2(pos.x, pos.z);
+			break;
+		case YZ:
+			v2 = Vector2(pos.y, pos.z);
+			break;
+		case XYT:
+			v3 = Vector3(pos.x, pos.y, t);
+			break;
+		case XZT:
+			v3 = Vector3(pos.x, pos.z, t);
+			break;
+		case YZT:
+			v3 = Vector3(pos.y, pos.z, t);
+			break;
+		case XYZ:
+			v3 = pos;
+			break;
 		case XYZT:
-		{
-			Vector4 xyzt(pos.x, pos.y, pos.z, t);
-			xyzt *= frequency;
-			for (auto noise : noises)
-			{
-				val += amplitude * noise->eval(xyzt.x, xyzt.y, xyzt.z, xyzt.w);
-				xyzt *= lacunarity;
-				amplitude *= gain;
-			}
-		}
+			v4 = Vector4(pos.x, pos.y, pos.z, t);
 			break;
-		default:
+		}
+		switch (dimensions)
 		{
-			Vector3 xyz(pos);
-			xyz *= frequency;
+		case X:
+		case Y:
+		case Z:
+			v1 *= frequency;
 			for (auto noise : noises)
 			{
-				val += amplitude * noise->eval(xyz.x, xyz.y, xyz.z);
-				xyz *= lacunarity;
+				val += amplitude * noise->eval(v1, 0.0);
+				v1 *= lacunarity;
 				amplitude *= gain;
 			}
 			break;
-		}
+		case XT:
+		case YT:
+		case ZT:
+		case XY:
+		case XZ:
+		case YZ:
+			v2 *= frequency;
+			for (auto noise : noises)
+			{
+				val += amplitude * noise->eval(v2.x, v2.y);
+				v2 *= lacunarity;
+				amplitude *= gain;
+			}
+			break;
+		case XYT:
+		case XZT:
+		case YZT:
+		case XYZ:
+			v3 *= frequency;
+			for (auto noise : noises)
+			{
+				val += amplitude * noise->eval(v3.x, v3.y, v3.z);
+				v3 *= lacunarity;
+				amplitude *= gain;
+			}
+			break;
+		case XYZT:
+			v4 *= frequency;
+			for (auto noise : noises)
+			{
+				val += amplitude * noise->eval(v4.x, v4.y, v4.z, v4.w);
+				v4 *= lacunarity;
+				amplitude *= gain;
+			}
+			break;
 		}
 		return val;
 	}

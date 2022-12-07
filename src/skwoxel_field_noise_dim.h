@@ -20,6 +20,18 @@ namespace skwoxel
 	private:
 		enum Dimensions
 		{
+			X,
+			Y,
+			Z,
+			XT,
+			YT,
+			ZT,
+			XY,
+			XZ,
+			YZ,
+			XYT,
+			XZT,
+			YZT,
 			XYZ,
 			XYZT
 		};

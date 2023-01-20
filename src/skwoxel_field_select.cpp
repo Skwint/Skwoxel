@@ -65,8 +65,8 @@ namespace skwoxel
 			if (child_fields[ch]->is_enabled())
 			{
 				real_t val = child_fields[ch]->strength(pos, untransformed, thread_num);
-				highest = MAX(highest, val);
-				lowest = MIN(lowest, val);
+				highest = std::max(highest, val);
+				lowest = std::max(lowest, val);
 			}
 		}
 		if (highest < lowest)

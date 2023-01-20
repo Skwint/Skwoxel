@@ -29,7 +29,7 @@ namespace skwoxel
 		godot::AABB get_aabb() const { return aabb; };
 		void set_aabb(godot::AABB p_aabb) { aabb = p_aabb; }
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
+		void set_blend(real_t p_blend) { blend = std::max((real_t)0.1, p_blend); }
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 

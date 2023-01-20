@@ -50,7 +50,7 @@ namespace skwoxel
 		godot::Ref<godot::Curve2D> get_curve() const { return curve; };
 		void set_curve(const godot::Ref<godot::Curve2D> cur) { curve = cur; }
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
+		void set_blend(real_t p_blend) { blend = std::max((real_t)0.1, p_blend); }
 		int get_slice() const { return (int)slice; };
 		void set_slice(int p_slice) { slice = (Slice)p_slice; }
 		SKWOXEL_INLINE_SET_GET(real_t, radius);

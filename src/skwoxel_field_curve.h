@@ -36,7 +36,7 @@ namespace skwoxel
 		SKWOXEL_INLINE_SET_GET(real_t, start_radius);
 		SKWOXEL_INLINE_SET_GET(real_t, end_radius);
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
+		void set_blend(real_t p_blend) { blend = std::max((real_t)0.1, p_blend); }
 		SKWOXEL_INLINE_SET_GET(real_t, inner_strength);
 		SKWOXEL_INLINE_SET_GET(bool, sliced);
 		SKWOXEL_INLINE_SET_GET(real_t, outer_strength);

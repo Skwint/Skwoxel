@@ -32,6 +32,8 @@
 	type get_##mm() const { return mm;} \
 	void set_##mm(type p_##mm) { mm = p_##mm; }
 
+#define SKWOXEL_CALLABLE(obj, method) godot::Callable(obj, #method)
+
 namespace skwoxel
 {
 	const real_t normal_offset = 0.1;

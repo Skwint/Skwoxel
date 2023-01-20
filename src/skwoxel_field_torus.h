@@ -37,7 +37,7 @@ namespace skwoxel
 		real_t get_minor_radius() const { return minor_radius; };
 		void set_minor_radius(real_t p_radius) { minor_radius = p_radius; }
 		real_t get_blend() const { return blend; };
-		void set_blend(real_t p_blend) { blend = MAX(0.1, p_blend); }
+		void set_blend(real_t p_blend) { blend = std::max((real_t)0.1, p_blend); }
 		real_t get_inner_strength() const { return inner_strength; };
 		void set_inner_strength(real_t p_strength) { inner_strength = p_strength; }
 

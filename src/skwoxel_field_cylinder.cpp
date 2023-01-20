@@ -103,7 +103,7 @@ namespace skwoxel
 		// capping planes:
 		real_t end1 = - dist;
 		real_t end2 = dist - length;
-		real_t cap_multiplier = smooth_step(blend, -blend, MAX(end1, end2));
+		real_t cap_multiplier = smooth_step(blend, -blend, std::max(end1, end2));
 
 		// combined:
 		return inner_strength * cap_multiplier * radial_multiplier;

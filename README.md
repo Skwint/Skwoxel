@@ -21,6 +21,8 @@ It also makes generating a navigation mesh more challenging. Much more challengi
 
 This is only a major issue if you want a procedural world. If you are using voxels as a simple way to start a world you edit manually it isn't really a concern.
 
+My gut feeling, after using this for a while, is that although it works exactly as intended and is, infact, kind of cool, it will never generate a world that has the kind of detail and polish we expect these days, so while I try to come up with a way to fix that the project is on hold. Not dead, just waiting for inspiration.
+
 ## Algorithm
 Skwoxel uses Marching Tetrahedra to generate an isosurface of a field, a reasonably simple mesh simplification routine to keep the triangle count down, and uses the field gradients to calculate normals for a little extra smoothness in the end result. This can backfire if the field has components with a higher frequency than the voxels, but you should avoid that anyway, and it usually works out better than averaging triangle normals.
 
